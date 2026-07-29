@@ -51,17 +51,17 @@ if (file_exists($statusesFile)) {
     }
 }
 
-// Dossiers système et dossiers internes à exclure du listing
-$exclude = ['core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials'];
+// Dossiers système et dossiers internes à exclure du listing (avec .git ajouté ici)
+$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials'];
 
 foreach ($files as $file) {
     if ($file === '.' || $file === '..' || !is_dir($dir . '/' . $file)) continue;
     if (in_array($file, $exclude)) continue;
 
     $hasIndex = file_exists($dir . '/' . $file . '/index.php') || file_exists($dir . '/' . $file . '/index.html');
-    $isWP     = file_exists($dir . '/' . $file . '/wp-config.php');
+    $isWP    = file_exists($dir . '/' . $file . '/wp-config.php');
 
-    $title     = $file;
+    $title    = $file;
     $lowerFile = mb_strtolower($file);
     
     // Associe les détails JSON (visuel, technos, pitch...)
@@ -101,8 +101,8 @@ foreach ($files as $file) {
     }
 
     $projects[] = [
-        'name'        => $file,
-        'title'       => $title,
+        'name'      => $file,
+        'title'     => $title,
         'hasIndex'    => true,
         'isWP'        => $isWP,
         'description' => $description,
