@@ -447,6 +447,17 @@ foreach ($projects as $p) {
 if (!empty($currentRow)) {
     $rows[] = $currentRow;
 }
+
+// Calcul de l'espace restant sur la dernière ligne pour l'ours dynamique
+$lastRowSpan = 0;
+if (!empty($rows)) {
+    $lastRow = end($rows);
+    foreach ($lastRow as $item) {
+        $lastRowSpan += $item['colSpan'];
+    }
+}
+$bearColSpan = (12 - $lastRowSpan);
+if ($bearColSpan < 0) $bearColSpan = 0;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -573,17 +584,6 @@ if (!empty($currentRow)) {
         /* ============================================================
             SECTION NEWS (GRILLE 12 COLONNES - MISE EN PAGE JOURNAL 100% SANS TROU)
         ============================================================ */
-        details.section-news-block > summary {
-            background-color: #2b2620;
-            border-color: rgba(192, 57, 43, 0.4);
-        }
-        details.section-news-block > summary:hover {
-            background-color: #383028;
-            border-color: #c0392b;
-        }
-        details.section-news-block > summary h2 { color: #e67e22; }
-        details.section-news-block > summary .summary-chevron { color: #e67e22; }
-
         .news-sheet {
             background-color: #fdfbf7;
             color: #111111;
@@ -591,6 +591,7 @@ if (!empty($currentRow)) {
             border-radius: 4px;
             padding: 35px;
             font-family: Georgia, "Times New Roman", serif;
+            margin-top: 20px;
         }
 
         .news-bandeau {
@@ -706,7 +707,7 @@ if (!empty($currentRow)) {
         .news-article-visual {
             width: 100%;
             height: 110px;
-            background-color: #e9ecef;
+            background-color: #f1f3f5;
             border: 1px dashed #cbd5e1;
             border-radius: 4px;
             display: flex;
@@ -776,6 +777,19 @@ if (!empty($currentRow)) {
             letter-spacing: 1px;
         }
 
+        /* Style de l'ours en pied de page si la grille est complète */
+        .news-colophon-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #bbb;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.8rem;
+            color: #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         /* Lien interactif aligné à droite, gris et obscurci au survol */
         .news-article-link-container {
             margin-top: 15px;
@@ -809,12 +823,12 @@ if (!empty($currentRow)) {
 </head>
 <body>
 
-    <h1>🚀 Mes Projets Nomades</h1>
+    <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
     <!-- ============================================================
-         SECTION V1 : GRILLE PRINCIPALE (HAUT DE PAGE)
+         SECTION V1 : GRILLE PRINCIPALE (HAUT DE PAGE) [MASQUÉE EN RÉSERVE]
     ============================================================ -->
-    <details class="section-block" open>
+    <details class="section-block" open style="display: none;">
         <summary>
             <span class="summary-icon">🗂️</span>
             <h2>Mes Projets Nomades (V1)</h2>
@@ -855,12 +869,12 @@ if (!empty($currentRow)) {
         </div>
     </details>
 
-    <hr class="separator-v2">
+    <hr class="separator-v2" style="display: none;">
 
     <!-- ============================================================
-         SECTION V2 : LANCEUR PROJETS - CARTES ENRICHIES
+         SECTION V2 : LANCEUR PROJETS - CARTES ENRICHIES [MASQUÉE EN RÉSERVE]
     ============================================================ -->
-    <details class="section-block" open>
+    <details class="section-block" open style="display: none;">
         <summary>
             <span class="summary-icon">🚀</span>
             <h2>Lanceur Projets (V2 — Cartes Enrichies)</h2>
@@ -872,9 +886,9 @@ if (!empty($currentRow)) {
     </details>
 
     <!-- ============================================================
-         SECTION V3 : PRÉSENTATION DE L'ÉCOSYSTÈME & RAPPORT CLÉ
+         SECTION V3 : PRÉSENTATION DE L'ÉCOSYSTÈME & RAPPORT CLÉ [MASQUÉE EN RÉSERVE]
     ============================================================ -->
-    <details class="section-block section-ecosystem">
+    <details class="section-block section-ecosystem" style="display: none;">
         <summary>
             <span class="summary-icon">📋</span>
             <h2>Présentation de l'Écosystème &amp; Rapport de la Clé</h2>
@@ -889,129 +903,157 @@ if (!empty($currentRow)) {
     </details>
 
     <!-- ============================================================
-         SECTION 4 : NEWS (JOURNAL MODULAIRE - ZÉRO TROU GARANTI)
+         SECTION V4 : PRÉSENTATION DE L'ATELIER 2026 [MASQUÉE EN RÉSERVE - NON JETÉE]
     ============================================================ -->
-    <details class="section-block section-news-block">
+    <details class="section-block" style="display: none;">
         <summary>
-            <span class="summary-icon">📰</span>
-            <h2>News : Le Journal de l'Atelier (Mise en Page Multi-Combinaisons Sans Trou)</h2>
+            <span class="summary-icon">🏛️</span>
+            <h2>Atelier 2026 (En réserve)</h2>
             <span class="summary-chevron">▼</span>
         </summary>
         <div class="section-body">
-            <div class="news-sheet">
-                
-                <!-- Bandeau supérieur -->
-                <div class="news-bandeau">
-                    Chronique Indépendante • Édition Spéciale Nomadisme Numérique • 2026
-                </div>
+            <p>Contenu en réserve de l'Atelier 2026.</p>
+        </div>
+    </details>
 
-                <!-- Manchette et Oreilles -->
-                <div class="news-header-grid">
-                    <div class="news-ear">
-                        <strong>SUPPORT :</strong> Clé USB F:\<br>
-                        <strong>SERVEUR :</strong> XAMPP Portable
-                    </div>
-                    <div>
-                        <h2 class="news-manchette">Le Journal</h2>
-                        <div style="font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 6px; font-weight: bold;">De l'Atelier Numérique</div>
-                    </div>
-                    <div class="news-ear">
-                        <strong>ARCHITECTURES :</strong> Flat-File<br>
-                        <strong>STATUT :</strong> Opérationnel
-                    </div>
-                </div>
+    <!-- ============================================================
+         SECTION 4 : NEWS (JOURNAL DE L'ATELIER - SORTI DU DÉROULANT ET EN PREMIER)
+    ============================================================ -->
+    <div class="news-sheet">
+        
+        <!-- Bandeau supérieur -->
+        <div class="news-bandeau">
+            Chronique Indépendante • Édition Spéciale Nomadisme Numérique • 2026
+        </div>
 
-                <!-- Tribune (Éditorial) -->
-                <div class="news-tribune">
-                    <h3>Tribune Libre — L'Affranchissement du Cloud</h3>
-                    <p>« S'affranchir des infrastructures distantes pour recentrer le développement web sur l'essentiel : la maîtrise absolue du code, de l'octet initial jusqu'au déploiement final, au creux d'un support de poche inaltérable. »</p>
-                </div>
+        <!-- Manchette et Oreilles -->
+        <div class="news-header-grid">
+            <div class="news-ear">
+                <strong>SUPPORT :</strong> Clé USB F:\<br>
+                <strong>SERVEUR :</strong> XAMPP Portable
+            </div>
+            <div>
+                <h2 class="news-manchette">Le Journal</h2>
+                <div style="font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 6px; font-weight: bold;">De l'Atelier Numérique</div>
+            </div>
+            <div class="news-ear">
+                <strong>ARCHITECTURES :</strong> Flat-File<br>
+                <strong>STATUT :</strong> Opérationnel
+            </div>
+        </div>
 
-                <!-- Le Ventre : Affichage par lignes de 12 colonnes sans trou -->
-                <?php foreach ($rows as $rowProjects): ?>
-                    <div class="news-row">
-                        <?php foreach ($rowProjects as $p): ?>
-                            <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
-                                <article class="news-article">
-                                    <div>
-                                        <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
-                                            <h4 style="margin: 0; border: none; padding: 0;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
-                                            <span style="font-family: -apple-system, sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                        </div>
-                                        
-                                        <!-- Encart visuel gris clair en haut de l'article -->
-                                        <div class="news-article-visual">
-                                            <i class="fas fa-image" style="margin-right: 6px;"></i> Encart Visuel / Illustration
-                                        </div>
+        <!-- Tribune (Éditorial) -->
+        <div class="news-tribune">
+            <h3>Tribune Libre — L'Affranchissement du Cloud</h3>
+            <p>« S'affranchir des infrastructures distantes pour recentrer le développement web sur l'essentiel : la maîtrise absolue du code, de l'octet initial jusqu'au déploiement final, au creux d'un support de poche inaltérable. »</p>
+        </div>
 
-                                        <?php if ($p['name'] === 'cms-2026-v8-full'): ?>
-                                            <p class="news-pitch desk-col-2">Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>
-                                        <?php elseif ($p['name'] === 'dashboard-designer'): ?>
-                                            <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, il permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
-                                        <?php elseif ($p['name'] === 'wordpress-portable'): ?>
-                                            <p class="news-pitch">Instance WordPress totalement encapsulée et autonome, <strong>wordpress-portable</strong> embarque toute la puissance du CMS le plus populaire du web directement au creux de votre clé USB, sans installation lourde sur la machine hôte.</p>
-                                        <?php elseif ($p['name'] === 'mon-site'): ?>
-                                            <p class="news-pitch">Résultat direct de l'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l'exportation du squelette pour l'afficher et le vérifier directement dans le navigateur en conditions réelles.</p>
-                                        <?php elseif ($p['name'] === 'user_journey-v1.0'): ?>
-                                            <p class="news-pitch">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>
-                                        <?php elseif ($p['name'] === 'texturor'): ?>
-                                            <p class="news-pitch">Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>
-                                        <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                            <p class="news-pitch">Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>
-                                        <?php elseif ($p['name'] === 'modulor'): ?>
-                                            <p class="news-pitch">Laboratoire visuel et interactif de l'atelier, <strong>modulor</strong> propose l'interface idéale pour tester à la volée des mises en page, expérimenter des structures d'UI et sculpter des composants en direct sans contrainte technique lourde.</p>
-                                        <?php elseif ($p['name'] === 'skeletor-v1.0-o2switch'): ?>
-                                            <p class="news-pitch">Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>
-                                        <?php elseif ($p['name'] === 'skeletor-v1.0'): ?>
-                                            <p class="news-pitch">Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l'arborescence à recréer à la main : il déploie en un clin d'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.</p>
-                                        <?php elseif ($p['details'] && isset($p['details']['niveau1']) && !empty($p['details']['niveau1']['pitch'])): ?>
-                                            <p class="news-pitch"><?php echo htmlspecialchars($p['details']['niveau1']['pitch'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                        <?php else: ?>
-                                            <p class="news-pitch"><?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                        <?php endif; ?>
+        <!-- Le Ventre : Affichage par lignes de 12 colonnes sans trou -->
+        <?php foreach ($rows as $index => $rowProjects): ?>
+            <div class="news-row">
+                <?php foreach ($rowProjects as $p): ?>
+                    <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <article class="news-article">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
+                                    <h4 style="margin: 0; border: none; padding: 0;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
+                                    <span style="font-family: -apple-system, sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                </div>
+                                
+                                <!-- Encart visuel gris clair en haut de l'article -->
+                                <div class="news-article-visual">
+                                    <i class="fas fa-image" style="margin-right: 6px;"></i> Encart Visuel / Illustration
+                                </div>
 
-                                        <?php if ($p['details'] && isset($p['details']['niveau2'])): ?>
-                                            <?php if (!empty($p['details']['niveau2']['contexte'])): ?>
-                                                <div class="news-subhead">Contexte</div>
-                                                <p><?php echo htmlspecialchars($p['details']['niveau2']['contexte'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                            <?php endif; ?>
+                                <?php if ($p['name'] === 'cms-2026-v8-full'): ?>
+                                    <p class="news-pitch desk-col-2">Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>
+                                <?php elseif ($p['name'] === 'dashboard-designer'): ?>
+                                    <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, il permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
+                                <?php elseif ($p['name'] === 'wordpress-portable'): ?>
+                                    <p class="news-pitch">Instance WordPress totalement encapsulée et autonome, <strong>wordpress-portable</strong> embarque toute la puissance du CMS le plus populaire du web directement au creux de votre clé USB, sans installation lourde sur la machine hôte.</p>
+                                <?php elseif ($p['name'] === 'mon-site'): ?>
+                                    <p class="news-pitch">Résultat direct de l'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l'exportation du squelette pour l'afficher et le vérifier directement dans le navigateur en conditions réelles.</p>
+                                <?php elseif ($p['name'] === 'user_journey-v1.0'): ?>
+                                    <p class="news-pitch">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>
+                                <?php elseif ($p['name'] === 'texturor'): ?>
+                                    <p class="news-pitch">Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>
+                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                    <p class="news-pitch">Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>
+                                <?php elseif ($p['name'] === 'modulor'): ?>
+                                    <p class="news-pitch">Laboratoire visuel et interactif de l'atelier, <strong>modulor</strong> propose l'interface idéale pour tester à la volée des mises en page, expérimenter des structures d'UI et sculpter des composants en direct sans contrainte technique lourde.</p>
+                                <?php elseif ($p['name'] === 'skeletor-v1.0-o2switch'): ?>
+                                    <p class="news-pitch">Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>
+                                <?php elseif ($p['name'] === 'skeletor-v1.0'): ?>
+                                    <p class="news-pitch">Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l'arborescence à recréer à la main : il déploie en un clin d'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.</p>
+                                <?php elseif ($p['details'] && isset($p['details']['niveau1']) && !empty($p['details']['niveau1']['pitch'])): ?>
+                                    <p class="news-pitch"><?php echo htmlspecialchars($p['details']['niveau1']['pitch'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                <?php else: ?>
+                                    <p class="news-pitch"><?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                <?php endif; ?>
 
-                                            <?php if (!empty($p['details']['niveau2']['fonctionnalites'])): ?>
-                                                <div class="news-subhead">Fonctionnalités clés</div>
-                                                <ul>
-                                                    <?php foreach (array_slice($p['details']['niveau2']['fonctionnalites'], 0, ($p['colSpan'] == 12 ? 3 : 2)) as $f): ?>
-                                                        <li><?php echo htmlspecialchars($f, ENT_QUOTES, 'UTF-8'); ?></li>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="news-article-link-container">
-                                        <?php if ($p['name'] === 'modulor'): ?>
-                                            <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Modulons ensemble !...</a>
-                                        <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                            <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">En quête de personnalité ?...</a>
-                                        <?php elseif ($p['name'] === 'texturor'): ?>
-                                            <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">On refait la déco ?...</a>
-                                        <?php else: ?>
-                                            <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Voir le projet...</a>
-                                        <?php endif; ?>
-                                    </div>
-                                </article>
+                                <?php if ($p['details'] && isset($p['details']['niveau2'])): ?>
+                                    <?php if (!empty($p['details']['niveau2']['contexte'])): ?>
+                                        <div class="news-subhead">Contexte</div>
+                                        <p><?php echo htmlspecialchars($p['details']['niveau2']['contexte'], ENT_QUOTES, 'UTF-8'); ?></p>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($p['details']['niveau2']['fonctionnalites'])): ?>
+                                        <div class="news-subhead">Fonctionnalités clés</div>
+                                        <ul>
+                                            <?php foreach (array_slice($p['details']['niveau2']['fonctionnalites'], 0, ($p['colSpan'] == 12 ? 3 : 2)) as $f): ?>
+                                                <li><?php echo htmlspecialchars($f, ENT_QUOTES, 'UTF-8'); ?></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </div>
-                        <?php endforeach; ?>
+                            <div class="news-article-link-container">
+                                <?php if ($p['name'] === 'modulor'): ?>
+                                    <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Modulons ensemble !...</a>
+                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                    <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">En quête de personnalité ?...</a>
+                                <?php elseif ($p['name'] === 'texturor'): ?>
+                                    <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">On refait la déco ?...</a>
+                                <?php else: ?>
+                                    <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Voir le projet...</a>
+                                <?php endif; ?>
+                            </div>
+                        </article>
                     </div>
                 <?php endforeach; ?>
 
-                <!-- Pied de page / Rez-de-chaussée -->
-                <div class="news-footer">
-                    <span>Rédaction : Synchronisation dynamique (projects.json)</span>
-                    <span>Tous droits réservés • Atelier Nomade 2026</span>
-                </div>
-
+                <!-- Injection dynamique de l'Ours en mode bouche-trou (centré horizontalement et verticalement) -->
+                <?php if ($index === array_key_last($rows) && $bearColSpan > 0): ?>
+                    <div class="news-col-<?php echo $bearColSpan; ?>">
+                        <article class="news-article" style="background: #f8fafc; border: 1px dashed #cbd5e1; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <div>
+                                <ul style="list-style: none; padding: 0; margin: 0; font-family: -apple-system, sans-serif; font-size: 0.85rem; line-height: 1.8; color: #333;">
+                                    <li><strong>Rédacteur en chef :</strong> Christophe Millot</li>
+                                    <li><strong>Assistant :</strong> Gemini</li>
+                                    <li><strong>Pige :</strong> Antigravity</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                <?php endif; ?>
             </div>
+        <?php endforeach; ?>
+
+        <!-- Bascule automatique de l'Ours en pied de page si la grille est complète (aucun trou, centré) -->
+        <?php if ($bearColSpan === 0): ?>
+            <div class="news-colophon-footer" style="text-align: center; justify-content: center; gap: 20px;">
+                <span>Rédacteur en chef : Christophe Millot | Assistant : Gemini | Pige : Antigravity</span>
+            </div>
+        <?php endif; ?>
+
+        <!-- Pied de page / Rez-de-chaussée avec horloge dynamique et copyright (centré) -->
+        <div class="news-footer" style="text-align: center; justify-content: center; gap: 20px;">
+            <span>&copy; <?php echo date('Y'); ?> Christophe Millot • Tous droits réservés</span>
+            <span>•</span>
+            <span>Mise à jour : <?php echo date('d/m/Y à H:i'); ?></span>
         </div>
-    </details>
+
+    </div>
 
     <!-- MODALE OVERLAY MODULOR -->
     <div id="modulor-overlay">
@@ -1092,7 +1134,7 @@ if (!empty($currentRow)) {
             } else if (title.includes('mon-site')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Résultat direct de l\'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l\'exportation du squelette pour l\'afficher et le vérifier directement dans le navigateur en conditions réelles.</p>';
             } else if (title.includes('user_journey')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l\'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l\'expérience utilisateur, il fournit l\'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>';
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l\'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>';
             } else if (title.includes('texturor')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Conçu comme un CodePen <em>home made</em> au cœur de l\'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d\'œil. Doté d\'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>';
             } else if (title.includes('personator-v1.2')) {
@@ -1100,7 +1142,7 @@ if (!empty($currentRow)) {
             } else if (title.includes('modulor')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Laboratoire visuel et interactif de l\'atelier, <strong>modulor</strong> propose l\'interface idéale pour tester à la volée des mises en page, expérimenter des structures d\'UI et sculpter des composants en direct sans contrainte technique lourde.</p>';
             } else if (title.includes('skeletor-v1.0-o2switch')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Version dopée à la production de l\'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l\'enregistrement de trames de son aîné pour l\'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d\'un bloc le passage de la clé USB nomade à l\'hébergeur o2switch, sans friction ni perte de temps.</p>';
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Version dopée à la production de l\'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l\'enregistrement de trames de son aîné pour l\'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d\'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>';
             } else if (title.includes('skeletor-v1.0')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d\'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l\'arborescence à recréer à la main : il déploie en un clin d\'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.</p>';
             } else if (details && details.niveau1 && details.niveau1.pitch) {
