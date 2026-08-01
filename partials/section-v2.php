@@ -1,5 +1,8 @@
-<!-- SECTION EXPÉRIMENTALE (V2) -->
+<!-- ========================================================================== -->
+<!-- SECTION EXPÉRIMENTALE (V2) : STYLES DES CARTES ENRICHIES                   -->
+<!-- ========================================================================== -->
 <style>
+    /* Grille adaptative pour l'affichage responsive des cartes */
     .projects-grid-v2 {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -7,6 +10,7 @@
         margin-top: 20px;
     }
 
+    /* Conteneur principal de la carte V2 */
     .card-v2 {
         background-color: var(--card-bg);
         border: 1px solid rgba(255, 255, 255, 0.08);
@@ -20,6 +24,7 @@
         box-sizing: border-box;
     }
 
+    /* Effet au survol de la carte */
     .card-v2:hover {
         transform: translateY(-4px);
         border-color: rgba(56, 189, 248, 0.4);
@@ -39,7 +44,7 @@
         word-break: break-all;
     }
 
-    /* Média : Image de la card */
+    /* Média : Conteneur de l'image de la card */
     .card-v2-media {
         position: relative;
         width: 100%;
@@ -57,6 +62,7 @@
         display: block;
     }
 
+    /* Corps de la carte : répartition flex */
     .card-v2-body {
         flex-grow: 1;
         display: flex;
@@ -69,17 +75,19 @@
         margin-bottom: 10px;
     }
 
+    /* Badges de technologies */
     .card-v2-technos {
         margin-bottom: 20px;
     }
 
-    /* Boutons d'action en colonne (pleine largeur V1) */
+    /* Boutons d'action en colonne (pleine largeur) */
     .card-v2-actions {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
+    /* Style du bouton primaire "Lancer le site" */
     .btn-v2-primary {
         display: inline-block;
         text-align: center;
@@ -97,6 +105,7 @@
         background-color: var(--accent-hover);
     }
 
+    /* Style du bouton secondaire "En savoir plus..." (Ghost) */
     .btn-v2-ghost {
         background: rgba(56, 189, 248, 0.05);
         border: 1px solid rgba(56, 189, 248, 0.3);
@@ -123,17 +132,24 @@
     }
 </style>
 
+<!-- ========================================================================== -->
+<!-- CONTENEUR HTML DE LA SECTION V2                                            -->
+<!-- ========================================================================== -->
 <div id="section-v2-container">
+    <!-- Titre de section V2 -->
     <h2 style="color: var(--accent); font-size: 1.4rem; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
         🧪 Lanceur Projets (V2 - Cartes Enrichies)
     </h2>
 
+    <!-- Grille dynamique générée à partir du tableau PHP $projects -->
     <div class="projects-grid-v2">
         <?php foreach ($projects as $p): ?>
             <?php 
+                // Préparation des liens et des attributs de données (JSON pour la modale)
                 $linkHref = '/' . rawurlencode($p['name']) . '/';
                 $jsonDetailsAttr = htmlspecialchars(json_encode($p['details']), ENT_QUOTES, 'UTF-8');
                 
+                // Gestion de la source de l'image (fallback sur l'image par défaut si absente)
                 $assetsDir = __DIR__ . '/../dashboard-designer/assets/img/';
                 $defaultImage = 'photo-640x480.png';
                 $imgName = $defaultImage;
@@ -147,6 +163,8 @@
 
                 $imgSrc = 'dashboard-designer/assets/img/' . $imgName;
             ?>
+            
+            <!-- Carte individuelle V2 avec attributs de données pour l'interaction JS -->
             <div class="card-v2 card"
                  data-title="<?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>"
                  data-summary="<?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?>"
@@ -158,14 +176,15 @@
                     <h3 class="card-v2-title"><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
                 </div>
 
-                <!-- 2. Image -->
+                <!-- 2. Bloc Média (Aperçu visuel / Image) -->
                 <div class="card-v2-media">
                     <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
 
-                <!-- 3. Corps : Statut + Badges technos sous l'image -->
+                <!-- 3. Corps de la carte : Statut et Badges de technologies -->
                 <div class="card-v2-body">
                     <div>
+                        <!-- Badge de statut du projet (cliquable si non-WordPress) -->
                         <div class="card-v2-status">
                             <span class="<?php echo $p['badgeClass']; ?>" 
                                   data-project="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>"
@@ -175,6 +194,7 @@
                             </span>
                         </div>
 
+                        <!-- Affichage conditionnel des badges technos -->
                         <?php if (isset($p['details']['niveau1']['technos']) && !empty($p['details']['niveau1']['technos'])): ?>
                             <div class="card-v2-technos">
                                 <?php foreach ($p['details']['niveau1']['technos'] as $tech): ?>
@@ -184,7 +204,7 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- 4. Actions verticalisées -->
+                    <!-- 4. Boutons d'action verticalisés (Lancer + En savoir plus) -->
                     <div class="card-v2-actions">
                         <a class="btn-v2-primary" href="<?php echo $linkHref; ?>" target="_blank">
                             Lancer le site

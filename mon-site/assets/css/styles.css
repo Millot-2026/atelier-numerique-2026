@@ -1,0 +1,10 @@
+/* Style principal pour mon-site */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; text-align: center; }
+main { margin-top: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
