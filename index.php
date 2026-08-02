@@ -51,7 +51,7 @@ if (file_exists($statusesFile)) {
     }
 }
 
-// Dossiers système et dossiers internes à exclure du listing (mon-premier-site masqué ici)
+// Dossiers système et dossiers internes à exclure du listing
 $exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site'];
 
 foreach ($files as $file) {
@@ -240,22 +240,22 @@ foreach ($files as $file) {
             'name' => 'cms-2026-v8-full',
             'details' => [
                 'niveau1' => [
-                    'pitch' => "Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d\'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.",
+                    'pitch' => "Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Véritable poste de pilotage administrateur, l'application orchestre l'initialisation des articles, le suivi des publications et la gestion des flux sans aucune base de données lourde.",
                     'technos' => ['PHP', 'JavaScript', 'CSS Custom'],
-                    'image' => 'photo-640x480.png'
+                    'image' => '02-desktop-capture-cms-accueil.png'
                 ],
                 'niveau2' => [
-                    'contexte' => "Conçu pour répondre au besoin d'un CMS rapide, totalement personnalisable et indépendant des bases de données lourdes.",
+                    'contexte' => "Poste de pilotage et gestion centralisée des projets pour l'administrateur unique de la plateforme.",
                     'fonctionnalites' => [
-                        "Édition dynamique des contenus",
-                        "Gestion des blocs d'organisation",
+                        "Éditeur de blocs structurés et intégration visuelle",
+                        "Bascule transparente entre mode édition local et version d'exploitation en ligne",
                         "Architecture flat-file sans BDD"
                     ]
                 ],
                 'niveau3' => [
                     'architecture' => "Flat-file / PHP Vanille",
                     'environnement' => "Serveur local XAMPP / Clé USB",
-                    'roadmap' => "Ajout de nouveaux modules de mise en page"
+                    'roadmap' => "Optimisation des flux de publication distants"
                 ]
             ]
         ];
@@ -309,7 +309,6 @@ foreach ($files as $file) {
         ];
     }
 
-    // Fallback automatique pour tout autre dossier n'ayant pas de détails explicites
     if (!$customDetails) {
         $customDetails = [
             'name' => $file,
@@ -343,7 +342,11 @@ foreach ($files as $file) {
         $imgName = basename($customDetails['details']['niveau1']['image']);
     }
     
-    $screenshot = 'dashboard-designer/assets/img/' . $imgName;
+    if ($lowerFile === 'cms-2026-v8-full') {
+        $screenshot = 'images/images-cms/' . $imgName;
+    } else {
+        $screenshot = 'dashboard-designer/assets/img/' . $imgName;
+    }
     
     if (isset($savedStatuses[$file])) {
         $statusKey = $savedStatuses[$file];
@@ -369,7 +372,6 @@ foreach ($files as $file) {
         $badgeClass = 'badge badge-' . $statusKey;
     }
 
-    // Attribution de la largeur en colonnes et du libellé technique selon la nature du projet
     $colSpan = 6; 
     $sizeLabel = 'UX-UI';
 
@@ -400,8 +402,47 @@ foreach ($files as $file) {
     ];
 }
 
-// Ordonnancement strict selon notre classement validé
+// INJECTION MANUELLE DE WORKSTATION
+$projectsRaw['workstation'] = [
+    'name'        => 'workstation',
+    'title'       => 'Workstation',
+    'hasIndex'    => true,
+    'isWP'        => false,
+    'description' => "Cockpit central et tableau de bord de l'atelier nomade.",
+    'screenshot'  => 'images/images-workstation/01-header.png',
+    'statusKey'   => 'operational',
+    'badgeLabel'  => '&#x1F7E0; Op&eacute;rationnel',
+    'badgeClass'  => 'badge badge-operational',
+    'cardClass'   => 'card',
+    'details'     => [
+        'niveau1' => [
+            'pitch' => "Véritable cockpit central et tableau de bord ultime, <strong>Workstation</strong> unifie le pilotage du temps, la météo en direct, le lancement rapide des applications et des outils de prototypage de code instantanés dans une interface sombre et immersive.",
+            'technos' => ['PHP', 'JavaScript', 'CSS Custom'],
+            'image' => '01-header.png'
+        ],
+        'niveau2' => [
+            'contexte' => "Conçu pour unifier l'accès aux multiples applications de l'atelier nomade sans dépendre d'outils lourds ou distants.",
+            'fonctionnalites' => [
+                "Mise en page journalistique multi-combinaisons",
+                "Gestion dynamique des statuts de projets",
+                "Architecture modulaire et responsive de la même façon que c'est fait dans les autres cards."
+            ]
+        ],
+        'niveau3' => [
+            'architecture' => "Flat-file / PHP Vanille / CSS Grid",
+            'environnement' => "Serveur local XAMPP / Clé USB",
+            'roadmap' => "Évolution vers une application Windows native"
+        ]
+    ],
+    'colSpan'     => 12,
+    'colClass'    => 'news-col-12',
+    'sizeLabel'   => 'SYSTEM',
+    'linkHref'    => '#'
+];
+
+// Ordonnancement strict
 $orderedKeys = [
+    'workstation',
     'cms-2026-v8-full',
     'dashboard-designer',
     'skeletor-v1.0',
@@ -425,7 +466,7 @@ foreach ($projectsRaw as $extraP) {
     $projects[] = $extraP;
 }
 
-// Algorithme d'empaquetage mathématique strict (lignes exactes de 12 colonnes -> Zéro trou)
+// Algorithme d'empaquetage mathématique strict
 $rows = [];
 $currentRow = [];
 $currentSpan = 0;
@@ -449,7 +490,6 @@ if (!empty($currentRow)) {
     $rows[] = $currentRow;
 }
 
-// Calcul de l'espace restant sur la dernière ligne pour l'ours dynamique
 $lastRowSpan = 0;
 if (!empty($rows)) {
     $lastRow = end($rows);
@@ -541,6 +581,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         }
         .btn-info:hover { background-color: var(--accent); color: var(--bg-color); border-color: var(--accent); }
 
+        /* MODALE OVERLAY CORRIGÉE */
         #modulor-overlay {
             position: fixed; inset: 0; background-color: var(--bg-color); z-index: 10000;
             display: flex; flex-direction: column; opacity: 0; pointer-events: none;
@@ -567,7 +608,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
         .separator-v2 { border: none; height: 6px; background-color: var(--accent); margin: 40px 0; opacity: 0.8; border-radius: 3px; }
 
-        /* SECTIONS PLIABLES <details> */
         details.section-block { margin-bottom: 40px; border-radius: 12px; overflow: hidden; }
         details.section-block > summary {
             list-style: none; cursor: pointer; user-select: none; padding: 14px 20px;
@@ -583,9 +623,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         details.section-block[open] > summary .summary-chevron { transform: rotate(180deg); }
         .section-body { padding: 24px 4px 8px 4px; }
 
-        /* ============================================================
-            SECTION NEWS (GRILLE 12 COLONNES - MISE EN PAGE JOURNAL 100% SANS TROU)
-        ============================================================ */
         .news-sheet {
             background-color: #fdfbf7;
             color: #2b2b2b;
@@ -660,7 +697,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             color: #333333;
         }
 
-        /* SYSTÈME DE LIGNES 12 COLONNES */
         .news-row {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
@@ -682,7 +718,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             .news-ear { display: none; }
         }
 
-        /* Style des articles rédactionnels avec encart visuel fixe (hauteur 220px, ancré en haut, loupe) */
         .news-article {
             background: #fff;
             padding: 22px;
@@ -705,96 +740,124 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             padding-bottom: 4px;
         }
 
-        .news-article-visual {
-            width: 100%;
-            height: 220px;
-            background-color: #f1f3f5;
-            border: 1px dashed #cbd5e1;
-            border-radius: 4px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            color: #64748b;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            cursor: zoom-in;
-            position: relative;
-        }
-        .news-article-visual img {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-position: top;
-        }
-
-        /* OVERLAY DÉDIÉ POUR L'IMAGE DU JOURNAL (Noir dense, curseur SVG miniature intégré propre et net en 24x24, scrollbar masquée) */
-        #journal-img-overlay {
-            position: fixed;
-            inset: 0;
-            background: #000000;
-            z-index: 20000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 40px;
+        .press-figure {
+            margin: 0 0 16px 0;
+            background: #fdfbf7;
+            border: 1px solid #e2ddd5;
+            padding: 8px;
             box-sizing: border-box;
         }
-        #journal-img-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .journal-img-overlay-content {
-            position: relative;
-            max-width: 95vw;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: #000000;
-            padding: 0;
-            border-radius: 0;
-            box-shadow: none;
-            border: none;
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ffffff' stroke='%23000000' stroke-width='2'/%3E%3Cpath d='M12 7l-3 4h6z' fill='%23000000'/%3E%3Cpath d='M12 17l-3-4h6z' fill='%23000000'/%3E%3C/svg%3E") 12 12, ns-resize;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        .journal-img-overlay-content::-webkit-scrollbar {
-            display: none;
-        }
-
-        .journal-img-overlay-content img {
+        .press-figure img {
             width: 100%;
             height: auto;
+            max-height: 480px;
+            object-fit: contain;
+            background: #f8fafc;
             display: block;
-            border-radius: 0;
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ffffff' stroke='%23000000' stroke-width='2'/%3E%3Cpath d='M12 7l-3 4h6z' fill='%23000000'/%3E%3Cpath d='M12 17l-3-4h6z' fill='%23000000'/%3E%3C/svg%3E") 12 12, ns-resize;
+            border: 1px solid #dcd7ce;
+            cursor: zoom-in;
+        }
+        
+        .press-figure-scrollable img {
+            height: 400px !important;
+            max-height: 400px !important;
+            object-fit: cover !important;
+            object-position: top !important;
+            overflow-y: auto;
         }
 
-        .journal-img-close {
-            position: fixed;
-            top: 30px;
-            right: 40px;
-            background: #1c1c1c;
-            border: none;
-            color: #f3f3f3;
-            padding: 10px 20px;
-            border-radius: 0;
-            font-size: 1rem;
+        .press-caption {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-top: 6px;
             font-weight: bold;
-            cursor: pointer;
-            z-index: 20001;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            transition: all 0.2s;
+            text-align: center;
         }
-        .journal-img-close:hover {
-            background: #333333;
-            color: #ffffff;
+
+        .press-duo-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+            background: #fdfbf7;
+            border: 1px solid #e2ddd5;
+            padding: 8px;
+        }
+        .press-duo-layout img {
+            width: 100%;
+            height: auto;
+            max-height: 280px;
+            object-fit: contain;
+            background: #f8fafc;
+            display: block;
+            border: 1px solid #dcd7ce;
+            cursor: zoom-in;
+        }
+        .press-duo-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #333;
+            text-align: justify;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .press-duo-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-switch-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+            background: #f1f3f5;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid #e2ddd5;
+            border-bottom: none;
+        }
+        .editor-switch-btn {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #333;
+            transition: all 0.2s;
+            text-align: center;
+            line-height: 1.2;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .editor-switch-btn.active, .editor-switch-btn:hover {
+            background: #2b2b2b;
+            color: #fff;
+            border-color: #2b2b2b;
+        }
+        .editor-switch-hint {
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.65rem;
+            color: #777;
+            background: #f1f3f5;
+            padding: 0 8px 6px 8px;
+            margin-bottom: 12px;
+            border: 1px solid #e2ddd5;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            font-style: italic;
         }
 
         .news-article p.news-pitch::first-letter {
@@ -833,7 +896,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         .news-article ul { margin: 4px 0 8px 0; padding-left: 1.1em; color: #4a4a4a; }
         .news-article li { font-size: 0.85rem; line-height: 1.4; margin-bottom: 2px; }
 
-        /* Masquage strict des tags et badges techniques dans cette section */
         .news-sheet .badge-tech, 
         .news-sheet .press-badge-tech, 
         .news-sheet .badge {
@@ -853,7 +915,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             letter-spacing: 1px;
         }
 
-        /* Style de l'ours en pied de page si la grille est complète */
         .news-colophon-footer {
             margin-top: 20px;
             padding-top: 15px;
@@ -866,7 +927,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             align-items: center;
         }
 
-        /* Lien interactif aligné à droite, gris et obscurci au survol */
         .news-article-link-container {
             margin-top: 15px;
             font-size: 0.75rem;
@@ -887,7 +947,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             font-weight: bold;
         }
 
-        /* MISE EN PAGE 2 COLONNES UNIQUEMENT AU FORMAT DESK (> 1024px) */
         @media (min-width: 1025px) {
             .desk-col-2 {
                 column-count: 2;
@@ -902,9 +961,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
-    <!-- ============================================================
-         SECTION V1 : GRILLE PRINCIPALE (HAUT DE PAGE)
-    ============================================================ -->
     <details class="section-block" open>
         <summary>
             <span class="summary-icon">🗂️</span>
@@ -948,9 +1004,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     <hr class="separator-v2">
 
-    <!-- ============================================================
-         SECTION V2 : LANCEUR PROJETS - CARTES ENRICHIES
-    ============================================================ -->
     <details class="section-block" open>
         <summary>
             <span class="summary-icon">🚀</span>
@@ -962,9 +1015,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </div>
     </details>
 
-    <!-- ============================================================
-         SECTION V3 : PRÉSENTATION DE L'ÉCOSYSTÈME & RAPPORT CLÉ [MASQUÉE EN RÉSERVE]
-    ============================================================ -->
     <details class="section-block section-ecosystem" style="display: none;">
         <summary>
             <span class="summary-icon">📋</span>
@@ -979,9 +1029,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </div>
     </details>
 
-    <!-- ============================================================
-         SECTION V4 : PRÉSENTATION DE L'ATELIER 2026 [MASQUÉE EN RÉSERVE - NON JETÉE]
-    ============================================================ -->
     <details class="section-block" style="display: none;">
         <summary>
             <span class="summary-icon">🏛️</span>
@@ -993,17 +1040,12 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </div>
     </details>
 
-    <!-- ============================================================
-         SECTION 4 : NEWS (JOURNAL DE L'ATELIER)
-    ============================================================ -->
     <div class="news-sheet">
         
-        <!-- Bandeau supérieur -->
         <div class="news-bandeau">
             Chronique Indépendante • Édition Spéciale Nomadisme Numérique • 2026
         </div>
 
-        <!-- Manchette et Oreilles -->
         <div class="news-header-grid">
             <div class="news-ear">
                 <strong>SUPPORT :</strong> Clé USB F:\<br>
@@ -1019,13 +1061,11 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             </div>
         </div>
 
-        <!-- Tribune (Éditorial) -->
         <div class="news-tribune">
             <h3>Tribune Libre — L'Affranchissement du Cloud</h3>
             <p>« S'affranchir des infrastructures distantes pour recentrer le développement web sur l'essentiel : la maîtrise absolue du code, de l'octet initial jusqu'au déploiement final, au creux d'un support de poche inaltérable. »</p>
         </div>
 
-        <!-- Le Ventre : Affichage par lignes de 12 colonnes sans trou -->
         <?php foreach ($rows as $index => $rowProjects): ?>
             <div class="news-row">
                 <?php foreach ($rowProjects as $p): ?>
@@ -1033,28 +1073,147 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                     $linkHref = '/' . rawurlencode($p['name']) . '/';
                     ?>
                     <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <article class="news-article">
+                        <article class="news-article" style="<?php echo ($p['name'] === 'workstation' || $p['name'] === 'cms-2026-v8-full') ? 'background-color: #fdf2f4 !important; border: 2px dashed #f43f5e !important;' : ''; ?>">
                             <div>
                                 <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
                                     <h4 style="margin: 0; border: none; padding: 0;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
                                     <span style="font-family: -apple-system, sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
                                 </div>
                                 
-                                <!-- Encart visuel / Image dynamique ancrée en haut dans le journal -->
-                                <div class="news-article-visual" style="<?php echo ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch' || $p['name'] === 'personator-v1.2') ? 'border: none; background: transparent;' : ''; ?>">
-                                    <?php if ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
-                                        <img src="images/capture-skeletor.png" alt="Aperçu Skeletor" onclick="openJournalImage(this.src)">
-                                    <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                        <img src="images/capture-personator.png" alt="Aperçu Personator" onclick="openJournalImage(this.src)">
-                                    <?php else: ?>
-                                        <i class="fas fa-image" style="margin-right: 6px;"></i> Encart Visuel / Illustration
-                                    <?php endif; ?>
-                                </div>
-
                                 <?php if ($p['name'] === 'cms-2026-v8-full'): ?>
-                                    <p class="news-pitch desk-col-2">Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d\'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>
+                                    
+                                    <p class="news-pitch">Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Entièrement autonome sur un serveur local XAMPP, il incarne l'excellence du développement Flat-file.</p>
+
+                                    <div class="press-duo-layout">
+                                        <div>
+                                            <img src="images/images-cms/01-desktop-capture-cms-hero.png" alt="Vitrine Hero" onclick="openJournalImage(this.src)">
+                                            <div class="press-caption">Fig. 1 — En-tête de la vitrine (Hero)</div>
+                                        </div>
+                                        <div>
+                                            <p class="press-duo-text"><strong>La vitrine d'accueil :</strong> Première immersion dans l'écosystème du CMS. Conçu comme une invitation visuelle, ce bandeau d'en-tête (Hero) pose l'ambiance graphique de la plateforme. Pensé pour évoluer, il pourra prochainement s'appuyer sur une bibliothèque d'images pour renouveler l'inspiration à chaque connexion.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="press-duo-layout">
+                                        <div>
+                                            <img src="images/images-cms/02-desktop-capture-cms-accueil.png" alt="Poste de pilotage" onclick="openJournalImage(this.src)">
+                                            <div class="press-caption">Fig. 2 — Poste de pilotage (Gestion des Projets)</div>
+                                        </div>
+                                        <div>
+                                            <p class="press-duo-text"><strong>Le poste de pilotage :</strong> Tour de contrôle de l'administrateur unique, cette interface centralise l'accès aux cartes de projets. Chaque espace permet d'initialiser un nouvel article ou de basculer en mode de configuration, garantissant une maîtrise absolue des flux de travail sans aucune dépendance cloud.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="news-subhead">Immersion dans l'Éditeur &amp; Le Responsive</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">La visite se poursuit par la découverte de l'éditeur de pages. Utilisez le sélecteur ci-dessous pour basculer dynamiquement entre l'aperçu Bureau et l'aperçu Mobile de l'interface.</p>
+                                    
+                                    <div class="editor-switch-bar">
+                                        <button type="button" class="editor-switch-btn active" onclick="switchEditorView('desktop', this)">
+                                            <span>Aperçu desktop</span>
+                                        </button>
+                                        <button type="button" class="editor-switch-btn" onclick="switchEditorView('mobile', this)">
+                                            <span>Aperçu mobile</span>
+                                        </button>
+                                    </div>
+                                    <div class="editor-switch-hint">Cliquez dans l'image pour l'agrandir</div>
+
+                                    <figure class="press-figure press-figure-scrollable" id="editor-figure-wrapper">
+                                        <img id="editor-demo-img" src="images/images-cms/03-capture-cms-editeur-frame-desktop.png" alt="Éditeur Desktop" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption" id="editor-demo-caption">Fig. 3 — L'éditeur en mode Bureau (hauteur fixe de 400px avec défilement interne)</figcaption>
+                                    </figure>
+
+                                    <div class="news-subhead">Restitution et Rendu Final</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">Chaque modification s'exporte et s'affiche instantanément en conditions réelles, garantissant une parfaite lisibilité sur tous les supports d'exploitation.</p>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+                                        <figure class="press-figure" style="margin: 0;">
+                                            <img src="images/images-cms/03-desktopcapture cms-site-exemple-page.png" alt="Exemple de page" onclick="openJournalImage(this.src)" style="max-height: 250px;">
+                                            <figcaption class="press-caption">Fig. 5 — Page exemple générée</figcaption>
+                                        </figure>
+                                        <figure class="press-figure" style="margin: 0;">
+                                            <img src="images/images-cms/05-capture cms-site-mobile.png" alt="Rendu mobile" onclick="openJournalImage(this.src)" style="max-height: 250px;">
+                                            <figcaption class="press-caption">Fig. 6 — Rendu mobile final</figcaption>
+                                        </figure>
+                                    </div>
+
+                                <?php elseif ($p['name'] === 'workstation'): ?>
+                                    
+                                    <p class="news-pitch">Au cœur de l'écosystème portable, <strong>Workstation</strong> s'impose comme le cockpit central et le tableau de bord ultime du développeur nomade. Pensé pour fusionner pilotage du temps, météo en temps réel et utilitaires de code instantanés, il centralise l'ensemble des flux de l'atelier sous une charte graphique sombre et immersive.</p>
+
+                                    <div class="news-subhead">Le Cockpit &amp; Contrôles Horaires</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">La partie supérieure réunit les indicateurs vitaux de l'atelier : horloge analogique synchronisée, météo en direct et sélecteur de thèmes dynamiques.</p>
+                                    
+                                    <figure class="press-figure">
+                                        <img src="images/images-workstation/01-header.png" alt="Header Workstation" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption">Fig. 1 — En-tête, horloge et widgets de session</figcaption>
+                                    </figure>
+
+                                    <figure class="press-figure">
+                                        <img src="images/images-workstation/02-racourcis.png" alt="Raccourcis web" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption">Fig. 2 — Barre de raccourcis rapides</figcaption>
+                                    </figure>
+
+                                    <div class="news-subhead">Navigation &amp; Utilitaires de Saisie</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">Le lanceur de projets et les générateurs intégrés (tests de polices Google Fonts, convertisseurs PX to REM) offrent une réactivité immédiate sans quitter l'interface.</p>
+
+                                    <div class="desk-col-2">
+                                        <figure class="press-figure">
+                                            <img src="images/images-workstation/03-lanceur.png" alt="Lanceur de projets" onclick="openJournalImage(this.src)">
+                                            <figcaption class="press-caption">Fig. 3 — Grille du lanceur de projets</figcaption>
+                                        </figure>
+                                        <figure class="press-figure">
+                                            <img src="images/images-workstation/04-google-font-tester.png" alt="Google Font Tester" onclick="openJournalImage(this.src)">
+                                            <figcaption class="press-caption">Fig. 4 — Module testeur de polices &amp; Lorem</figcaption>
+                                        </figure>
+                                    </div>
+
+                                    <div class="news-subhead">Prototypage Live &amp; Playground CSS</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">L'espace d'expérimentation permet de tester du code HTML/CSS à la volée et de manipuler les propriétés graphiques en direct.</p>
+
+                                    <figure class="press-figure">
+                                        <img src="images/images-workstation/05-codepen.png" alt="Codepen Master" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption">Fig. 5 — Codepen Master intégré</figcaption>
+                                    </figure>
+
+                                    <figure class="press-figure">
+                                        <img src="images/images-workstation/06-css-playground.png" alt="CSS Playground" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption">Fig. 6 — Playground CSS interactif</figcaption>
+                                    </figure>
+
+                                    <div class="news-subhead">Notes Rapides &amp; Suivi de Projet</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">Le bloc de notes persistantes et le journal de bord structurent la feuille de route et l'évolution de l'application vers un mode natif.</p>
+
+                                    <div class="desk-col-2">
+                                        <figure class="press-figure">
+                                            <img src="images/images-workstation/07-notes-rapides.png" alt="Notes rapides" onclick="openJournalImage(this.src)">
+                                            <figcaption class="press-caption">Fig. 7 — Bloc notes rapides</figcaption>
+                                        </figure>
+                                        <figure class="press-figure">
+                                            <img src="images/images-workstation/08-journal-de developpement-de-ce-projet.png" alt="Journal de bord" onclick="openJournalImage(this.src)">
+                                            <figcaption class="press-caption">Fig. 8 — Journal de développement et roadmap</figcaption>
+                                        </figure>
+                                    </div>
+
+                                <?php elseif ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
+                                    <figure class="press-figure">
+                                        <img src="images/capture-skeletor.png" alt="Aperçu Skeletor" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption">Illustration — Skeletor</figcaption>
+                                    </figure>
+                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                    <figure class="press-figure">
+                                        <img src="images/capture-personator.png" alt="Aperçu Personator" onclick="openJournalImage(this.src)">
+                                        <figcaption class="press-caption">Illustration — Personator</figcaption>
+                                    </figure>
+                                <?php else: ?>
+                                    <div style="height: 180px; background: #f1f3f5; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 16px;">
+                                        <i class="fas fa-image" style="margin-right: 6px;">&nbsp;</i> Illustration
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation'): ?>
+                                    
                                 <?php elseif ($p['name'] === 'dashboard-designer'): ?>
-                                    <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, il permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
+                                    <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, le module permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
                                 <?php elseif ($p['name'] === 'wordpress-portable'): ?>
                                     <p class="news-pitch">Instance WordPress totalement encapsulée et autonome, <strong>wordpress-portable</strong> embarque toute la puissance du CMS le plus populaire du web directement au creux de votre clé USB, sans installation lourde sur la machine hôte.</p>
                                 <?php elseif ($p['name'] === 'mon-site'): ?>
@@ -1077,7 +1236,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                                     <p class="news-pitch"><?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                                 <?php endif; ?>
 
-                                <?php if ($p['details'] && isset($p['details']['niveau2'])): ?>
+                                <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation']) && $p['details'] && isset($p['details']['niveau2'])): ?>
                                     <?php if (!empty($p['details']['niveau2']['contexte'])): ?>
                                         <div class="news-subhead">Contexte</div>
                                         <p><?php echo htmlspecialchars($p['details']['niveau2']['contexte'], ENT_QUOTES, 'UTF-8'); ?></p>
@@ -1100,6 +1259,8 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                                     <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">En quête de personnalité ?...</a>
                                 <?php elseif ($p['name'] === 'texturor'): ?>
                                     <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">On refait la déco ?...</a>
+                                <?php elseif (in_array($p['name'], ['cms-2026-v8-full', 'workstation'])): ?>
+                                    <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Lire l'article...</a>
                                 <?php else: ?>
                                     <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Voir le projet...</a>
                                 <?php endif; ?>
@@ -1108,7 +1269,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                     </div>
                 <?php endforeach; ?>
 
-                <!-- Injection dynamique de l'Ours en mode bouche-trou (centré horizontalement et verticalement) -->
                 <?php if ($index === array_key_last($rows) && $bearColSpan > 0): ?>
                     <div class="news-col-<?php echo $bearColSpan; ?>">
                         <article class="news-article" style="background: #f8fafc; border: 1px dashed #cbd5e1; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -1125,14 +1285,12 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             </div>
         <?php endforeach; ?>
 
-        <!-- Bascule automatique de l'Ours en pied de page si la grille est complète (aucun trou, centré) -->
         <?php if ($bearColSpan === 0): ?>
             <div class="news-colophon-footer" style="text-align: center; justify-content: center; gap: 20px;">
                 <span>Rédacteur en chef : Christophe Millot | Assistant : Gemini | Pige : Antigravity</span>
             </div>
         <?php endif; ?>
 
-        <!-- Pied de page / Rez-de-chaussée avec horloge dynamique et copyright (centré) -->
         <div class="news-footer" style="text-align: center; justify-content: center; gap: 20px;">
             <span>&copy; <?php echo date('Y'); ?> Christophe Millot • Tous droits réservés</span>
             <span>•</span>
@@ -1141,7 +1299,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     </div>
 
-    <!-- MODALE OVERLAY -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
@@ -1155,7 +1312,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </div>
     </div>
 
-    <!-- OVERLAY DÉDIÉ POUR L'IMAGE DU JOURNAL (Noir dense, curseur SVG miniature 24x24 rond flèches haut/bas, scrollbar masquée) -->
     <div id="journal-img-overlay">
         <button class="journal-img-close" onclick="closeJournalImage()"><i class="fas fa-times"></i> Fermer</button>
         <div class="journal-img-overlay-content">
@@ -1199,14 +1355,34 @@ if ($bearColSpan < 0) $bearColSpan = 0;
               .catch(error => console.error('Erreur réseau :', error));
         }
 
+        // Fonction du switch Desktop/Mobile corrigée
+        function switchEditorView(mode, btnEl) {
+            const imgEl = document.getElementById('editor-demo-img');
+            const captionEl = document.getElementById('editor-demo-caption');
+            const container = btnEl.closest('.editor-switch-bar') || btnEl.parentElement;
+            
+            if (container) {
+                container.querySelectorAll('.editor-switch-btn').forEach(b => b.classList.remove('active'));
+            }
+            btnEl.classList.add('active');
+
+            if (imgEl) {
+                if (mode === 'desktop') {
+                    imgEl.src = 'images/images-cms/03-capture-cms-editeur-frame-desktop.png';
+                    if (captionEl) captionEl.innerHTML = 'Fig. 3 — L\'éditeur en mode Bureau (hauteur fixe de 400px avec défilement interne)';
+                } else {
+                    imgEl.src = 'images/images-cms/04-capture-cms-editeur-frame-mobile.png';
+                    if (captionEl) captionEl.innerHTML = 'Fig. 4 — L\'éditeur en mode Mobile (hauteur fixe de 400px avec défilement interne)';
+                }
+            }
+        }
+
+        // Fonction openOverlay corrigée pour cibler correctement .card
         function openOverlay(btn) {
-            const card = btn.closest('.card, .card-v2');
+            const card = btn.closest('.card');
             if (!card) return;
             
-            const badgeEl = card.querySelector('[data-project]');
-            const projectName = badgeEl ? badgeEl.getAttribute('data-project') : '';
-            
-            const title = (card.getAttribute('data-title') || '').toLowerCase();
+            const title = card.getAttribute('data-title') || '';
             const summary = card.getAttribute('data-summary') || '';
             const imgSrc = card.getAttribute('data-img') || '';
             
@@ -1218,34 +1394,21 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                 }
             } catch(e) {}
 
-            document.getElementById('overlay-title').innerText = card.getAttribute('data-title') || 'Détails';
+            document.getElementById('overlay-title').innerText = title || 'Détails';
             const containerText = document.getElementById('overlay-text');
             const mediaWrapper = document.getElementById('overlay-media-wrapper');
             const imgContainer = document.getElementById('overlay-img-container');
 
             let html = '';
-
             html += '<div class="level-block">';
-            if (title.includes('cms-2026-v8-full')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;" class="desk-col-2">Au cœur de l\'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s\'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d\'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>';
-            } else if (title.includes('dashboard-designer')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;" class="desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l\'ergonomie de pilotage de l\'atelier nomade. En fusionnant l\'esthétique rédactionnelle de la grande presse et la rigueur d\'un tableau de bord technique, le module permet d\'orchestrer, de structurer et de visualiser l\'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>';
-            } else if (title.includes('wordpress-portable')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Instance WordPress totalement encapsulée et autonome, <strong>wordpress-portable</strong> embarque toute la puissance du CMS le plus populaire du web directement au creux de votre clé USB, sans installation lourde sur la machine hôte.</p>';
-            } else if (title.includes('mon-site')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Résultat direct de l\'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l\'exportation du squelette pour l\'afficher et le vérifier directement dans le navigateur en conditions réelles.</p>';
-            } else if (title.includes('user_journey')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l\'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l\'expérience utilisateur, il fournit l\'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>';
-            } else if (title.includes('texturor')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Conçu comme un CodePen <em>home made</em> au cœur de l\'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d\'œil. Doté d\'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>';
-            } else if (title.includes('personator-v1.2')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Atelier d\'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>';
-            } else if (title.includes('modulor')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Laboratoire visuel et interactif de l\'atelier, <strong>modulor</strong> propose l\'interface idéale pour tester à la volée des mises en page, expérimenter des structures d\'UI et sculpter des composants en direct sans contrainte technique lourde.</p>';
-            } else if (title.includes('skeletor-v1.0-o2switch')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Version dopée à la production de l\'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l\'enregistrement de trames de son aîné pour l\'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d\'un bloc le passage de la clé USB nomade à l\'hébergeur o2switch, sans friction ni perte de temps.</p>';
-            } else if (title.includes('skeletor-v1.0')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d\'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l\'arborescence à recréer à la main : il déploie en un clin d\'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.</p>';
+            
+            const titleLower = title.toLowerCase();
+            if (titleLower.includes('cms-2026-v8-full')) {
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Au cœur de l\'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s\'affranchir des lourdeurs du web traditionnel. Véritable poste de pilotage administrateur, l\'application orchestre l\'initialisation des articles et le suivi des flux sans aucune base de données lourde.</p>';
+            } else if (titleLower.includes('workstation')) {
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Véritable cockpit central et tableau de bord ultime, <strong>Workstation</strong> unifie le pilotage du temps, la météo en direct, le lancement rapide des applications et des outils de prototypage de code instantanés dans une interface sombre et immersive.</p>';
+            } else if (titleLower.includes('dashboard-designer')) {
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Le module <strong>dashboard-designer</strong> redéfinit l\'ergonomie de pilotage de l\'atelier nomade. En fusionnant l\'esthétique rédactionnelle de la grande presse et la rigueur d\'un tableau de bord technique, le module permet d\'orchestrer, de structurer et de visualiser l\'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>';
             } else if (details && details.niveau1 && details.niveau1.pitch) {
                 html += `<p style="font-size: 1.1em; color: #fff; font-weight: bold;">${details.niveau1.pitch}</p>`;
             } else {
@@ -1288,15 +1451,16 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
             containerText.innerHTML = html;
 
-            if (projectName === 'skeletor-v1.0' || projectName === 'skeletor-v1.0-o2switch' || title.includes('skeletor')) {
+            if (titleLower.includes('skeletor')) {
                 mediaWrapper.innerHTML = `<img id="overlay-img" src="images/capture-skeletor.png" alt="Aperçu Skeletor" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
-            } else if (projectName === 'personator-v1.2' || title.includes('personator')) {
+            } else if (titleLower.includes('personator')) {
                 mediaWrapper.innerHTML = `<img id="overlay-img" src="images/capture-personator.png" alt="Aperçu Personator" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
+            } else if (titleLower.includes('cms-2026-v8-full')) {
+                mediaWrapper.innerHTML = `<img id="overlay-img" src="images/images-cms/02-desktop-capture-cms-accueil.png" alt="Poste de pilotage CMS" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
+            } else if (titleLower.includes('workstation')) {
+                mediaWrapper.innerHTML = `<img id="overlay-img" src="images/images-workstation/01-header.png" alt="Aperçu Workstation" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
             } else {
                 let finalImgSrc = imgSrc || `dashboard-designer/assets/img/photo-640x480.png`;
-                if (details && details.niveau1 && details.niveau1.image && !title.includes('skeletor') && !title.includes('personator')) {
-                    finalImgSrc = `dashboard-designer/assets/img/${details.niveau1.image}`;
-                }
                 mediaWrapper.innerHTML = `<img id="overlay-img" src="${finalImgSrc}" alt="Aperçu de la page d'accueil" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
             }
             imgContainer.style.display = 'block';
@@ -1310,7 +1474,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             document.body.style.overflow = 'auto';
         }
 
-        // Fonctions pour l'overlay de zoom des images du journal (fond noir dense, curseur SVG rond miniature 24x24, scrollbar masquée)
         function openJournalImage(src) {
             document.getElementById('journal-overlay-img').src = src;
             document.getElementById('journal-img-overlay').classList.add('active');
