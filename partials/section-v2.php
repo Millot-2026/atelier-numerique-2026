@@ -209,7 +209,7 @@
                         <a class="btn-v2-primary" href="<?php echo $linkHref; ?>" target="_blank">
                             Lancer le site
                         </a>
-                        <button class="btn-v2-ghost" onclick="openOverlay(this)" title="En savoir plus">
+                        <button type="button" class="btn-v2-ghost" onclick="openOverlay(this)" title="En savoir plus">
                             <i class="fas fa-eye"></i> En savoir plus...
                         </button>
                     </div>

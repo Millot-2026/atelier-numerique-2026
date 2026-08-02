@@ -625,13 +625,13 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             letter-spacing: 1px;
         }
         .news-manchette {
-            font-size: 3rem;
+            font-size: 2.2rem;
             font-weight: 900;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
             text-transform: uppercase;
             color: #111;
             margin: 0;
-            line-height: 1;
+            line-height: 1.1;
             font-family: Georgia, serif;
         }
 
@@ -826,9 +826,9 @@ if ($bearColSpan < 0) $bearColSpan = 0;
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
     <!-- ============================================================
-         SECTION V1 : GRILLE PRINCIPALE (HAUT DE PAGE) [MASQUÉE EN RÉSERVE]
+         SECTION V1 : GRILLE PRINCIPALE (HAUT DE PAGE)
     ============================================================ -->
-    <details class="section-block" open style="display: none;">
+    <details class="section-block" open>
         <summary>
             <span class="summary-icon">🗂️</span>
             <h2>Mes Projets Nomades (V1)</h2>
@@ -860,7 +860,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                             </div>
                             <div class="card-actions">
                                 <a class="card-link" href="<?php echo $linkHref; ?>" target="_blank">Lancer le site</a>
-                                <button class="btn-info" onclick="openOverlay(this)"><i class="fas fa-eye"></i> En savoir plus...</button>
+                                <button type="button" class="btn-info" onclick="openOverlay(this)"><i class="fas fa-eye"></i> En savoir plus...</button>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -869,12 +869,12 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </div>
     </details>
 
-    <hr class="separator-v2" style="display: none;">
+    <hr class="separator-v2">
 
     <!-- ============================================================
-         SECTION V2 : LANCEUR PROJETS - CARTES ENRICHIES [MASQUÉE EN RÉSERVE]
+         SECTION V2 : LANCEUR PROJETS - CARTES ENRICHIES
     ============================================================ -->
-    <details class="section-block" open style="display: none;">
+    <details class="section-block" open>
         <summary>
             <span class="summary-icon">🚀</span>
             <h2>Lanceur Projets (V2 — Cartes Enrichies)</h2>
@@ -917,7 +917,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
     </details>
 
     <!-- ============================================================
-         SECTION 4 : NEWS (JOURNAL DE L'ATELIER - SORTI DU DÉROULANT ET EN PREMIER)
+         SECTION 4 : NEWS (JOURNAL DE L'ATELIER)
     ============================================================ -->
     <div class="news-sheet">
         
@@ -933,8 +933,8 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                 <strong>SERVEUR :</strong> XAMPP Portable
             </div>
             <div>
-                <h2 class="news-manchette">Le Journal</h2>
-                <div style="font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 6px; font-weight: bold;">De l'Atelier Numérique</div>
+                <h2 class="news-manchette">L'Atelier Numérique</h2>
+                <div style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; font-weight: bold; color: #444;">Christophe Millot</div>
             </div>
             <div class="news-ear">
                 <strong>ARCHITECTURES :</strong> Flat-File<br>
@@ -952,6 +952,9 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         <?php foreach ($rows as $index => $rowProjects): ?>
             <div class="news-row">
                 <?php foreach ($rowProjects as $p): ?>
+                    <?php
+                    $linkHref = '/' . rawurlencode($p['name']) . '/';
+                    ?>
                     <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
                         <article class="news-article">
                             <div>
@@ -1105,9 +1108,11 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
         function openOverlay(btn) {
             const card = btn.closest('.card, .card-v2');
-            const title = card.getAttribute('data-title').toLowerCase();
-            const summary = card.getAttribute('data-summary');
-            const imgSrc = card.getAttribute('data-img');
+            if (!card) return;
+            
+            const title = (card.getAttribute('data-title') || '').toLowerCase();
+            const summary = card.getAttribute('data-summary') || '';
+            const imgSrc = card.getAttribute('data-img') || '';
             
             const detailsRaw = card.getAttribute('data-details');
             let details = null;
@@ -1117,7 +1122,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                 }
             } catch(e) {}
 
-            document.getElementById('overlay-title').innerText = card.getAttribute('data-title');
+            document.getElementById('overlay-title').innerText = card.getAttribute('data-title') || 'Détails';
             const containerText = document.getElementById('overlay-text');
             const imgEl = document.getElementById('overlay-img');
             const imgContainer = document.getElementById('overlay-img-container');
@@ -1128,13 +1133,13 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             if (title.includes('cms-2026-v8-full')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;" class="desk-col-2">Au cœur de l\'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s\'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d\'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>';
             } else if (title.includes('dashboard-designer')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;" class="desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l\'ergonomie de pilotage de l\'atelier nomade. En fusionnant l\'esthétique rédactionnelle de la grande presse et la rigueur d\'un tableau de bord technique, il permet d\'orchestrer, de structurer et de visualiser l\'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>';
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;" class="desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l\'ergonomie de pilotage de l\'atelier nomade. En fusionnant l\'esthétique rédactionnelle de la grande presse et la rigueur d\'un tableau de bord technique, le module permet d\'orchestrer, de structurer et de visualiser l\'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>';
             } else if (title.includes('wordpress-portable')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Instance WordPress totalement encapsulée et autonome, <strong>wordpress-portable</strong> embarque toute la puissance du CMS le plus populaire du web directement au creux de votre clé USB, sans installation lourde sur la machine hôte.</p>';
             } else if (title.includes('mon-site')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Résultat direct de l\'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l\'exportation du squelette pour l\'afficher et le vérifier directement dans le navigateur en conditions réelles.</p>';
             } else if (title.includes('user_journey')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l\'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>';
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l\'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l\'expérience utilisateur, il fournit l\'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>';
             } else if (title.includes('texturor')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Conçu comme un CodePen <em>home made</em> au cœur de l\'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d\'œil. Doté d\'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>';
             } else if (title.includes('personator-v1.2')) {
@@ -1142,7 +1147,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             } else if (title.includes('modulor')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Laboratoire visuel et interactif de l\'atelier, <strong>modulor</strong> propose l\'interface idéale pour tester à la volée des mises en page, expérimenter des structures d\'UI et sculpter des composants en direct sans contrainte technique lourde.</p>';
             } else if (title.includes('skeletor-v1.0-o2switch')) {
-                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Version dopée à la production de l\'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l\'enregistrement de trames de son aîné pour l\'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d\'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>';
+                html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Version dopée à la production de l\'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l\'enregistrement de trames de son aîné pour l\'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d\'un bloc le passage de la clé USB nomade à l\'hébergeur o2switch, sans friction ni perte de temps.</p>';
             } else if (title.includes('skeletor-v1.0')) {
                 html += '<p style="font-size: 1.05em; color: #fff; font-weight: 500; margin-bottom: 12px; line-height: 1.6;">Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d\'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l\'arborescence à recréer à la main : il déploie en un clin d\'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.</p>';
             } else if (details && details.niveau1 && details.niveau1.pitch) {
