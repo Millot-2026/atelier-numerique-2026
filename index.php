@@ -122,7 +122,7 @@ foreach ($files as $file) {
                 'niveau1' => [
                     'pitch' => "Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.",
                     'technos' => ['PHP', 'JSON', 'JavaScript'],
-                    'image' => 'photo-640x480.png'
+                    'image' => 'capture-personator.png'
                 ],
                 'niveau2' => [
                     'contexte' => "S'affranchit des saisies manuelles fastidieuses lors des phases de test pour injecter du contenu vivant dans les interfaces.",
@@ -170,7 +170,7 @@ foreach ($files as $file) {
                 'niveau1' => [
                     'pitch' => "Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l'arborescence à recréer à la main : il déploie en un clin d'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.",
                     'technos' => ['PHP', 'HTML5', 'CSS3'],
-                    'image' => 'photo-640x480.png'
+                    'image' => 'capture-skeletor.png'
                 ],
                 'niveau2' => [
                     'contexte' => "Créé pour automatiser la mise en place initiale des structures de projets web directement depuis la clé USB.",
@@ -194,7 +194,7 @@ foreach ($files as $file) {
                 'niveau1' => [
                     'pitch' => "Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.",
                     'technos' => ['PHP', 'Déploiement', 'Sécurité'],
-                    'image' => 'photo-640x480.png'
+                    'image' => 'capture-skeletor.png'
                 ],
                 'niveau2' => [
                     'contexte' => "Adaptation des trames nomades aux exigences de sécurité et de configuration d'un hébergement web professionnel.",
@@ -240,7 +240,7 @@ foreach ($files as $file) {
             'name' => 'cms-2026-v8-full',
             'details' => [
                 'niveau1' => [
-                    'pitch' => "Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.",
+                    'pitch' => "Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d\'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.",
                     'technos' => ['PHP', 'JavaScript', 'CSS Custom'],
                     'image' => 'photo-640x480.png'
                 ],
@@ -342,6 +342,7 @@ foreach ($files as $file) {
     if ($customDetails && isset($customDetails['details']['niveau1']['image']) && !empty($customDetails['details']['niveau1']['image'])) {
         $imgName = basename($customDetails['details']['niveau1']['image']);
     }
+    
     $screenshot = 'dashboard-designer/assets/img/' . $imgName;
     
     if (isset($savedStatuses[$file])) {
@@ -465,6 +466,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
     <meta charset="UTF-8">
     <title>DEV NOMADE - Dashboard</title>
     <link rel="stylesheet" href="static/fonts/fontawesome/css/all.min.css">
+
     <style>
         :root {
             --bg-color: #0f172a;
@@ -586,8 +588,8 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         ============================================================ */
         .news-sheet {
             background-color: #fdfbf7;
-            color: #111111;
-            border: 2px solid #111;
+            color: #2b2b2b;
+            border: 2px solid #2b2b2b;
             border-radius: 4px;
             padding: 35px;
             font-family: Georgia, "Times New Roman", serif;
@@ -600,18 +602,18 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 3px;
-            border-bottom: 1px solid #111;
+            border-bottom: 1px solid #333333;
             padding-bottom: 8px;
             margin-bottom: 15px;
             font-weight: 700;
-            color: #444;
+            color: #4a4a4a;
         }
 
         .news-header-grid {
             display: grid;
             grid-template-columns: 180px 1fr 180px;
             align-items: center;
-            border-bottom: 3px double #111;
+            border-bottom: 3px double #333333;
             padding-bottom: 20px;
             margin-bottom: 25px;
             text-align: center;
@@ -619,7 +621,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         .news-ear {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: 0.75rem;
-            color: #555;
+            color: #555555;
             line-height: 1.3;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -629,14 +631,14 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             font-weight: 900;
             letter-spacing: -0.5px;
             text-transform: uppercase;
-            color: #111;
+            color: #2b2b2b;
             margin: 0;
             line-height: 1.1;
             font-family: Georgia, serif;
         }
 
         .news-tribune {
-            border-bottom: 1px solid #111;
+            border-bottom: 1px solid #333333;
             padding-bottom: 20px;
             margin-bottom: 25px;
             text-align: justify;
@@ -655,7 +657,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             line-height: 1.5;
             margin: 0;
             font-style: italic;
-            color: #222;
+            color: #333333;
         }
 
         /* SYSTÈME DE LIGNES 12 COLONNES */
@@ -680,7 +682,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             .news-ear { display: none; }
         }
 
-        /* Style des articles rédactionnels avec encart visuel gris clair */
+        /* Style des articles rédactionnels avec encart visuel fixe (hauteur 220px, ancré en haut, loupe) */
         .news-article {
             background: #fff;
             padding: 22px;
@@ -697,21 +699,20 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: 1.15rem;
             font-weight: 700;
-            color: #111;
+            color: #2b2b2b;
             margin: 0 0 10px 0;
-            border-bottom: 2px solid #111;
+            border-bottom: 2px solid #2b2b2b;
             padding-bottom: 4px;
         }
 
-        /* Encart visuel gris clair en haut de l'article */
         .news-article-visual {
             width: 100%;
-            height: 110px;
+            height: 220px;
             background-color: #f1f3f5;
             border: 1px dashed #cbd5e1;
             border-radius: 4px;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             color: #64748b;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -719,6 +720,81 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 12px;
+            overflow: hidden;
+            cursor: zoom-in;
+            position: relative;
+        }
+        .news-article-visual img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-position: top;
+        }
+
+        /* OVERLAY DÉDIÉ POUR L'IMAGE DU JOURNAL (Noir dense, curseur SVG miniature intégré propre et net en 24x24, scrollbar masquée) */
+        #journal-img-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000000;
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        #journal-img-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .journal-img-overlay-content {
+            position: relative;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #000000;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ffffff' stroke='%23000000' stroke-width='2'/%3E%3Cpath d='M12 7l-3 4h6z' fill='%23000000'/%3E%3Cpath d='M12 17l-3-4h6z' fill='%23000000'/%3E%3C/svg%3E") 12 12, ns-resize;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .journal-img-overlay-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .journal-img-overlay-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 0;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ffffff' stroke='%23000000' stroke-width='2'/%3E%3Cpath d='M12 7l-3 4h6z' fill='%23000000'/%3E%3Cpath d='M12 17l-3-4h6z' fill='%23000000'/%3E%3C/svg%3E") 12 12, ns-resize;
+        }
+
+        .journal-img-close {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            background: #1c1c1c;
+            border: none;
+            color: #f3f3f3;
+            padding: 10px 20px;
+            border-radius: 0;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 20001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+        .journal-img-close:hover {
+            background: #333333;
+            color: #ffffff;
         }
 
         .news-article p.news-pitch::first-letter {
@@ -735,7 +811,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             line-height: 1.5;
             margin: 0 0 10px 0;
             text-align: justify;
-            color: #222;
+            color: #333333;
         }
 
         .news-subhead {
@@ -752,9 +828,9 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             line-height: 1.5;
             margin: 0 0 8px 0;
             text-align: justify;
-            color: #444;
+            color: #4a4a4a;
         }
-        .news-article ul { margin: 4px 0 8px 0; padding-left: 1.1em; color: #444; }
+        .news-article ul { margin: 4px 0 8px 0; padding-left: 1.1em; color: #4a4a4a; }
         .news-article li { font-size: 0.85rem; line-height: 1.4; margin-bottom: 2px; }
 
         /* Masquage strict des tags et badges techniques dans cette section */
@@ -767,10 +843,10 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         .news-footer {
             margin-top: 30px;
             padding-top: 15px;
-            border-top: 1px solid #111;
+            border-top: 1px solid #333333;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: 0.75rem;
-            color: #555;
+            color: #555555;
             display: flex;
             justify-content: space-between;
             text-transform: uppercase;
@@ -781,10 +857,10 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         .news-colophon-footer {
             margin-top: 20px;
             padding-top: 15px;
-            border-top: 1px dashed #bbb;
+            border-top: 1px dashed #bbbbbb;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: 0.8rem;
-            color: #444;
+            color: #4a4a4a;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -801,13 +877,13 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             text-align: right;
         }
         .news-article-link {
-            color: #777;
+            color: #666666;
             text-decoration: none;
             transition: color 0.2s, font-weight 0.2s;
             display: inline-block;
         }
         .news-article-link:hover {
-            color: #111;
+            color: #111111;
             font-weight: bold;
         }
 
@@ -819,6 +895,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                 text-align: justify;
             }
         }
+
     </style>
 </head>
 <body>
@@ -963,13 +1040,19 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                                     <span style="font-family: -apple-system, sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
                                 </div>
                                 
-                                <!-- Encart visuel gris clair en haut de l'article -->
-                                <div class="news-article-visual">
-                                    <i class="fas fa-image" style="margin-right: 6px;"></i> Encart Visuel / Illustration
+                                <!-- Encart visuel / Image dynamique ancrée en haut dans le journal -->
+                                <div class="news-article-visual" style="<?php echo ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch' || $p['name'] === 'personator-v1.2') ? 'border: none; background: transparent;' : ''; ?>">
+                                    <?php if ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
+                                        <img src="images/capture-skeletor.png" alt="Aperçu Skeletor" onclick="openJournalImage(this.src)">
+                                    <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                        <img src="images/capture-personator.png" alt="Aperçu Personator" onclick="openJournalImage(this.src)">
+                                    <?php else: ?>
+                                        <i class="fas fa-image" style="margin-right: 6px;"></i> Encart Visuel / Illustration
+                                    <?php endif; ?>
                                 </div>
 
                                 <?php if ($p['name'] === 'cms-2026-v8-full'): ?>
-                                    <p class="news-pitch desk-col-2">Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>
+                                    <p class="news-pitch desk-col-2">Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Conçu pour fonctionner de manière autonome sur un serveur local XAMPP hébergé au creux d\'une clé USB, ce projet incarne la quintessence du développement Flat-file en PHP vanille, garantissant une souveraineté technique totale et une réactivité immédiate sans aucune dépendance cloud.</p>
                                 <?php elseif ($p['name'] === 'dashboard-designer'): ?>
                                     <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, il permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
                                 <?php elseif ($p['name'] === 'wordpress-portable'): ?>
@@ -1058,15 +1141,25 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     </div>
 
-    <!-- MODALE OVERLAY MODULOR -->
+    <!-- MODALE OVERLAY -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
             <h2 id="overlay-title"></h2>
             <div id="overlay-text"></div>
             <div class="overlay-image-wrapper" id="overlay-img-container">
-                <img id="overlay-img" src="" alt="Aperçu de la page d'accueil">
+                <div id="overlay-media-wrapper">
+                    <img id="overlay-img" src="" alt="Aperçu de la page d'accueil">
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY DÉDIÉ POUR L'IMAGE DU JOURNAL (Noir dense, curseur SVG miniature 24x24 rond flèches haut/bas, scrollbar masquée) -->
+    <div id="journal-img-overlay">
+        <button class="journal-img-close" onclick="closeJournalImage()"><i class="fas fa-times"></i> Fermer</button>
+        <div class="journal-img-overlay-content">
+            <img id="journal-overlay-img" src="" alt="Aperçu grand format">
         </div>
     </div>
 
@@ -1110,6 +1203,9 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             const card = btn.closest('.card, .card-v2');
             if (!card) return;
             
+            const badgeEl = card.querySelector('[data-project]');
+            const projectName = badgeEl ? badgeEl.getAttribute('data-project') : '';
+            
             const title = (card.getAttribute('data-title') || '').toLowerCase();
             const summary = card.getAttribute('data-summary') || '';
             const imgSrc = card.getAttribute('data-img') || '';
@@ -1124,7 +1220,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
             document.getElementById('overlay-title').innerText = card.getAttribute('data-title') || 'Détails';
             const containerText = document.getElementById('overlay-text');
-            const imgEl = document.getElementById('overlay-img');
+            const mediaWrapper = document.getElementById('overlay-media-wrapper');
             const imgContainer = document.getElementById('overlay-img-container');
 
             let html = '';
@@ -1192,10 +1288,16 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
             containerText.innerHTML = html;
 
-            if (details && details.niveau1 && details.niveau1.image) {
-                imgEl.src = `dashboard-designer/assets/img/${details.niveau1.image}`;
+            if (projectName === 'skeletor-v1.0' || projectName === 'skeletor-v1.0-o2switch' || title.includes('skeletor')) {
+                mediaWrapper.innerHTML = `<img id="overlay-img" src="images/capture-skeletor.png" alt="Aperçu Skeletor" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
+            } else if (projectName === 'personator-v1.2' || title.includes('personator')) {
+                mediaWrapper.innerHTML = `<img id="overlay-img" src="images/capture-personator.png" alt="Aperçu Personator" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
             } else {
-                imgEl.src = imgSrc || `dashboard-designer/assets/img/photo-640x480.png`;
+                let finalImgSrc = imgSrc || `dashboard-designer/assets/img/photo-640x480.png`;
+                if (details && details.niveau1 && details.niveau1.image && !title.includes('skeletor') && !title.includes('personator')) {
+                    finalImgSrc = `dashboard-designer/assets/img/${details.niveau1.image}`;
+                }
+                mediaWrapper.innerHTML = `<img id="overlay-img" src="${finalImgSrc}" alt="Aperçu de la page d'accueil" style="width: 100%; height: auto; border-radius: 8px; display: block;">`;
             }
             imgContainer.style.display = 'block';
 
@@ -1205,6 +1307,18 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
         function closeOverlay() {
             document.getElementById('modulor-overlay').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fonctions pour l'overlay de zoom des images du journal (fond noir dense, curseur SVG rond miniature 24x24, scrollbar masquée)
+        function openJournalImage(src) {
+            document.getElementById('journal-overlay-img').src = src;
+            document.getElementById('journal-img-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJournalImage() {
+            document.getElementById('journal-img-overlay').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
     </script>
