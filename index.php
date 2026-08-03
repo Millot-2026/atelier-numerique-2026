@@ -337,7 +337,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             border-radius: 4px;
             padding: 35px;
             font-family: Georgia, "Times New Roman", serif;
-            margin-top: 20px;
+            margin-bottom: 40px;
             position: relative;
         }
 
@@ -552,7 +552,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             background: #f8fafc;
             display: block;
             border: 1px solid #dcd7ce;
-            cursor: zoom-in;
         }
         
         .press-figure-scrollable img {
@@ -592,7 +591,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             background: #f8fafc;
             display: block;
             border: 1px solid #dcd7ce;
-            cursor: zoom-in;
         }
         .press-duo-text {
             font-size: 0.85rem;
@@ -758,62 +756,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
-    <!-- Menu V1 replié par défaut au refresh -->
-    <details class="section-block">
-        <summary>
-            <span class="summary-icon">🗂️</span>
-            <h2>Mes Projets Nomades (V1)</h2>
-            <span class="summary-chevron">▼</span>
-        </summary>
-        <div class="section-body">
-            <div class="grid">
-                <?php if (empty($projects)): ?>
-                    <p class="empty">Aucun projet trouvé dans ce dossier.</p>
-                <?php else: ?>
-                    <?php foreach ($projects as $p): ?>
-                        <?php
-                        $linkHref = '/' . rawurlencode($p['name']) . '/';
-                        $jsonDetailsAttr = htmlspecialchars(json_encode($p['details']), ENT_QUOTES, 'UTF-8');
-                        ?>
-                        <div class="<?php echo $p['cardClass']; ?>" 
-                             data-title="<?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>"
-                             data-summary="<?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?>"
-                             data-img="<?php echo htmlspecialchars($p['screenshot'], ENT_QUOTES, 'UTF-8'); ?>"
-                             data-details='<?php echo $jsonDetailsAttr; ?>'>
-                            <div>
-                                <div class="card-title"><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?></div>
-                                <span class="<?php echo $p['badgeClass']; ?>" 
-                                      data-project="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>"
-                                      data-status="<?php echo $p['statusKey']; ?>"
-                                      <?php echo !$p['isWP'] ? 'onclick="cycleStatus(this)" title="Cliquez pour changer le statut"' : ''; ?>>
-                                    <?php echo $p['badgeLabel']; ?>
-                                </span>
-                            </div>
-                            <div class="card-actions">
-                                <a class="card-link" href="<?php echo $linkHref; ?>" target="_blank">Lancer le site</a>
-                                <button type="button" class="btn-info" onclick="openOverlay(this)"><i class="fas fa-eye"></i> En savoir plus...</button>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </details>
-
-    <hr class="separator-v2">
-
-    <!-- Menu V2 replié par défaut au refresh (Cartes Enrichies) -->
-    <details class="section-block">
-        <summary>
-            <span class="summary-icon">🚀</span>
-            <h2>Lanceur Projets (V2 — Cartes Enrichies)</h2>
-            <span class="summary-chevron">▼</span>
-        </summary>
-        <div class="section-body">
-            <?php include __DIR__ . '/partials/section-v2.php'; ?>
-        </div>
-    </details>
-
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- SECTION PRINCIPALE : JOURNAL (ACCUEIL)                                -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
     <div class="news-sheet">
         
         <div class="news-bandeau">
@@ -900,7 +847,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
                                     <div class="press-duo-layout">
                                         <div>
-                                            <img src="images/images-cms/01-desktop-capture-cms-hero.png" alt="Vitrine Hero" onclick="openJournalImage(this.src)">
+                                            <img src="images/images-cms/01-desktop-capture-cms-hero.png" alt="Vitrine Hero">
                                             <div class="press-caption">Fig. 1 — En-tête de la vitrine (Hero)</div>
                                         </div>
                                         <div>
@@ -910,7 +857,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
                                     <div class="press-duo-layout">
                                         <div>
-                                            <img src="images/images-cms/02-desktop-capture-cms-accueil.png" alt="Poste de pilotage" onclick="openJournalImage(this.src)">
+                                            <img src="images/images-cms/02-desktop-capture-cms-accueil.png" alt="Poste de pilotage">
                                             <div class="press-caption">Fig. 2 — Poste de pilotage (Gestion des Projets)</div>
                                         </div>
                                         <div>
@@ -932,7 +879,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <div class="editor-switch-hint">Cliquez dans l'image pour l'agrandir</div>
 
                                     <figure class="press-figure press-figure-scrollable" id="editor-figure-wrapper">
-                                        <img id="editor-demo-img" src="images/images-cms/03-capture-cms-editeur-frame-desktop.png" alt="Éditeur Desktop" onclick="openJournalImage(this.src)">
+                                        <img id="editor-demo-img" src="images/images-cms/03-capture-cms-editeur-frame-desktop.png" alt="Éditeur Desktop">
                                         <figcaption class="press-caption" id="editor-demo-caption">Fig. 3 — L'éditeur en mode Bureau (hauteur fixe de 400px avec défilement interne)</figcaption>
                                     </figure>
 
@@ -941,11 +888,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
                                         <figure class="press-figure" style="margin: 0;">
-                                            <img src="images/images-cms/03-desktopcapture cms-site-exemple-page.png" alt="Exemple de page" onclick="openJournalImage(this.src)" style="max-height: 250px;">
+                                            <img src="images/images-cms/03-desktopcapture cms-site-exemple-page.png" alt="Exemple de page" style="max-height: 250px;">
                                             <figcaption class="press-caption">Fig. 5 — Page exemple générée</figcaption>
                                         </figure>
                                         <figure class="press-figure" style="margin: 0;">
-                                            <img src="images/images-cms/05-capture cms-site-mobile.png" alt="Rendu mobile" onclick="openJournalImage(this.src)" style="max-height: 250px;">
+                                            <img src="images/images-cms/05-capture cms-site-mobile.png" alt="Rendu mobile" style="max-height: 250px;">
                                             <figcaption class="press-caption">Fig. 6 — Rendu mobile final</figcaption>
                                         </figure>
                                     </div>
@@ -958,12 +905,12 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <p class="press-duo-text" style="margin-bottom: 10px;">La partie supérieure réunit les indicateurs vitaux de l'atelier : horloge analogique synchronisée, météo en direct et sélecteur de thèmes dynamiques.</p>
                                     
                                     <figure class="press-figure">
-                                        <img src="images/images-workstation/01-header.png" alt="Header Workstation" onclick="openJournalImage(this.src)">
+                                        <img src="images/images-workstation/01-header.png" alt="Header Workstation">
                                         <figcaption class="press-caption">Fig. 1 — En-tête, horloge et widgets de session</figcaption>
                                     </figure>
 
                                     <figure class="press-figure">
-                                        <img src="images/images-workstation/02-racourcis.png" alt="Raccourcis web" onclick="openJournalImage(this.src)">
+                                        <img src="images/images-workstation/02-racourcis.png" alt="Raccourcis web">
                                         <figcaption class="press-caption">Fig. 2 — Barre de raccourcis rapides</figcaption>
                                     </figure>
 
@@ -972,11 +919,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
                                     <div class="desk-col-2">
                                         <figure class="press-figure">
-                                            <img src="images/images-workstation/03-lanceur.png" alt="Lanceur de projets" onclick="openJournalImage(this.src)">
+                                            <img src="images/images-workstation/03-lanceur.png" alt="Lanceur de projets">
                                             <figcaption class="press-caption">Fig. 3 — Grille du lanceur de projets</figcaption>
                                         </figure>
                                         <figure class="press-figure">
-                                            <img src="images/images-workstation/04-google-font-tester.png" alt="Google Font Tester" onclick="openJournalImage(this.src)">
+                                            <img src="images/images-workstation/04-google-font-tester.png" alt="Google Font Tester">
                                             <figcaption class="press-caption">Fig. 4 — Module testeur de polices &amp; Lorem</figcaption>
                                         </figure>
                                     </div>
@@ -985,12 +932,12 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <p class="press-duo-text" style="margin-bottom: 10px;">L'espace d'expérimentation permet de tester du code HTML/CSS à la volée et de manipuler les propriétés graphiques en direct.</p>
 
                                     <figure class="press-figure">
-                                        <img src="images/images-workstation/05-codepen.png" alt="Codepen Master" onclick="openJournalImage(this.src)">
+                                        <img src="images/images-workstation/05-codepen.png" alt="Codepen Master">
                                         <figcaption class="press-caption">Fig. 5 — Codepen Master intégré</figcaption>
                                     </figure>
 
                                     <figure class="press-figure">
-                                        <img src="images/images-workstation/06-css-playground.png" alt="CSS Playground" onclick="openJournalImage(this.src)">
+                                        <img src="images/images-workstation/06-css-playground.png" alt="CSS Playground">
                                         <figcaption class="press-caption">Fig. 6 — Playground CSS interactif</figcaption>
                                     </figure>
 
@@ -999,23 +946,23 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
                                     <div class="desk-col-2">
                                         <figure class="press-figure">
-                                            <img src="images/images-workstation/07-notes-rapides.png" alt="Notes rapides" onclick="openJournalImage(this.src)">
+                                            <img src="images/images-workstation/07-notes-rapides.png" alt="Notes rapides">
                                             <figcaption class="press-caption">Fig. 7 — Bloc notes rapides</figcaption>
                                         </figure>
                                         <figure class="press-figure">
-                                            <img src="images/images-workstation/08-journal-de developpement-de-ce-projet.png" alt="Journal de bord" onclick="openJournalImage(this.src)">
+                                            <img src="images/images-workstation/08-journal-de developpement-de-ce-projet.png" alt="Journal de bord">
                                             <figcaption class="press-caption">Fig. 8 — Journal de développement et roadmap</figcaption>
                                         </figure>
                                     </div>
 
                                 <?php elseif ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                     <figure class="press-figure">
-                                        <img src="images/capture-skeletor.png" alt="Aperçu Skeletor" onclick="openJournalImage(this.src)">
+                                        <img src="images/capture-skeletor.png" alt="Aperçu Skeletor">
                                         <figcaption class="press-caption">Illustration — Skeletor</figcaption>
                                     </figure>
                                 <?php elseif ($p['name'] === 'personator-v1.2'): ?>
                                     <figure class="press-figure">
-                                        <img src="images/capture-personator.png" alt="Aperçu Personator" onclick="openJournalImage(this.src)">
+                                        <img src="images/capture-personator.png" alt="Aperçu Personator">
                                         <figcaption class="press-caption">Illustration — Personator</figcaption>
                                     </figure>
                                 <?php else: ?>
@@ -1113,8 +1060,82 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     </div>
 
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- SECTION V1 : MES PROJETS NOMADES (V1)                                 -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- Menu V1 replié par défaut au refresh -->
+    <details class="section-block">
+        <summary>
+            <span class="summary-icon">🗂️</span>
+            <h2>Mes Projets Nomades (V1)</h2>
+            <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="section-body">
+            <div class="grid">
+                <?php if (empty($projects)): ?>
+                    <p class="empty">Aucun projet trouvé dans ce dossier.</p>
+                <?php else: ?>
+                    <?php foreach ($projects as $p): ?>
+                        <?php
+                        $linkHref = '/' . rawurlencode($p['name']) . '/';
+                        $jsonDetailsAttr = htmlspecialchars(json_encode($p['details']), ENT_QUOTES, 'UTF-8');
+                        ?>
+                        <div class="<?php echo $p['cardClass']; ?>" 
+                             data-title="<?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>"
+                             data-summary="<?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?>"
+                             data-img="<?php echo htmlspecialchars($p['screenshot'], ENT_QUOTES, 'UTF-8'); ?>"
+                             data-details='<?php echo $jsonDetailsAttr; ?>'>
+                            <div>
+                                <div class="card-title"><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                <span class="<?php echo $p['badgeClass']; ?>" 
+                                      data-project="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                      data-status="<?php echo $p['statusKey']; ?>"
+                                      <?php echo !$p['isWP'] ? 'onclick="cycleStatus(this)" title="Cliquez pour changer le statut"' : ''; ?>>
+                                    <?php echo $p['badgeLabel']; ?>
+                                </span>
+                            </div>
+                            <div class="card-actions">
+                                <a class="card-link" href="<?php echo $linkHref; ?>" target="_blank">Lancer le site</a>
+                                <button type="button" class="btn-info" onclick="openOverlay(this)"><i class="fas fa-eye"></i> En savoir plus...</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </details>
+
+    <hr class="separator-v2">
+
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- SECTION V2 : LANCEUR PROJETS (V2 — CARTES ENRICHIES)                  -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- Menu V2 replié par défaut au refresh (Cartes Enrichies) -->
+    <details class="section-block">
+        <summary>
+            <span class="summary-icon">🚀</span>
+            <h2>Lanceur Projets (V2 — Cartes Enrichies)</h2>
+            <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="section-body">
+            <?php include __DIR__ . '/partials/section-v2.php'; ?>
+        </div>
+    </details>
+
     <div id="modulor-overlay">
-        <button class="overlay-close" onclick="openOverlay()"><i class="fas fa-times"></i> Fermer</button>
+        <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
             <h2 id="overlay-title"></h2>
             <div id="overlay-text"></div>
@@ -1123,13 +1144,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     <img id="overlay-img" src="" alt="Aperçu de la page d'accueil">
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="journal-img-overlay">
-        <button class="journal-img-close" onclick="closeJournalImage()"><i class="fas fa-times"></i> Fermer</button>
-        <div class="journal-img-overlay-content">
-            <img id="journal-overlay-img" src="" alt="Aperçu grand format">
         </div>
     </div>
 
@@ -1316,17 +1330,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
         function closeOverlay() {
             document.getElementById('modulor-overlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function openJournalImage(src) {
-            document.getElementById('journal-overlay-img').src = src;
-            document.getElementById('journal-img-overlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeJournalImage() {
-            document.getElementById('journal-img-overlay').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
     </script>
