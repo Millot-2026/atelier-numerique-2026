@@ -136,10 +136,6 @@
 <!-- CONTENEUR HTML DE LA SECTION V2                                            -->
 <!-- ========================================================================== -->
 <div id="section-v2-container">
-    <!-- Titre de section V2 -->
-    <h2 style="color: var(--accent); font-size: 1.4rem; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
-        🧪 Lanceur Projets (V2 - Cartes Enrichies)
-    </h2>
 
     <!-- Grille dynamique générée à partir du tableau PHP $projects -->
     <div class="projects-grid-v2">

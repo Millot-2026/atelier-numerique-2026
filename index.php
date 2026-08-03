@@ -66,276 +66,20 @@ foreach ($files as $file) {
     
     $customDetails = isset($projectsDetailsMap[$lowerFile]) ? $projectsDetailsMap[$lowerFile] : null;
 
-    // Injection des détails complets (avec niveaux 2 et 3)
     if (!$customDetails && in_array($lowerFile, ['user_journey-v1.0', 'user_journey'])) {
         $customDetails = [
             'name' => $file,
             'details' => [
                 'niveau1' => [
-                    'pitch' => "Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.",
+                    'pitch' => "Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure.",
                     'technos' => ['UI Design', 'UX Research', 'Prototypage'],
                     'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Conçu exclusivement pour les professionnels du design d'interface et de l'expérience utilisateur ne faisant que de l'UX-UI.",
-                    'fonctionnalites' => [
-                        "Modélisation et analyse des parcours utilisateurs",
-                        "Conception et test d'interfaces orientées UX",
-                        "Outils dédiés aux exigences strictes des web designers"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Design System / Parcours UX",
-                    'environnement' => "Clé USB / Atelier Nomade",
-                    'roadmap' => "Intégration de nouveaux composants d'ergonomie"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'texturor') {
-        $customDetails = [
-            'name' => 'texturor',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.",
-                    'technos' => ['PHP', 'JavaScript', 'HTML/CSS Live'],
-                    'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Offre un espace d'expérimentation de code instantané, portable et accessible sur tous les supports, y compris en situation de mobilité.",
-                    'fonctionnalites' => [
-                        "Environnement de test type CodePen maison",
-                        "Enregistrement et gestion de snippets réutilisables",
-                        "Interface responsive taillée pour le test sur mobile"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Éditeur de snippets / Flat-file",
-                    'environnement' => "Clé USB / Mobile / Local",
-                    'roadmap' => "Optimisation du stockage des snippets favoris"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'personator-v1.2') {
-        $customDetails = [
-            'name' => 'personator-v1.2',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.",
-                    'technos' => ['PHP', 'JSON', 'JavaScript'],
-                    'image' => 'capture-personator.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "S'affranchit des saisies manuelles fastidieuses lors des phases de test pour injecter du contenu vivant dans les interfaces.",
-                    'fonctionnalites' => [
-                        "Génération à la volée de profils et d'identités fictives",
-                        "Injection rapide de données de test cohérentes",
-                        "Personnalisation fine des attributs et des rôles"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Générateur dynamique / Flat-file",
-                    'environnement' => "Clé USB / Serveur Local",
-                    'roadmap' => "Extension des jeux de données internationaux"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'modulor') {
-        $customDetails = [
-            'name' => 'modulor',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Laboratoire visuel et interactif de l'atelier, <strong>modulor</strong> propose l'interface idéale pour tester à la volée des mises en page, expérimenter des structures d'UI et sculpter des composants en direct sans contrainte technique lourde.",
-                    'technos' => ['PHP', 'CSS Live', 'JavaScript'],
-                    'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "S'affranchit des maquettes statiques pour prototyper instantanément des blocs d'interface au sein de l'atelier nomade.",
-                    'fonctionnalites' => [
-                        "Test en direct de mises en page et de designs",
-                        "Prototypage rapide de composants web",
-                        "Espace d'expérimentation visuelle modulable"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Design Lab / Moteur de Skin",
-                    'environnement' => "Clé USB / Serveur Local",
-                    'roadmap' => "Extension des moteurs de sections et d'export"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'skeletor-v1.0') {
-        $customDetails = [
-            'name' => 'skeletor-v1.0',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Couteau suisse du développeur nomade, <strong>skeletor-v1.0</strong> transforme la corvée des clics répétés en un jeu d'enfant. Fini les « nouveau dossier », « nouveau fichier index.php » et l'arborescence à recréer à la main : il déploie en un clin d'œil toute la trame de base indispensable pour lancer un nouveau site web, rendant la création de projets à la fois ludique, instantanée et redoutablement efficace.",
-                    'technos' => ['PHP', 'HTML5', 'CSS3'],
-                    'image' => 'capture-skeletor.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Créé pour automatiser la mise en place initiale des structures de projets web directement depuis la clé USB.",
-                    'fonctionnalites' => [
-                        "Génération instantanée de l'arborescence de dossiers",
-                        "Enregistrement de trames de base réutilisables",
-                        "Élimination des tâches répétitives de configuration"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Modulaire / Arborescence standard",
-                    'environnement' => "Clé USB / Serveur Local",
-                    'roadmap' => "Extension des trames personnalisables"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'skeletor-v1.0-o2switch') {
-        $customDetails = [
-            'name' => 'skeletor-v1.0-o2switch',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.",
-                    'technos' => ['PHP', 'Déploiement', 'Sécurité'],
-                    'image' => 'capture-skeletor.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Adaptation des trames nomades aux exigences de sécurité et de configuration d'un hébergement web professionnel.",
-                    'fonctionnalites' => [
-                        "Préparation des fichiers pour le transfert distant",
-                        "Optimisation des configurations serveur",
-                        "Pont direct entre l'atelier local et o2switch"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Production / O2switch Ready",
-                    'environnement' => "Hébergement Distant / Clé USB",
-                    'roadmap' => "Automatisation des scripts de déploiement"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'dashboard-designer') {
-        $customDetails = [
-            'name' => 'dashboard-designer',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, il permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.",
-                    'technos' => ['PHP', 'JavaScript', 'CSS Custom'],
-                    'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Conçu pour unifier l'accès aux multiples applications de l'atelier nomade sans dépendre d'outils lourds ou distants.",
-                    'fonctionnalites' => [
-                        "Mise en page journalistique multi-combinaisons",
-                        "Gestion dynamique des statuts de projets",
-                        "Architecture modulaire et responsive"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Flat-file / PHP Vanille / CSS Grid",
-                    'environnement' => "Serveur local XAMPP / Clé USB",
-                    'roadmap' => "Ajout de nouveaux thèmes typographiques"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'cms-2026-v8-full') {
-        $customDetails = [
-            'name' => 'cms-2026-v8-full',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Au cœur de l'atelier nomade se dresse <strong>cms-2026-v8-full</strong>, un système de gestion de contenu sur-mesure et ultra-léger pensé pour s'affranchir des lourdeurs du web traditionnel. Véritable poste de pilotage administrateur, l'application orchestre l'initialisation des articles, le suivi des publications et la gestion des flux sans aucune base de données lourde.",
-                    'technos' => ['PHP', 'JavaScript', 'CSS Custom'],
-                    'image' => '02-desktop-capture-cms-accueil.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Poste de pilotage et gestion centralisée des projets pour l'administrateur unique de la plateforme.",
-                    'fonctionnalites' => [
-                        "Éditeur de blocs structurés et intégration visuelle",
-                        "Bascule transparente entre mode édition local et version d'exploitation en ligne",
-                        "Architecture flat-file sans BDD"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Flat-file / PHP Vanille",
-                    'environnement' => "Serveur local XAMPP / Clé USB",
-                    'roadmap' => "Optimisation des flux de publication distants"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'wordpress-portable') {
-        $customDetails = [
-            'name' => 'wordpress-portable',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Instance WordPress totalement encapsulée et autonome, <strong>wordpress-portable</strong> embarque toute la puissance du CMS le plus populaire du web directement au creux de votre clé USB, sans installation lourde sur la machine hôte.",
-                    'technos' => ['WordPress', 'PHP', 'MySQL Portable'],
-                    'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Permet de prototyper, tester et développer des sites sous WordPress de manière nomade et isolée.",
-                    'fonctionnalites' => [
-                        "Environnement CMS complet et transportable",
-                        "Intégration transparente avec le serveur XAMPP local",
-                        "Autonomie totale des fichiers et de la base de données"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "CMS / Base de données embarquée",
-                    'environnement' => "Clé USB / XAMPP Local",
-                    'roadmap' => "Mise à jour des noyaux et des extensions de base"
-                ]
-            ]
-        ];
-    } elseif (!$customDetails && $lowerFile === 'mon-site') {
-        $customDetails = [
-            'name' => 'mon-site',
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Résultat direct de l'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l'exportation du squelette pour l'afficher et le vérifier directement dans le navigateur en conditions réelles.",
-                    'technos' => ['HTML5', 'CSS3', 'PHP'],
-                    'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Sert de livrable de test et de vérification visuelle pour valider le bon fonctionnement du squelette exporté depuis Skeletor.",
-                    'fonctionnalites' => [
-                        "Vérification de l'arborescence exportée dans le navigateur",
-                        "Zone de test en conditions réelles de rendu",
-                        "Passage de relais entre génération et affichage"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Livrable de vérification / Flat-file",
-                    'environnement' => "Clé USB / Serveur Local",
-                    'roadmap' => "Vérification itérative des gabarits"
                 ]
             ]
         ];
     }
 
-    if (!$customDetails) {
-        $customDetails = [
-            'name' => $file,
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Description détaillée et présentation complète du projet web : " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ". Ce projet fonctionne localement dans votre environnement de développement nomade.",
-                    'technos' => ['PHP', 'HTML/CSS'],
-                    'image' => 'photo-640x480.png'
-                ],
-                'niveau2' => [
-                    'contexte' => "Intégration et suivi de projet au sein de l'environnement de développement portable.",
-                    'fonctionnalites' => [
-                        "Exécution locale sur serveur XAMPP",
-                        "Structure de fichiers normalisée",
-                        "Suivi d'état et de validation"
-                    ]
-                ],
-                'niveau3' => [
-                    'architecture' => "Standard / Standardisé",
-                    'environnement' => "Clé USB / Local",
-                    'roadmap' => "Évolution continue"
-                ]
-            ]
-        ];
-    }
-
-    $description = "Description détaillée et présentation complète du projet web : " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ". Ce projet fonctionne localement dans votre environnement de développement nomade.";
+    $description = "Description détaillée et présentation complète du projet web : " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ".";
     
     $imgName = 'photo-640x480.png';
     if ($customDetails && isset($customDetails['details']['niveau1']['image']) && !empty($customDetails['details']['niveau1']['image'])) {
@@ -351,11 +95,7 @@ foreach ($files as $file) {
     if (isset($savedStatuses[$file])) {
         $statusKey = $savedStatuses[$file];
     } else {
-        if ($isWP || $hasIndex) {
-            $statusKey = 'operational';
-        } else {
-            $statusKey = 'progress';
-        }
+        $statusKey = ($isWP || $hasIndex) ? 'operational' : 'progress';
     }
 
     if ($isWP) {
@@ -372,16 +112,8 @@ foreach ($files as $file) {
         $badgeClass = 'badge badge-' . $statusKey;
     }
 
-    $colSpan = 6; 
-    $sizeLabel = 'UX-UI';
-
-    if (in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable'])) {
-        $colSpan = 12;
-        $sizeLabel = 'CMS';
-    } elseif ($lowerFile === 'mon-site') {
-        $colSpan = 6; 
-        $sizeLabel = 'Preview';
-    }
+    $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable']) ? 12 : 6;
+    $sizeLabel = ($colSpan === 12) ? 'CMS' : 'UX-UI';
 
     $projectsRaw[$lowerFile] = [
         'name'        => $file,
@@ -416,22 +148,9 @@ $projectsRaw['workstation'] = [
     'cardClass'   => 'card',
     'details'     => [
         'niveau1' => [
-            'pitch' => "Véritable cockpit central et tableau de bord ultime, <strong>Workstation</strong> unifie le pilotage du temps, la météo en direct, le lancement rapide des applications et des outils de prototypage de code instantanés dans une interface sombre et immersive.",
+            'pitch' => "Véritable cockpit central et tableau de bord ultime, <strong>Workstation</strong> unifie le pilotage du temps, la météo en direct et les outils de prototypage.",
             'technos' => ['PHP', 'JavaScript', 'CSS Custom'],
             'image' => '01-header.png'
-        ],
-        'niveau2' => [
-            'contexte' => "Conçu pour unifier l'accès aux multiples applications de l'atelier nomade sans dépendre d'outils lourds ou distants.",
-            'fonctionnalites' => [
-                "Mise en page journalistique multi-combinaisons",
-                "Gestion dynamique des statuts de projets",
-                "Architecture modulaire et responsive de la même façon que c'est fait dans les autres cards."
-            ]
-        ],
-        'niveau3' => [
-            'architecture' => "Flat-file / PHP Vanille / CSS Grid",
-            'environnement' => "Serveur local XAMPP / Clé USB",
-            'roadmap' => "Évolution vers une application Windows native"
         ]
     ],
     'colSpan'     => 12,
@@ -440,19 +159,10 @@ $projectsRaw['workstation'] = [
     'linkHref'    => '#'
 ];
 
-// Ordonnancement strict
 $orderedKeys = [
-    'workstation',
-    'cms-2026-v8-full',
-    'dashboard-designer',
-    'skeletor-v1.0',
-    'skeletor-v1.0-o2switch',
-    'modulor',
-    'personator-v1.2',
-    'texturor',
-    'user_journey-v1.0',
-    'wordpress-portable',
-    'mon-site'
+    'workstation', 'cms-2026-v8-full', 'dashboard-designer', 'skeletor-v1.0',
+    'skeletor-v1.0-o2switch', 'modulor', 'personator-v1.2', 'texturor',
+    'user_journey-v1.0', 'wordpress-portable', 'mon-site'
 ];
 
 $projects = [];
@@ -466,7 +176,6 @@ foreach ($projectsRaw as $extraP) {
     $projects[] = $extraP;
 }
 
-// Algorithme d'empaquetage mathématique strict
 $rows = [];
 $currentRow = [];
 $currentSpan = 0;
@@ -497,8 +206,7 @@ if (!empty($rows)) {
         $lastRowSpan += (int)$item['colSpan'];
     }
 }
-$bearColSpan = (12 - $lastRowSpan);
-if ($bearColSpan < 0) $bearColSpan = 0;
+$bearColSpan = max(0, 12 - $lastRowSpan);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -1094,7 +802,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     <hr class="separator-v2">
 
-    <!-- Menu V2 replié par défaut au refresh -->
+    <!-- Menu V2 replié par défaut au refresh (Cartes Enrichies) -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🚀</span>
@@ -1103,31 +811,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </summary>
         <div class="section-body">
             <?php include __DIR__ . '/partials/section-v2.php'; ?>
-        </div>
-    </details>
-
-    <details class="section-block section-ecosystem" style="display: none;">
-        <summary>
-            <span class="summary-icon">📋</span>
-            <h2>Présentation de l'Écosystème &amp; Rapport de la Clé</h2>
-            <span class="summary-chevron">▼</span>
-        </summary>
-        <div class="section-body">
-            <div class="eco-section">
-                <h3>🎯 Concept &amp; Paradigme Global</h3>
-                <p>Environnement de développement web 100% portable sur clé USB (F:\).</p>
-            </div>
-        </div>
-    </details>
-
-    <details class="section-block" style="display: none;">
-        <summary>
-            <span class="summary-icon">🏛️</span>
-            <h2>Atelier 2026 (En réserve)</h2>
-            <span class="summary-chevron">▼</span>
-        </summary>
-        <div class="section-body">
-            <p>Contenu en réserve de l'Atelier 2026.</p>
         </div>
     </details>
 
