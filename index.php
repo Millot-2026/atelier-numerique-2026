@@ -395,8 +395,8 @@ foreach ($files as $file) {
         'badgeClass'  => $badgeClass,
         'cardClass'   => 'card',
         'details'     => $customDetails ? $customDetails['details'] : null,
-        'colSpan'     => $colSpan,
-        'colClass'    => 'news-col-' . $colSpan,
+        'colSpan'     => (int)$colSpan,
+        'colClass'    => 'news-col-' . (int)$colSpan,
         'sizeLabel'   => $sizeLabel,
         'linkHref'    => '/' . rawurlencode($file) . '/'
     ];
@@ -472,13 +472,13 @@ $currentRow = [];
 $currentSpan = 0;
 
 foreach ($projects as $p) {
-    if (($currentSpan + $p['colSpan']) > 12) {
+    if (($currentSpan + (int)$p['colSpan']) > 12) {
         $rows[] = $currentRow;
         $currentRow = [$p];
-        $currentSpan = $p['colSpan'];
+        $currentSpan = (int)$p['colSpan'];
     } else {
         $currentRow[] = $p;
-        $currentSpan += $p['colSpan'];
+        $currentSpan += (int)$p['colSpan'];
         if ($currentSpan === 12) {
             $rows[] = $currentRow;
             $currentRow = [];
@@ -494,7 +494,7 @@ $lastRowSpan = 0;
 if (!empty($rows)) {
     $lastRow = end($rows);
     foreach ($lastRow as $item) {
-        $lastRowSpan += $item['colSpan'];
+        $lastRowSpan += (int)$item['colSpan'];
     }
 }
 $bearColSpan = (12 - $lastRowSpan);
@@ -630,6 +630,70 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             padding: 35px;
             font-family: Georgia, "Times New Roman", serif;
             margin-top: 20px;
+            position: relative;
+        }
+
+        .news-header-divider {
+            border: none;
+            border-top: 3px double #333333 !important;
+            margin: 15px 0 0 0;
+        }
+
+        .news-header-wrapper {
+            position: relative;
+        }
+
+        .journal-mega-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff !important;
+            border: 2px solid #2b2b2b;
+            border-top: none;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            z-index: 999;
+            font-family: -apple-system, sans-serif;
+            box-sizing: border-box;
+        }
+        .journal-mega-menu.active {
+            display: block;
+        }
+        .mega-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .mega-menu-col h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #c0392b;
+            border-bottom: 1px solid #2b2b2b;
+            padding-bottom: 6px;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .mega-menu-col ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .mega-menu-col li {
+            margin-bottom: 8px;
+        }
+        .mega-menu-col a {
+            color: #2b2b2b;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .mega-menu-col a:hover {
+            color: #c0392b;
+            text-decoration: underline;
         }
 
         .news-bandeau {
@@ -649,9 +713,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             display: grid;
             grid-template-columns: 180px 1fr 180px;
             align-items: center;
-            border-bottom: 3px double #333333;
-            padding-bottom: 20px;
-            margin-bottom: 25px;
+            padding-bottom: 15px;
             text-align: center;
         }
         .news-ear {
@@ -675,7 +737,9 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
         .news-tribune {
             border-bottom: 1px solid #333333;
+            padding-top: 25px;
             padding-bottom: 20px;
+            margin-top: 15px;
             margin-bottom: 25px;
             text-align: justify;
         }
@@ -717,9 +781,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 10px;
-                border-bottom: 3px double #333333;
-                padding-bottom: 20px;
-                margin-bottom: 25px;
+                padding-bottom: 15px;
             }
             .news-header-grid > div:nth-child(1) {
                 grid-column: 1 / 2;
@@ -947,7 +1009,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             padding-top: 15px;
             border-top: 1px dashed #bbbbbb;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.80rem;
             color: #4a4a4a;
             display: flex;
             justify-content: space-between;
@@ -988,7 +1050,8 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
-    <details class="section-block" open>
+    <!-- Menu V1 replié par défaut au refresh -->
+    <details class="section-block">
         <summary>
             <span class="summary-icon">🗂️</span>
             <h2>Mes Projets Nomades (V1)</h2>
@@ -1031,7 +1094,8 @@ if ($bearColSpan < 0) $bearColSpan = 0;
 
     <hr class="separator-v2">
 
-    <details class="section-block" open>
+    <!-- Menu V2 replié par défaut au refresh -->
+    <details class="section-block">
         <summary>
             <span class="summary-icon">🚀</span>
             <h2>Lanceur Projets (V2 — Cartes Enrichies)</h2>
@@ -1073,26 +1137,57 @@ if ($bearColSpan < 0) $bearColSpan = 0;
             Chronique Indépendante • Édition Spéciale Nomadisme Numérique • 2026
         </div>
 
-        <div class="news-header-grid">
-            <div class="news-ear" style="text-align: left;">
-                <strong>SUPPORT :</strong> Clé USB F:\<br>
-                <strong>SERVEUR :</strong> XAMPP Portable
-            </div>
-            <div>
-                <h2 class="news-manchette">L'Atelier Numérique</h2>
-                <div style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; font-weight: bold; color: #444;">Christophe Millot</div>
-            </div>
-            <div class="news-ear" style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 4px; text-align: right;">
-                <div>
-                    <strong>ARCHITECTURES :</strong> Flat-File<br>
-                    <strong>STATUT :</strong> Opérationnel
+        <div class="news-header-wrapper">
+            <div class="news-header-grid">
+                <div class="news-ear" style="text-align: left;">
+                    <strong>SUPPORT :</strong> Clé USB F:\<br>
+                    <strong>SERVEUR :</strong> XAMPP Portable
                 </div>
-                <div style="cursor: pointer; display: flex; align-items: center;" title="Menu">
-                    <svg width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
+                <div>
+                    <h2 class="news-manchette">L'Atelier Numérique</h2>
+                    <div style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; font-weight: bold; color: #444;">Christophe Millot</div>
+                </div>
+                <div class="news-ear" style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 4px; text-align: right;">
+                    <div>
+                        <strong>ARCHITECTURES :</strong> Flat-File<br>
+                        <strong>STATUT :</strong> Opérationnel
+                    </div>
+                    <!-- Icône hamburger qui se transformera dynamiquement en croix -->
+                    <div id="hamburger-menu-btn" style="cursor: pointer; display: flex; align-items: center;" title="Menu">
+                        <svg id="hamburger-icon-svg" width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="news-header-divider">
+
+            <div id="journal-mega-menu" class="journal-mega-menu">
+                <div class="mega-menu-grid">
+                    <div class="mega-menu-col">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="page2.php"><i class="fas fa-file-alt"></i> Synthèse (Page 2)</a></li>
+                            <li><a href="#top"><i class="fas fa-home"></i> Haut de page</a></li>
+                        </ul>
+                    </div>
+                    <div class="mega-menu-col">
+                        <h4>Applications</h4>
+                        <ul>
+                            <li><a href="dashboard-designer/" target="_blank"><i class="fas fa-desktop"></i> Workstation</a></li>
+                            <li><a href="cms-2026-v8-full/" target="_blank"><i class="fas fa-newspaper"></i> CMS 2026</a></li>
+                        </ul>
+                    </div>
+                    <div class="mega-menu-col">
+                        <h4>Outils &amp; Clé</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-database"></i> Statuts JSON</a></li>
+                            <li><a href="#"><i class="fas fa-info-circle"></i> À propos</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1336,7 +1431,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
     </div>
 
     <div id="modulor-overlay">
-        <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
+        <button class="overlay-close" onclick="openOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
             <h2 id="overlay-title"></h2>
             <div id="overlay-text"></div>
@@ -1390,6 +1485,37 @@ if ($bearColSpan < 0) $bearColSpan = 0;
               })
               .catch(error => console.error('Erreur réseau :', error));
         }
+
+        // Script de gestion du méga menu et transformation dynamique de l'icône hamburger en croix
+        document.addEventListener("DOMContentLoaded", function() {
+            const hamburgerBtn = document.getElementById('hamburger-menu-btn');
+            const megaMenu = document.getElementById('journal-mega-menu');
+            const iconSvg = document.getElementById('hamburger-icon-svg');
+
+            if (hamburgerBtn && megaMenu && iconSvg) {
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = megaMenu.classList.toggle('active');
+                    
+                    if (isOpen) {
+                        // Transformation en croix (X)
+                        iconSvg.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+                    } else {
+                        // Retour à l'icône hamburger d'origine
+                        iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                    }
+                });
+
+                document.addEventListener('click', function() {
+                    megaMenu.classList.remove('active');
+                    iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                });
+
+                megaMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
 
         // Fonction du switch Desktop/Mobile corrigée
         function switchEditorView(mode, btnEl) {
