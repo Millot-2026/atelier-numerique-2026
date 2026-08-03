@@ -581,7 +581,6 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         }
         .btn-info:hover { background-color: var(--accent); color: var(--bg-color); border-color: var(--accent); }
 
-        /* MODALE OVERLAY CORRIGÉE */
         #modulor-overlay {
             position: fixed; inset: 0; background-color: var(--bg-color); z-index: 10000;
             display: flex; flex-direction: column; opacity: 0; pointer-events: none;
@@ -714,8 +713,36 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         }
         @media (max-width: 768px) {
             .news-col-12, .news-col-6, .news-col-3 { grid-column: span 12; }
-            .news-header-grid { grid-template-columns: 1fr; gap: 15px; }
-            .news-ear { display: none; }
+            .news-header-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                border-bottom: 3px double #333333;
+                padding-bottom: 20px;
+                margin-bottom: 25px;
+            }
+            .news-header-grid > div:nth-child(1) {
+                grid-column: 1 / 2;
+                text-align: left !important;
+            }
+            .news-header-grid > div:nth-child(2) {
+                grid-column: 1 / -1;
+                grid-row: 1;
+                text-align: center !important;
+                margin-bottom: 10px;
+            }
+            .news-header-grid > div:nth-child(3) {
+                grid-column: 2 / 3;
+                text-align: right !important;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end !important;
+            }
+            .news-header-grid > div:nth-child(3) > div:last-child {
+                display: flex;
+                justify-content: flex-end !important;
+                width: 100%;
+            }
         }
 
         .news-article {
@@ -1047,7 +1074,7 @@ if ($bearColSpan < 0) $bearColSpan = 0;
         </div>
 
         <div class="news-header-grid">
-            <div class="news-ear">
+            <div class="news-ear" style="text-align: left;">
                 <strong>SUPPORT :</strong> Clé USB F:\<br>
                 <strong>SERVEUR :</strong> XAMPP Portable
             </div>
@@ -1055,9 +1082,18 @@ if ($bearColSpan < 0) $bearColSpan = 0;
                 <h2 class="news-manchette">L'Atelier Numérique</h2>
                 <div style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; font-weight: bold; color: #444;">Christophe Millot</div>
             </div>
-            <div class="news-ear">
-                <strong>ARCHITECTURES :</strong> Flat-File<br>
-                <strong>STATUT :</strong> Opérationnel
+            <div class="news-ear" style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 4px; text-align: right;">
+                <div>
+                    <strong>ARCHITECTURES :</strong> Flat-File<br>
+                    <strong>STATUT :</strong> Opérationnel
+                </div>
+                <div style="cursor: pointer; display: flex; align-items: center;" title="Menu">
+                    <svg width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </div>
             </div>
         </div>
 
