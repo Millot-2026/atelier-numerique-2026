@@ -399,20 +399,21 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         .mega-menu-col li {
             margin-bottom: 8px;
         }
+        /* Style des liens desktop avec un léger décalage permanent (padding-left) pour un effet visuel de sous-liste élégant sans saut au survol */
         .mega-menu-col a {
             color: #2b2b2b;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
             display: block;
-            padding: 6px 0;
-            transition: color 0.2s, background-color 0.2s;
+            padding: 6px 0 6px 12px;
+            transition: color 0.15s ease, background-color 0.15s ease;
         }
         .mega-menu-col a:hover {
             color: #ffffff !important;
             background-color: #555555 !important;
             text-decoration: none !important;
-            padding-left: 8px;
+            padding-left: 12px !important;
             padding-right: 8px;
             border-radius: 4px;
         }
@@ -420,7 +421,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             color: #ffffff !important;
             background-color: #000000 !important;
             text-decoration: none !important;
-            padding-left: 8px;
+            padding-left: 12px !important;
             padding-right: 8px;
             border-radius: 4px;
         }
@@ -535,7 +536,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 width: 100%;
             }
 
-            /* MENU MOBILE ANIMÉ AVEC PLEINE HAUTEUR, RÉORGANISATION ET REMPLISSAGE TOTAL DU BLOC LI */
+            /* MENU MOBILE ANIMÉ AVEC PLEINE HAUTEUR, RÉORGANISATION ET REMPLISSAGE TOTAL */
             .journal-mega-menu.active {
                 display: flex !important;
                 position: fixed !important;
@@ -584,7 +585,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             }
             
             .mega-menu-col {
-                background: rgba(0,0,0,0.02);
+                background: #fdfbf7;
                 border: 1px solid #e2ddd5;
                 border-radius: 8px;
                 overflow: hidden;
@@ -641,7 +642,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 justify-content: space-between !important;
             }
             
-            /* Les éléments li prennent toute la largeur et répartissent la hauteur en mode ouvert */
             .mega-menu-col li {
                 margin-bottom: 0 !important;
                 border-bottom: 1px dashed rgba(0,0,0,0.08);
@@ -654,7 +654,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 border-bottom: none;
             }
             
-            /* Les liens remplissent à 100% la largeur et la hauteur de leur conteneur li sans décalage */
             .mega-menu-col a {
                 font-size: 1.1rem;
                 font-weight: 700;
@@ -671,7 +670,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 transition: background-color 0.15s ease, color 0.15s ease;
             }
             
-            /* Survol mobile fixe : Gris soutenu (#555) et texte blanc occupant 100% de la surface */
             .mega-menu-col a:hover {
                 color: #ffffff !important;
                 background-color: #555555 !important;
@@ -681,7 +679,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 border-radius: 0 !important;
             }
             
-            /* Clic mobile : Noir (#000) et texte blanc occupant 100% de la surface */
             .mega-menu-col a:active, .mega-menu-col a.clicked {
                 color: #ffffff !important;
                 background-color: #000000 !important;
@@ -933,15 +930,9 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                           -->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
+    <!-- ========================================================================= -->
+    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                               -->
+    <!-- ========================================================================= -->
     <div class="news-sheet">
         
         <div class="news-bandeau">
@@ -976,6 +967,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
             <hr class="news-header-divider">
 
+            <!-- MÉGA-MENU DÉROULANT (NAVIGATION GLOBALE DU JOURNAL) -->
             <div id="journal-mega-menu" class="journal-mega-menu">
                 <div class="mega-menu-close-btn">
                     <button type="button" id="mega-menu-close"><i class="fas fa-times"></i> Fermer</button>
@@ -1019,7 +1011,8 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     $linkHref = '/' . rawurlencode($p['name']) . '/';
                     ?>
                     <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <article class="news-article" style="<?php echo ($p['name'] === 'workstation' || $p['name'] === 'cms-2026-v8-full') ? 'background-color: #fdf2f4 !important; border: 2px dashed #f43f5e !important;' : ''; ?>">
+                        <!-- ARTICLE DU JOURNAL (STYLE CLASSIQUE STANDARD) -->
+                        <article class="news-article">
                             <div>
                                 <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
                                     <h4 style="margin: 0; border: none; padding: 0;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
@@ -1245,16 +1238,9 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     </div>
 
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!-- SECTION V1 : MES PROJETS NOMADES (V1)                                 -->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!-- Menu V1 replié par défaut au refresh -->
+    <!-- ========================================================================= -->
+    <!-- SECTION V1 : MES PROJETS NOMADES (V1)                                     -->
+    <!-- ========================================================================= -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🗂️</span>
@@ -1298,16 +1284,9 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     <hr class="separator-v2">
 
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!-- SECTION V2 : LANCEUR PROJETS (V2 — CARTES ENRICHIES)                  -->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!--------------------------------------------------------------------------->
-    <!-- Menu V2 replié par défaut au refresh (Cartes Enrichies) -->
+    <!-- ========================================================================= -->
+    <!-- SECTION V2 : LANCEUR PROJETS (V2 — CARTES ENRICHIES)                      -->
+    <!-- ========================================================================= -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🚀</span>
@@ -1319,6 +1298,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         </div>
     </details>
 
+    <!-- FENÊTRE MODALE (OVERLAY) POUR LES DÉTAILS -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
