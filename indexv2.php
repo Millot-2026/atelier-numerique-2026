@@ -1,4 +1,5 @@
 <?php
+// index v2
 $dir = __DIR__;
 $statusesFile = $dir . DIRECTORY_SEPARATOR . 'statuses.json';
 $jsonFile = $dir . DIRECTORY_SEPARATOR . 'dashboard-designer' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'projects.json';
@@ -369,11 +370,17 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         .journal-mega-menu.active {
             display: block;
         }
+        
+        .mega-menu-close-btn {
+            display: none;
+        }
+
         .mega-menu-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
+        
         .mega-menu-col h4 {
             font-size: 0.85rem;
             text-transform: uppercase;
@@ -395,13 +402,27 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         .mega-menu-col a {
             color: #2b2b2b;
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: color 0.2s;
+            display: block;
+            padding: 6px 0;
+            transition: color 0.2s, background-color 0.2s;
         }
         .mega-menu-col a:hover {
-            color: #c0392b;
-            text-decoration: underline;
+            color: #ffffff !important;
+            background-color: #555555 !important;
+            text-decoration: none !important;
+            padding-left: 8px;
+            padding-right: 8px;
+            border-radius: 4px;
+        }
+        .mega-menu-col a:active, .mega-menu-col a.clicked {
+            color: #ffffff !important;
+            background-color: #000000 !important;
+            text-decoration: none !important;
+            padding-left: 8px;
+            padding-right: 8px;
+            border-radius: 4px;
         }
 
         .news-bandeau {
@@ -514,15 +535,160 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 width: 100%;
             }
 
-            /* OPTIMISATION MOBILE POUR LE MÉGA-MENU (Aligné sur les marges du bloc .news-sheet) */
-            .journal-mega-menu {
-                left: 0;
-                right: 0;
-                padding: 20px;
+            /* MENU MOBILE ANIMÉ AVEC PLEINE HAUTEUR, RÉORGANISATION ET REMPLISSAGE TOTAL DU BLOC LI */
+            .journal-mega-menu.active {
+                display: flex !important;
+                position: fixed !important;
+                inset: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                min-height: 100dvh !important;
+                background: #fdfbf7 !important;
+                z-index: 99999 !important;
+                padding: 20px !important;
+                box-sizing: border-box !important;
+                overflow-y: auto !important;
+                border: none !important;
+                box-shadow: none !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
             }
+            .mega-menu-close-btn {
+                display: flex;
+                justify-content: flex-end;
+                margin-bottom: 15px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #e2ddd5;
+                flex-shrink: 0;
+            }
+            .mega-menu-close-btn button {
+                background: #2b2b2b;
+                color: #fff;
+                border: none;
+                padding: 10px 18px;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
             .mega-menu-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 !important;
+                gap: 12px !important;
+                transition: all 0.3s ease;
+            }
+            
+            .mega-menu-col {
+                background: rgba(0,0,0,0.02);
+                border: 1px solid #e2ddd5;
+                border-radius: 8px;
+                overflow: hidden;
+                margin-bottom: 0 !important;
+                transition: order 0.3s ease, flex 0.3s ease;
+            }
+
+            .mega-menu-col.is-expanded {
+                order: -1;
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 !important;
+            }
+
+            .mega-menu-col h4 {
+                font-size: 1.15rem;
+                font-weight: 800;
+                margin: 0;
+                padding: 15px;
+                background: #fff;
+                border-bottom: 1px solid #e2ddd5;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                user-select: none;
+                flex-shrink: 0;
+            }
+            .mega-menu-col h4::after {
+                content: '▼';
+                font-size: 0.75rem;
+                color: #c0392b;
+                transition: transform 0.25s ease;
+            }
+            .mega-menu-col.open h4::after {
+                transform: rotate(180deg);
+            }
+            .mega-menu-col ul {
+                display: none;
+                padding: 0 !important;
+                background: #fdfbf7;
+                margin: 0 !important;
+            }
+            .mega-menu-col.open ul {
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 !important;
+                justify-content: space-between !important;
+            }
+            .mega-menu-col.is-expanded.open ul {
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 !important;
+                justify-content: space-between !important;
+            }
+            
+            /* Les éléments li prennent toute la largeur et répartissent la hauteur en mode ouvert */
+            .mega-menu-col li {
+                margin-bottom: 0 !important;
+                border-bottom: 1px dashed rgba(0,0,0,0.08);
+                display: flex !important;
+                align-items: stretch !important;
+                flex: 1 !important;
+                width: 100% !important;
+            }
+            .mega-menu-col li:last-child {
+                border-bottom: none;
+            }
+            
+            /* Les liens remplissent à 100% la largeur et la hauteur de leur conteneur li sans décalage */
+            .mega-menu-col a {
+                font-size: 1.1rem;
+                font-weight: 700;
+                padding: 0 20px;
+                width: 100% !important;
+                height: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                text-decoration: none !important;
+                color: #2b2b2b;
+                background-color: transparent;
+                box-sizing: border-box;
+                border-radius: 0 !important;
+                transition: background-color 0.15s ease, color 0.15s ease;
+            }
+            
+            /* Survol mobile fixe : Gris soutenu (#555) et texte blanc occupant 100% de la surface */
+            .mega-menu-col a:hover {
+                color: #ffffff !important;
+                background-color: #555555 !important;
+                text-decoration: none !important;
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+                border-radius: 0 !important;
+            }
+            
+            /* Clic mobile : Noir (#000) et texte blanc occupant 100% de la surface */
+            .mega-menu-col a:active, .mega-menu-col a.clicked {
+                color: #ffffff !important;
+                background-color: #000000 !important;
+                text-decoration: none !important;
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+                border-radius: 0 !important;
             }
         }
 
@@ -811,6 +977,9 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             <hr class="news-header-divider">
 
             <div id="journal-mega-menu" class="journal-mega-menu">
+                <div class="mega-menu-close-btn">
+                    <button type="button" id="mega-menu-close"><i class="fas fa-times"></i> Fermer</button>
+                </div>
                 <div class="mega-menu-grid">
                     <div class="mega-menu-col">
                         <h4>Navigation</h4>
@@ -820,10 +989,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                         </ul>
                     </div>
                     <div class="mega-menu-col">
-                        <h4>Applications</h4>
+                        <h4>Applications &amp; Modules</h4>
                         <ul>
-                            <li><a href="dashboard-designer/" target="_blank"><i class="fas fa-desktop"></i> Workstation</a></li>
-                            <li><a href="cms-2026-v8-full/" target="_blank"><i class="fas fa-newspaper"></i> CMS 2026</a></li>
+                            <?php foreach ($projects as $p): ?>
+                                <li><a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank"><i class="fas fa-folder-open"></i> <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="mega-menu-col">
@@ -1198,11 +1368,12 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
               .catch(error => console.error('Erreur réseau :', error));
         }
 
-        // Script de gestion du méga menu et transformation dynamique de l'icône hamburger en croix
+        // Script de gestion du méga menu, accordéons mobiles animés, réorganisation et restitution active
         document.addEventListener("DOMContentLoaded", function() {
             const hamburgerBtn = document.getElementById('hamburger-menu-btn');
             const megaMenu = document.getElementById('journal-mega-menu');
             const iconSvg = document.getElementById('hamburger-icon-svg');
+            const closeBtn = document.getElementById('mega-menu-close');
 
             if (hamburgerBtn && megaMenu && iconSvg) {
                 hamburgerBtn.addEventListener('click', function(e) {
@@ -1210,17 +1381,56 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     const isOpen = megaMenu.classList.toggle('active');
                     
                     if (isOpen) {
-                        // Transformation en croix (X)
                         iconSvg.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
                     } else {
-                        // Retour à l'icône hamburger d'origine
                         iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                        document.querySelectorAll('.mega-menu-col').forEach(c => {
+                            c.classList.remove('open', 'is-expanded');
+                        });
                     }
                 });
 
-                document.addEventListener('click', function() {
-                    megaMenu.classList.remove('active');
-                    iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        megaMenu.classList.remove('active');
+                        iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                        document.querySelectorAll('.mega-menu-col').forEach(c => {
+                            c.classList.remove('open', 'is-expanded');
+                        });
+                    });
+                }
+
+                const menuLinks = megaMenu.querySelectorAll('.mega-menu-col a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        menuLinks.forEach(l => l.classList.remove('clicked'));
+                        this.classList.add('clicked');
+                    });
+                });
+
+                const megaMenuCols = document.querySelectorAll('.mega-menu-col');
+                megaMenuCols.forEach(col => {
+                    const title = col.querySelector('h4');
+                    if (title) {
+                        title.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const isOpen = col.classList.toggle('open');
+                            
+                            if (window.innerWidth <= 768) {
+                                if (isOpen) {
+                                    megaMenuCols.forEach(c => {
+                                        if (c !== col) {
+                                            c.classList.remove('open', 'is-expanded');
+                                        }
+                                    });
+                                    col.classList.add('is-expanded');
+                                } else {
+                                    col.classList.remove('is-expanded');
+                                }
+                            }
+                        });
+                    }
                 });
 
                 megaMenu.addEventListener('click', function(e) {
@@ -1304,7 +1514,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     html += '<h3 class="level-title">Contexte</h3>';
                     html += `<p>${details.niveau2.contexte}</p>`;
                 }
-                if (details.niveau2.fonctionnalites && details.niveau2.fonctionnalites.length > 0) {
+                if (details.niveau2.fonctionnalites && details.niveau2.fonctionnalites.length > 1) {
                     html += '<h3 class="level-title" style="margin-top: 15px;">Fonctionnalités clés</h3><ul>';
                     details.niveau2.fonctionnalites.forEach(f => {
                         html += `<li>${f}</li>`;
