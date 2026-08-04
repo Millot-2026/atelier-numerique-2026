@@ -1792,13 +1792,14 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             if (originalHeader && stickyHeader) {
                 const observer = new IntersectionObserver(function(entries) {
                     entries.forEach(entry => {
-                        // Si le header original sort de l'écran par le haut, on affiche la barre fixe
                         if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
                             stickyHeader.classList.add('visible');
                         } else {
                             stickyHeader.classList.remove('visible');
-                            // Ferme aussi le menu si on remonte tout en haut
                             megaMenu.classList.remove('active');
+                            const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                            if (iconSvg) iconSvg.innerHTML = defaultSvg;
+                            if (stickyIconSvg) stickyIconSvg.innerHTML = defaultSvg;
                         }
                     });
                 }, { threshold: 0 });
