@@ -18,6 +18,32 @@ if (file_exists($jsonFile)) {
     }
 }
 
+// Gestion AJAX de la suppression d'un export
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_export' && isset($_POST['project'])) {
+    $targetProject = basename($_POST['project']);
+    $targetPath = __DIR__ . '/export/' . $targetProject;
+
+    $response = ['success' => false];
+
+    if (is_dir($targetPath)) {
+        $deleteDirectory = function($dir) use (&$deleteDirectory) {
+            $files = array_diff(scandir($dir), ['.', '..']);
+            foreach ($files as $file) {
+                $path = $dir . '/' . $file;
+                is_dir($path) ? $deleteDirectory($path) : unlink($path);
+            }
+            return rmdir($dir);
+        };
+
+        if ($deleteDirectory($targetPath)) {
+            $response['success'] = true;
+        }
+    }
+
+    echo json_encode($response);
+    exit;
+}
+
 // Gestion AJAX du changement de statut
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project']) && isset($_POST['status'])) {
     $projectName = basename($_POST['project']);
@@ -52,8 +78,8 @@ if (file_exists($statusesFile)) {
     }
 }
 
-// Dossiers système et dossiers internes à exclure du listing
-$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site'];
+// Dossiers système et dossiers internes à exclure du listing (export est bien analysé)
+$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site', 'dashboard-designer', 'images'];
 
 foreach ($files as $file) {
     if ($file === '.' || $file === '..' || !is_dir($dir . '/' . $file)) continue;
@@ -113,7 +139,7 @@ foreach ($files as $file) {
         $badgeClass = 'badge badge-' . $statusKey;
     }
 
-    $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable']) ? 12 : 6;
+    $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable', 'modulor', 'personator-v1.2']) ? 12 : 6;
     $sizeLabel = ($colSpan === 12) ? 'CMS' : 'UX-UI';
 
     $projectsRaw[$lowerFile] = [
@@ -214,7 +240,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 <head>
     <meta charset="UTF-8">
     <title>DEV NOMADE - Dashboard</title>
-    <link rel="stylesheet" href="static/fonts/fontawesome/css/all.min.css">
 
     <style>
         :root {
@@ -260,9 +285,45 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             flex-direction: column;
             justify-content: space-between;
             border: 1px solid transparent;
+            position: relative;
         }
         .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
-        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; word-break: break-all; }
+        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; word-break: break-all; padding-right: 20px; }
+
+        .btn-delete-export {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffffff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            padding: 0;
+            font-size: 0;
+        }
+        .btn-delete-export::before {
+            content: "×";
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 900;
+            line-height: 1;
+            display: block;
+        }
+        .btn-delete-export:hover {
+            background: #ef4444;
+            transform: scale(1.1);
+        }
+        .btn-delete-export:hover::before {
+            color: #ffffff;
+        }
 
         .badge {
             display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
@@ -358,7 +419,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             top: 100%;
             left: 0;
             right: 0;
-            background: #fff !important;
+            background: #FDFBF7 !important;
             border: 2px solid #2b2b2b;
             border-top: none;
             padding: 25px;
@@ -399,7 +460,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         .mega-menu-col li {
             margin-bottom: 8px;
         }
-        /* Style des liens desktop avec un léger décalage permanent (padding-left) pour un effet visuel de sous-liste élégant sans saut au survol */
         .mega-menu-col a {
             color: #2b2b2b;
             text-decoration: none;
@@ -536,7 +596,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 width: 100%;
             }
 
-            /* MENU MOBILE ANIMÉ AVEC PLEINE HAUTEUR, RÉORGANISATION ET REMPLISSAGE TOTAL */
             .journal-mega-menu.active {
                 display: flex !important;
                 position: fixed !important;
@@ -703,12 +762,12 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
         .news-article h4 {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: #2b2b2b;
-            margin: 0 0 10px 0;
+            margin: 0 0 12px 0;
             border-bottom: 2px solid #2b2b2b;
-            padding-bottom: 4px;
+            padding-bottom: 6px;
         }
 
         .press-figure {
@@ -780,6 +839,84 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             }
         }
 
+        .modulor-carousel-container {
+            position: relative;
+            margin: 16px 0;
+            background: #f8fafc;
+            border: none;
+            padding: 0;
+        }
+        .modulor-carousel-track-wrapper {
+            overflow: hidden;
+            width: 100%;
+        }
+        .modulor-carousel-track {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            will-change: transform;
+        }
+        .modulor-carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modulor-carousel-slide img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: contain;
+            background: #f8fafc;
+            display: block;
+            border: none;
+            box-shadow: none;
+        }
+        .modulor-carousel-btn {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            background: rgba(43, 43, 43, 0.85);
+            color: #ffffff !important;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            z-index: 10;
+            transition: background 0.2s;
+            line-height: 1;
+        }
+        .modulor-carousel-btn:hover {
+            background: rgba(43, 43, 43, 1);
+        }
+        .modulor-carousel-prev { left: 8px; }
+        .modulor-carousel-next { right: 8px; }
+        .modulor-carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .modulor-carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.2s;
+        }
+        .modulor-carousel-dot.active {
+            background: #2b2b2b;
+        }
+
         .editor-switch-bar {
             display: flex;
             justify-content: center;
@@ -848,11 +985,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
         .news-subhead {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             font-weight: 700;
             color: #c0392b;
-            margin: 10px 0 3px 0;
+            margin: 14px 0 4px 0;
             letter-spacing: 0.5px;
         }
         .news-article p {
@@ -923,7 +1060,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 text-align: justify;
             }
         }
-
     </style>
 </head>
 <body>
@@ -954,7 +1090,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                         <strong>ARCHITECTURES :</strong> Flat-File<br>
                         <strong>STATUT :</strong> Opérationnel
                     </div>
-                    <!-- Icône hamburger qui se transformera dynamiquement en croix -->
                     <div id="hamburger-menu-btn" style="cursor: pointer; display: flex; align-items: center;" title="Menu">
                         <svg id="hamburger-icon-svg" width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -1011,11 +1146,10 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     $linkHref = '/' . rawurlencode($p['name']) . '/';
                     ?>
                     <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <!-- ARTICLE DU JOURNAL (STYLE CLASSIQUE STANDARD) -->
                         <article class="news-article">
                             <div>
                                 <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
-                                    <h4 style="margin: 0; border: none; padding: 0;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
+                                    <h4 style="margin: 0; border: none; padding: 0; font-size: 1.35rem;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
                                     <span style="font-family: -apple-system, sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
                                 </div>
                                 
@@ -1133,23 +1267,100 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                         </figure>
                                     </div>
 
+                                <?php elseif ($p['name'] === 'modulor'): ?>
+                                    
+                                    <p class="news-pitch">Parmi les outils qui composent notre écosystème de développement, certains sont pensés pour produire des livrables finis, tandis que d'autres s'apparentent à de véritables terrains de jeu. <strong>Modulor</strong> appartient incontestablement à cette seconde catégorie.</p>
+                                    
+                                    <p>Conçu à l'origine comme une première incursion dans le développement personnel et comme le prétexte à la création d'un site utilitaire sur-mesure, ce module a évolué pour devenir un espace de travail vivant, un laboratoire d'expérimentation visuelle et fonctionnelle taillé pour le web designer et le développeur nomade.</p>
+
+                                    <div class="news-subhead">Une architecture piquée d'indépendance</div>
+                                    <p>D'un point de vue structurel, Modulor ne cherche pas à imposer les contraintes d'un CMS éditorial lourd. L'application repose sur un équilibre technique élégant :</p>
+                                    <ul>
+                                        <li>Un moteur de rendu en amont sous <strong>PHP</strong>, chargé d'hydrater la structure initiale et de gérer l'exportation des travaux.</li>
+                                        <li>Une couche de persistance hybride articulée autour d'un fichier central (<code>config.json</code>) pour figer la disposition des blocs sur le serveur local, complétée par un système de secours en <code>localStorage</code>.</li>
+                                        <li>Un moteur d'interface en JavaScript pur qui insuffle toute son interactivité à la surface de travail.</li>
+                                    </ul>
+                                    <p>Versionné de manière indépendante avec son propre dépôt <code>.git</code>, Modulor vit sa propre vie au cœur de la clé USB, tel un outil en constante mutation.</p>
+
+                                    <div class="news-subhead">Galerie &amp; Interfaces Principales</div>
+                                    <p class="press-duo-text" style="margin-bottom: 10px;">Découvrez ci-dessous un aperçu des différents écrans et thèmes de l'application via le carrousel interactif.</p>
+
+                                    <div class="modulor-carousel-container" id="modulor-carousel">
+                                        <button type="button" class="modulor-carousel-btn modulor-carousel-prev" onclick="moveModulorCarousel(-1)">&#10094;</button>
+                                        <button type="button" class="modulor-carousel-btn modulor-carousel-next" onclick="moveModulorCarousel(1)">&#10095;</button>
+                                        
+                                        <div class="modulor-carousel-track-wrapper">
+                                            <div class="modulor-carousel-track" id="modulor-track">
+                                                <div class="modulor-carousel-slide">
+                                                    <img src="images/images-modulor/modulor-accueil-01.png" alt="Modulor Accueil 1">
+                                                </div>
+                                                <div class="modulor-carousel-slide">
+                                                    <img src="images/images-modulor/modulor-accueil-02.png" alt="Modulor Accueil 2">
+                                                </div>
+                                                <div class="modulor-carousel-slide">
+                                                    <img src="images/images-modulor/modulor-accueil-03.png" alt="Modulor Accueil 3">
+                                                </div>
+                                                <div class="modulor-carousel-slide">
+                                                    <img src="images/images-modulor/modulor-accueil-04.png" alt="Modulor Accueil 4">
+                                                </div>
+                                                <div class="modulor-carousel-slide">
+                                                    <img src="images/images-modulor/modulor-accueil-05.png" alt="Modulor Accueil 5">
+                                                </div>
+                                                <div class="modulor-carousel-slide">
+                                                    <img src="images/images-modulor/modulor-accueil-06.png" alt="Modulor Accueil 6">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="press-caption" id="modulor-caption" style="margin-top: 8px;">Fig. 1 — Interface Modulor (Vue 1)</div>
+
+                                        <div class="modulor-carousel-dots" id="modulor-dots">
+                                            <button type="button" class="modulor-carousel-dot active" onclick="currentModulorSlide(0)"></button>
+                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(1)"></button>
+                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(2)"></button>
+                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(3)"></button>
+                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(4)"></button>
+                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(5)"></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="news-subhead">Un arsenal d'outils taillé pour le prototypage</div>
+                                    <p>Ce qui fait la force de Modulor, c'est la concentration d'utilitaires indispensables réunis sur une seule et même interface modulable :</p>
+                                    <ul>
+                                        <li><strong>Le Skin Engine :</strong> véritable caméléon visuel, ce moteur de thèmes permet de basculer instantanément d'une ambiance graphique à une autre (Cyber, Blueprint, V6, Terminal, Neumorph ou Skeletor).</li>
+                                        <li><strong>Le Design Lab (CodePen intégré) :</strong> intègre un système d'archives avec animation de retournement (flip), journalisation horodatée et prévisualisation en temps réel via un iframe dynamique.</li>
+                                        <li><strong>Les utilitaires d'appoint :</strong> un générateur de faux texte (Lorem Generator) paramétrable à la volée et un explorateur de la base d'icônes FontAwesome chargée localement.</li>
+                                        <li><strong>La gestion dynamique des blocs :</strong> composition libre des lignes de travail et organisation du flux d'idées secondé par un bloc-notes persistant.</li>
+                                    </ul>
+
+                                    <div class="news-subhead">L'esprit de l'atelier</div>
+                                    <p>Modulor incarne parfaitement la philosophie de l'atelier nomade : s'affranchir des architectures complexes pour retrouver le plaisir d'un code maîtrisé, rapide et entièrement sous contrôle local. C'est l'espace où l'on pose les idées, où l'on teste la cohérence d'un composant avant de l'industrialiser.</p>
+
+                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                    
+                                    <p class="news-pitch">Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>
+
+                                    <div class="news-subhead">L'Art de l'Inincarnation — Structurer le Profil</div>
+                                    <p>Conçu pour répondre aux exigences des méthodologies UX/UI modernes, Personator structure la création de personas autour de fiches dynamiques multicouches. Chaque profil est rigoureusement documenté pour ancrer les choix de conception dans la réalité des futurs utilisateurs.</p>
+
+                                    <div class="news-subhead">Motivation et Frustrations au Cœur de l'Interface</div>
+                                    <p>L'interface guide l'utilisateur pas à pas à travers les dimensions clés du persona : données démographiques, motivations profondes, freins et habitudes de navigation. Cette cartographie fine permet d'identifier immédiatement les leviers d'engagement et d'anticiper les frictions potentielles sur les maquettes.</p>
+
+                                    <div class="news-subhead">Restitution et Export des Fiches Clients</div>
+                                    <p>Parce qu'un livrable UX doit être aussi élégant à consulter qu'à partager, Personator intègre un double système de sortie : une vue d'impression optimisée pour les formats papier et un archivage rigoureux en JSON, prêt à être réutilisé ou intégré dans les dossiers de conception client.</p>
+
                                 <?php elseif ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                     <figure class="press-figure">
                                         <img src="images/capture-skeletor.png" alt="Aperçu Skeletor">
                                         <figcaption class="press-caption">Illustration — Skeletor</figcaption>
                                     </figure>
-                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                    <figure class="press-figure">
-                                        <img src="images/capture-personator.png" alt="Aperçu Personator">
-                                        <figcaption class="press-caption">Illustration — Personator</figcaption>
-                                    </figure>
                                 <?php else: ?>
                                     <div style="height: 180px; background: #f1f3f5; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 16px;">
-                                        <i class="fas fa-image" style="margin-right: 6px;">&nbsp;</i> Illustration
+                                        Illustration
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation'): ?>
+                                <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation' || $p['name'] === 'modulor' || $p['name'] === 'personator-v1.2'): ?>
                                     
                                 <?php elseif ($p['name'] === 'dashboard-designer'): ?>
                                     <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, le module permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
@@ -1161,10 +1372,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <p class="news-pitch">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>
                                 <?php elseif ($p['name'] === 'texturor'): ?>
                                     <p class="news-pitch">Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>
-                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                    <p class="news-pitch">Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>
-                                <?php elseif ($p['name'] === 'modulor'): ?>
-                                    <p class="news-pitch">Laboratoire visuel et interactif de l'atelier, <strong>modulor</strong> propose l'interface idéale pour tester à la volée des mises en page, expérimenter des structures d'UI et sculpter des composants en direct sans contrainte technique lourde.</p>
                                 <?php elseif ($p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                     <p class="news-pitch">Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>
                                 <?php elseif ($p['name'] === 'skeletor-v1.0'): ?>
@@ -1175,7 +1382,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <p class="news-pitch"><?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                                 <?php endif; ?>
 
-                                <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation']) && $p['details'] && isset($p['details']['niveau2'])): ?>
+                                <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation', 'modulor', 'personator-v1.2']) && $p['details'] && isset($p['details']['niveau2'])): ?>
                                     <?php if (!empty($p['details']['niveau2']['contexte'])): ?>
                                         <div class="news-subhead">Contexte</div>
                                         <p><?php echo htmlspecialchars($p['details']['niveau2']['contexte'], ENT_QUOTES, 'UTF-8'); ?></p>
@@ -1298,6 +1505,123 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         </div>
     </details>
 
+    <hr class="separator-v2">
+
+    <!-- ========================================================================= -->
+    <!-- NOUVELLE SECTION FINALE : PROJETS & PERSONAS GÉNÉRÉS (EXPORTS)            -->
+    <!-- ========================================================================= -->
+    <details class="section-block" open>
+        <summary>
+            <span class="summary-icon">📂</span>
+            <h2>Mes Projets Générés &amp; Exports (Personator, Skeletor, etc.)</h2>
+            <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="section-body">
+            <div class="grid" id="exports-grid">
+                <?php
+                $exportDir = __DIR__ . '/export/';
+                if (!is_dir($exportDir)) {
+                    mkdir($exportDir, 0777, true);
+                }
+
+                // CORRECTION : pré-filtrage sur is_dir() AVANT le test empty()
+                // Évite la grille vide silencieuse si /export/ contient des fichiers parasites
+                $allEntries        = array_diff(scandir($exportDir), ['.', '..']);
+                $generatedProjects = array_filter($allEntries, function($entry) use ($exportDir) {
+                    return is_dir($exportDir . $entry);
+                });
+
+                if (empty($generatedProjects)) {
+                    echo '<p style="color: var(--text-muted); font-size: 0.9em; padding: 10px;" id="no-exports-msg">Aucun projet généré pour le moment.</p>';
+                } else {
+                    foreach ($generatedProjects as $proj) {
+                        $projPath  = $exportDir . $proj;
+                        $indexPath = 'export/' . $proj . '/index.html';
+                        if (!file_exists($projPath . '/index.html') && file_exists($projPath . '/index.php')) {
+                            $indexPath = 'export/' . $proj . '/index.php';
+                        }
+                        $hasIndex = file_exists($projPath . '/index.html') || file_exists($projPath . '/index.php');
+
+                        // ── Valeurs par défaut (fallback = skeletor) ──────────────────
+                        $badgeType      = 'export-skeletor';
+                        $badgeColor     = 'rgba(155, 89, 182, 0.15)';
+                        $badgeTextColor = '#bb8fce';
+                        $actionLabel    = 'Voir le site';
+                        $detectedSource = 'skeletor'; // source résolue
+
+                        // ── NIVEAU 1 (priorité absolue) : lecture de _meta.json ────────
+                        // Chaque outil (Personator, Skeletor, User Journey) écrit ce fichier
+                        // à l'export avec { "source": "personator|skeletor|user-journey" }
+                        $metaFile = $projPath . '/_meta.json';
+                        if (file_exists($metaFile)) {
+                            $metaRaw = file_get_contents($metaFile);
+                            $meta    = json_decode($metaRaw, true);
+                            if (isset($meta['source'])) {
+                                $detectedSource = mb_strtolower(trim($meta['source']));
+                            }
+                        }
+                        // ── NIVEAU 2 (heuristique structure) : si _meta.json absent ────
+                        // Détecte le type par les fichiers signatures présents dans le dossier
+                        elseif (file_exists($projPath . '/persona.json') || file_exists($projPath . '/persona.html')) {
+                            $detectedSource = 'personator';
+                        } elseif (file_exists($projPath . '/journey.json') || file_exists($projPath . '/journey.html')) {
+                            $detectedSource = 'user-journey';
+                        }
+                        // ── NIVEAU 3 (fallback nom de dossier) : dernier recours ────────
+                        else {
+                            $projLower = mb_strtolower($proj);
+                            if (strpos($projLower, 'persona') !== false || strpos($projLower, 'personnator') !== false) {
+                                $detectedSource = 'personator';
+                            } elseif (strpos($projLower, 'journey') !== false || strpos($projLower, 'user-journey') !== false) {
+                                $detectedSource = 'user-journey';
+                            }
+                            // skeletor : strpos('skeletor') OU aucun mot-clé → fallback par défaut
+                        }
+
+                        // ── Application des couleurs/labels selon $detectedSource ────────
+                        if ($detectedSource === 'personator') {
+                            $badgeType      = 'export-personnator';
+                            $badgeColor     = 'rgba(245, 158, 11, 0.15)';
+                            $badgeTextColor = 'var(--orange)';
+                            $actionLabel    = 'Voir le persona';
+                        } elseif ($detectedSource === 'user-journey') {
+                            $badgeType      = 'export-user-journey';
+                            $badgeColor     = 'rgba(34, 197, 94, 0.15)';
+                            $badgeTextColor = 'var(--green)';
+                            $actionLabel    = 'Voir la journey';
+                        }
+                        // skeletor → valeurs par défaut déjà définies ci-dessus
+
+                        $projEsc = htmlspecialchars($proj, ENT_QUOTES, 'UTF-8');
+
+                        echo '<div class="card" id="export-card-' . $projEsc . '">';
+                        // CORRECTION : × inline dans le bouton (cross-browser garanti)
+                        echo '<button type="button" class="btn-delete-export" onclick="deleteExport(\'' . $projEsc . '\')" title="Supprimer définitivement ce dossier">×</button>';
+
+                        echo '<div>';
+                        echo '<div style="margin-bottom: 8px;">';
+                        echo '<span style="display:inline-block;font-size:0.65rem;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:99px;text-transform:uppercase;background:' . $badgeColor . ';color:' . $badgeTextColor . ';">' . $badgeType . '</span>';
+                        echo '</div>';
+                        echo '<div class="card-title" style="font-size:1rem;word-break:break-all;">' . $projEsc . '</div>';
+                        echo '</div>';
+
+                        echo '<div class="card-actions" style="margin-top:15px;">';
+                        if ($hasIndex) {
+                            echo '<a class="card-link" href="' . htmlspecialchars($indexPath, ENT_QUOTES, 'UTF-8') . '" target="_blank">' . $actionLabel . '</a>';
+                        } else {
+                            // CORRECTION : message explicite si pas d'index dans le dossier
+                            echo '<a class="card-link" href="export/' . $projEsc . '/" target="_blank">' . $actionLabel . '</a>';
+                            echo '<span style="display:block;margin-top:6px;color:var(--text-muted);font-size:0.78em;">⚠️ Pas d\'index détecté</span>';
+                        }
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                }
+                ?>
+            </div>
+        </div>
+    </details>
+
     <!-- FENÊTRE MODALE (OVERLAY) POUR LES DÉTAILS -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
@@ -1313,10 +1637,75 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
     </div>
 
     <script>
+        // Fonction de suppression sécurisée avec alerte de confirmation
+        function deleteExport(projectName) {
+            if (confirm("⚠️ Voulez-vous vraiment supprimer définitivement le projet \"" + projectName + "\" ainsi que tout son dossier ?")) {
+                const formData = new FormData();
+                formData.append('action', 'delete_export');
+                formData.append('project', projectName);
+
+                fetch('', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const card = document.getElementById('export-card-' + projectName);
+                        if (card) {
+                            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.9)';
+                            setTimeout(() => {
+                                card.remove();
+                                const grid = document.getElementById('exports-grid');
+                                if (grid && grid.querySelectorAll('.card').length === 0) {
+                                    grid.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9em; padding: 10px;" id="no-exports-msg">Aucun projet généré pour le moment.</p>';
+                                }
+                            }, 300);
+                        }
+                    } else {
+                        alert("Erreur lors de la suppression du dossier sur le serveur.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur réseau :', error);
+                    alert("Une erreur réseau est survenue.");
+                });
+            }
+        }
+
+        // LOGIQUE DU CAROUSEL MODULOR (DÉFILEMENT UNITAIRE PROpre)
+        let modulorSlideIndex = 0;
+        function showModulorSlide(index) {
+            const track = document.getElementById('modulor-track');
+            const dots = document.querySelectorAll('.modulor-carousel-dot');
+            const caption = document.getElementById('modulor-caption');
+            if (!track) return;
+            const slides = track.children;
+            if (index >= slides.length) { modulorSlideIndex = 0; }
+            else if (index < 0) { modulorSlideIndex = slides.length - 1; }
+            else { modulorSlideIndex = index; }
+            
+            track.style.transform = 'translateX(-' + (modulorSlideIndex * 100) + '%)';
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === modulorSlideIndex);
+            });
+            if (caption) {
+                caption.innerText = 'Fig. ' + (modulorSlideIndex + 1) + ' — Interface Modulor (Vue ' + (modulorSlideIndex + 1) + ')';
+            }
+        }
+        function moveModulorCarousel(step) {
+            showModulorSlide(modulorSlideIndex + step);
+        }
+        function currentModulorSlide(index) {
+            showModulorSlide(index);
+        }
+
         const statusCycle = {
             'validated':   { next: 'operational', label: '&#x1F7E0; Op&eacute;rationnel', class: 'badge badge-operational' },
             'operational': { next: 'progress',    label: '&#x1F534; En cours',        class: 'badge badge-progress' },
-            'progress':    { next: 'validated',   label: '&#x1F7E2; Valid&eacute;',    class: 'badge badge-validated' }
+            'progress':    { next: 'validated',    label: '&#x1F7E2; Valid&eacute;',    class: 'badge badge-validated' }
         };
 
         function cycleStatus(badgeEl) {
@@ -1506,7 +1895,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
             if (details && details.niveau3) {
                 html += '<div class="level-block">';
-                html += '<h3 class="level-title">Spécifications & Architecture</h3>';
+                html +='<h3 class="level-title">Spécifications & Architecture</h3>';
                 if (details.niveau3.architecture) html += `<p><strong>Architecture :</strong> ${details.niveau3.architecture}</p>`;
                 if (details.niveau3.environnement) html += `<p><strong>Environnement :</strong> ${details.niveau3.environnement}</p>`;
                 if (details.niveau3.roadmap) html += `<p style="margin-top: 10px;"><strong>Roadmap :</strong> ${details.niveau3.roadmap}</p>`;
