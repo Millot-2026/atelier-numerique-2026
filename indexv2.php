@@ -262,6 +262,45 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             padding: 40px;
         }
 
+        /* Barre d'en-tête fixe dynamique (apparaît au scroll quand l'original sort de l'écran) */
+        .sticky-header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fdfbf7;
+            border-bottom: 2px solid #2b2b2b;
+            padding: 10px 30px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 99999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sticky-header-bar.visible {
+            transform: translateY(0);
+        }
+        .sticky-header-brand {
+            font-family: Georgia, serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #2b2b2b;
+            letter-spacing: -0.5px;
+        }
+        .sticky-header-hamburger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            background: #2b2b2b;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+
         h1 {
             font-size: 1.8rem;
             margin-bottom: 30px;
@@ -1064,6 +1103,21 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 </head>
 <body>
 
+    <!-- Barre fixe dynamique (apparaît au scroll quand l'original sort de l'écran) -->
+    <div class="sticky-header-bar" id="sticky-header">
+        <div class="sticky-header-brand">
+            L'Atelier Numérique
+        </div>
+        <div class="sticky-header-hamburger" id="sticky-hamburger-btn" title="Menu">
+            <svg id="sticky-hamburger-icon-svg" width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <span style="font-family: -apple-system, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-left: 8px; font-weight: bold;">Menu</span>
+        </div>
+    </div>
+
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
     <!-- ========================================================================= -->
@@ -1076,7 +1130,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         </div>
 
         <div class="news-header-wrapper">
-            <div class="news-header-grid">
+            <div class="news-header-grid" id="original-header-grid">
                 <div class="news-ear" style="text-align: left;">
                     <strong>SUPPORT :</strong> Clé USB F:\<br>
                     <strong>SERVEUR :</strong> XAMPP Portable
@@ -1524,8 +1578,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     mkdir($exportDir, 0777, true);
                 }
 
-                // CORRECTION : pré-filtrage sur is_dir() AVANT le test empty()
-                // Évite la grille vide silencieuse si /export/ contient des fichiers parasites
                 $allEntries        = array_diff(scandir($exportDir), ['.', '..']);
                 $generatedProjects = array_filter($allEntries, function($entry) use ($exportDir) {
                     return is_dir($exportDir . $entry);
@@ -1542,16 +1594,12 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                         }
                         $hasIndex = file_exists($projPath . '/index.html') || file_exists($projPath . '/index.php');
 
-                        // ── Valeurs par défaut (fallback = skeletor) ──────────────────
                         $badgeType      = 'export-skeletor';
                         $badgeColor     = 'rgba(155, 89, 182, 0.15)';
                         $badgeTextColor = '#bb8fce';
                         $actionLabel    = 'Voir le site';
-                        $detectedSource = 'skeletor'; // source résolue
+                        $detectedSource = 'skeletor';
 
-                        // ── NIVEAU 1 (priorité absolue) : lecture de _meta.json ────────
-                        // Chaque outil (Personator, Skeletor, User Journey) écrit ce fichier
-                        // à l'export avec { "source": "personator|skeletor|user-journey" }
                         $metaFile = $projPath . '/_meta.json';
                         if (file_exists($metaFile)) {
                             $metaRaw = file_get_contents($metaFile);
@@ -1560,14 +1608,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                 $detectedSource = mb_strtolower(trim($meta['source']));
                             }
                         }
-                        // ── NIVEAU 2 (heuristique structure) : si _meta.json absent ────
-                        // Détecte le type par les fichiers signatures présents dans le dossier
                         elseif (file_exists($projPath . '/persona.json') || file_exists($projPath . '/persona.html')) {
                             $detectedSource = 'personator';
                         } elseif (file_exists($projPath . '/journey.json') || file_exists($projPath . '/journey.html')) {
                             $detectedSource = 'user-journey';
                         }
-                        // ── NIVEAU 3 (fallback nom de dossier) : dernier recours ────────
                         else {
                             $projLower = mb_strtolower($proj);
                             if (strpos($projLower, 'persona') !== false || strpos($projLower, 'personnator') !== false) {
@@ -1575,10 +1620,8 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                             } elseif (strpos($projLower, 'journey') !== false || strpos($projLower, 'user-journey') !== false) {
                                 $detectedSource = 'user-journey';
                             }
-                            // skeletor : strpos('skeletor') OU aucun mot-clé → fallback par défaut
                         }
 
-                        // ── Application des couleurs/labels selon $detectedSource ────────
                         if ($detectedSource === 'personator') {
                             $badgeType      = 'export-personnator';
                             $badgeColor     = 'rgba(245, 158, 11, 0.15)';
@@ -1590,12 +1633,10 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                             $badgeTextColor = 'var(--green)';
                             $actionLabel    = 'Voir la journey';
                         }
-                        // skeletor → valeurs par défaut déjà définies ci-dessus
 
                         $projEsc = htmlspecialchars($proj, ENT_QUOTES, 'UTF-8');
 
                         echo '<div class="card" id="export-card-' . $projEsc . '">';
-                        // CORRECTION : × inline dans le bouton (cross-browser garanti)
                         echo '<button type="button" class="btn-delete-export" onclick="deleteExport(\'' . $projEsc . '\')" title="Supprimer définitivement ce dossier">×</button>';
 
                         echo '<div>';
@@ -1609,7 +1650,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                         if ($hasIndex) {
                             echo '<a class="card-link" href="' . htmlspecialchars($indexPath, ENT_QUOTES, 'UTF-8') . '" target="_blank">' . $actionLabel . '</a>';
                         } else {
-                            // CORRECTION : message explicite si pas d'index dans le dossier
                             echo '<a class="card-link" href="export/' . $projEsc . '/" target="_blank">' . $actionLabel . '</a>';
                             echo '<span style="display:block;margin-top:6px;color:var(--text-muted);font-size:0.78em;">⚠️ Pas d\'index détecté</span>';
                         }
@@ -1737,75 +1777,103 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
               .catch(error => console.error('Erreur réseau :', error));
         }
 
-        // Script de gestion du méga menu, accordéons mobiles animés, réorganisation et restitution active
+        // Script de gestion de l'apparition dynamique de la barre au scroll + méga menu
         document.addEventListener("DOMContentLoaded", function() {
             const hamburgerBtn = document.getElementById('hamburger-menu-btn');
+            const stickyBtn = document.getElementById('sticky-hamburger-btn');
             const megaMenu = document.getElementById('journal-mega-menu');
             const iconSvg = document.getElementById('hamburger-icon-svg');
+            const stickyIconSvg = document.getElementById('sticky-hamburger-icon-svg');
             const closeBtn = document.getElementById('mega-menu-close');
+            const originalHeader = document.getElementById('original-header-grid');
+            const stickyHeader = document.getElementById('sticky-header');
 
-            if (hamburgerBtn && megaMenu && iconSvg) {
-                hamburgerBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const isOpen = megaMenu.classList.toggle('active');
-                    
-                    if (isOpen) {
-                        iconSvg.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
-                    } else {
-                        iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
-                        document.querySelectorAll('.mega-menu-col').forEach(c => {
-                            c.classList.remove('open', 'is-expanded');
-                        });
-                    }
-                });
+            // Observation du scroll pour afficher/masquer la barre fixe selon la position du header original
+            if (originalHeader && stickyHeader) {
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        // Si le header original sort de l'écran par le haut, on affiche la barre fixe
+                        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+                            stickyHeader.classList.add('visible');
+                        } else {
+                            stickyHeader.classList.remove('visible');
+                            // Ferme aussi le menu si on remonte tout en haut
+                            megaMenu.classList.remove('active');
+                        }
+                    });
+                }, { threshold: 0 });
+                observer.observe(originalHeader);
+            }
 
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        megaMenu.classList.remove('active');
-                        iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
-                        document.querySelectorAll('.mega-menu-col').forEach(c => {
-                            c.classList.remove('open', 'is-expanded');
-                        });
+            function toggleMenu(e) {
+                if (e) e.stopPropagation();
+                const isOpen = megaMenu.classList.toggle('active');
+                
+                const svgContent = isOpen 
+                    ? '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
+                    : '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                
+                if (iconSvg) iconSvg.innerHTML = svgContent;
+                if (stickyIconSvg) stickyIconSvg.innerHTML = svgContent;
+
+                if (!isOpen) {
+                    document.querySelectorAll('.mega-menu-col').forEach(c => {
+                        c.classList.remove('open', 'is-expanded');
                     });
                 }
+            }
 
-                const menuLinks = megaMenu.querySelectorAll('.mega-menu-col a');
-                menuLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        menuLinks.forEach(l => l.classList.remove('clicked'));
-                        this.classList.add('clicked');
+            if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMenu);
+            if (stickyBtn) stickyBtn.addEventListener('click', toggleMenu);
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    megaMenu.classList.remove('active');
+                    const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                    if (iconSvg) iconSvg.innerHTML = defaultSvg;
+                    if (stickyIconSvg) stickyIconSvg.innerHTML = defaultSvg;
+                    document.querySelectorAll('.mega-menu-col').forEach(c => {
+                        c.classList.remove('open', 'is-expanded');
                     });
                 });
-
-                const megaMenuCols = document.querySelectorAll('.mega-menu-col');
-                megaMenuCols.forEach(col => {
-                    const title = col.querySelector('h4');
-                    if (title) {
-                        title.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const isOpen = col.classList.toggle('open');
-                            
-                            if (window.innerWidth <= 768) {
-                                if (isOpen) {
-                                    megaMenuCols.forEach(c => {
-                                        if (c !== col) {
-                                            c.classList.remove('open', 'is-expanded');
-                                        }
-                                    });
-                                    col.classList.add('is-expanded');
-                                } else {
-                                    col.classList.remove('is-expanded');
-                                }
-                            }
-                        });
-                    }
-                });
-
-                megaMenu.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
             }
+
+            const menuLinks = megaMenu.querySelectorAll('.mega-menu-col a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    menuLinks.forEach(l => l.classList.remove('clicked'));
+                    this.classList.add('clicked');
+                });
+            });
+
+            const megaMenuCols = document.querySelectorAll('.mega-menu-col');
+            megaMenuCols.forEach(col => {
+                const title = col.querySelector('h4');
+                if (title) {
+                    title.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const isOpen = col.classList.toggle('open');
+                        
+                        if (window.innerWidth <= 768) {
+                            if (isOpen) {
+                                megaMenuCols.forEach(c => {
+                                    if (c !== col) {
+                                        c.classList.remove('open', 'is-expanded');
+                                    }
+                                });
+                                col.classList.add('is-expanded');
+                            } else {
+                                col.classList.remove('is-expanded');
+                            }
+                        }
+                    });
+                }
+            });
+
+            megaMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         });
 
         // Fonction du switch Desktop/Mobile corrigée
