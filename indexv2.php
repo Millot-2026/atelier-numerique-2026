@@ -1099,6 +1099,304 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 text-align: justify;
             }
         }
+
+        /* =========================================================================
+           CONTROL PANEL — Volet latéral escamotable
+           ========================================================================= */
+
+        /* Bouton flottant d'ouverture du Control Panel */
+        #cp-toggle-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 88888;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #2b2b2b;
+            color: #fdfbf7;
+            border: 2px solid #555;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        #cp-toggle-btn:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+            transform: scale(1.08);
+            box-shadow: 0 6px 22px rgba(192,57,43,0.45);
+        }
+        #cp-toggle-btn.cp-open {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+
+        /* Backdrop semi-transparent derrière le volet */
+        #cp-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 88889;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #cp-backdrop.cp-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Volet latéral (drawer) */
+        #control-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            max-width: 92vw;
+            height: 100vh;
+            background: #fdfbf7;
+            border-left: 2px solid #2b2b2b;
+            z-index: 88890;
+            box-shadow: -6px 0 30px rgba(0,0,0,0.3);
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        #control-panel.cp-open {
+            transform: translateX(0);
+        }
+
+        /* En-tête du volet */
+        .cp-header {
+            background: #2b2b2b;
+            color: #fdfbf7;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-bottom: 2px solid #444;
+        }
+        .cp-header-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #fdfbf7;
+        }
+        .cp-header-subtitle {
+            font-size: 0.65rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+        .cp-close-btn {
+            background: none;
+            border: 1px solid #555;
+            color: #fdfbf7;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            line-height: 1;
+            transition: background 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+        }
+        .cp-close-btn:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+
+        /* Barre d'actions rapides */
+        .cp-actions {
+            padding: 12px 18px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #e2ddd5;
+            flex-shrink: 0;
+            background: #f5f0e8;
+        }
+        .cp-action-btn {
+            flex: 1;
+            padding: 7px 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #2b2b2b;
+            background: #fff;
+            color: #2b2b2b;
+            transition: background 0.2s, color 0.2s;
+        }
+        .cp-action-btn:hover {
+            background: #2b2b2b;
+            color: #fff;
+        }
+        .cp-action-btn.cp-btn-danger {
+            border-color: #c0392b;
+            color: #c0392b;
+        }
+        .cp-action-btn.cp-btn-danger:hover {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        /* Corps scrollable du volet */
+        .cp-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 18px;
+        }
+        .cp-body::-webkit-scrollbar {
+            width: 5px;
+        }
+        .cp-body::-webkit-scrollbar-track {
+            background: #f5f0e8;
+        }
+        .cp-body::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 3px;
+        }
+
+        /* Label de section dans le volet */
+        .cp-section-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #c0392b;
+            border-bottom: 1px solid #e2ddd5;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            margin-top: 14px;
+        }
+        .cp-section-label:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Ligne de projet dans le volet */
+        .cp-project-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px dashed #e2ddd5;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: 3px;
+            user-select: none;
+        }
+        .cp-project-row:last-child {
+            border-bottom: none;
+        }
+        .cp-project-row:hover {
+            background: #f5f0e8;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        /* Toggle switch style journal */
+        .cp-toggle {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .cp-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+        .cp-toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #cbd5e1;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .cp-toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #fff;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+        }
+        .cp-toggle input:checked + .cp-toggle-slider {
+            background: #2b2b2b;
+        }
+        .cp-toggle input:checked + .cp-toggle-slider::before {
+            transform: translateX(16px);
+        }
+
+        /* Nom du projet dans la ligne */
+        .cp-project-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #2b2b2b;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cp-project-name.cp-hidden-label {
+            color: #aaa;
+            text-decoration: line-through;
+        }
+
+        /* Badge de format dans le volet */
+        .cp-size-badge {
+            font-size: 0.58rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 7px;
+            border-radius: 99px;
+            background: #e2ddd5;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        /* Pied de page du volet */
+        .cp-footer {
+            padding: 12px 18px;
+            border-top: 1px solid #e2ddd5;
+            font-size: 0.65rem;
+            color: #888;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            background: #f5f0e8;
+        }
+
+        /* Carte masquée dans la news-row : utilise visibility:hidden + height:0 pour conserver la grille */
+        .news-col-hidden {
+            visibility: hidden;
+            pointer-events: none;
+            /* On conserve le flux pour que CSS Grid garde la disposition correcte */
+        }
     </style>
 </head>
 <body>
@@ -1199,7 +1497,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     <?php
                     $linkHref = '/' . rawurlencode($p['name']) . '/';
                     ?>
-                    <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>" data-project-name="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>">
                         <article class="news-article">
                             <div>
                                 <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
@@ -1662,6 +1960,64 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         </div>
     </details>
 
+    <!-- =========================================================================
+         CONTROL PANEL — Volet latéral escamotable
+         ========================================================================= -->
+
+    <!-- Bouton flottant d'ouverture -->
+    <button id="cp-toggle-btn" title="Control Panel — Affichage des projets" aria-label="Ouvrir le Control Panel" aria-expanded="false" aria-controls="control-panel">
+        &#9776;
+    </button>
+
+    <!-- Backdrop (fermeture au clic extérieur) -->
+    <div id="cp-backdrop" aria-hidden="true"></div>
+
+    <!-- Volet latéral -->
+    <aside id="control-panel" role="complementary" aria-label="Control Panel — Visibilité des projets">
+
+        <!-- En-tête -->
+        <div class="cp-header">
+            <div>
+                <div class="cp-header-title">&#9881; Control Panel</div>
+                <div class="cp-header-subtitle">Affichage des projets</div>
+            </div>
+            <button class="cp-close-btn" id="cp-close-btn" title="Fermer le panneau" aria-label="Fermer le Control Panel">&times;</button>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="cp-actions">
+            <button class="cp-action-btn" id="cp-show-all" type="button">&#10003; Tout afficher</button>
+            <button class="cp-action-btn cp-btn-danger" id="cp-hide-all" type="button">&#10005; Tout masquer</button>
+        </div>
+
+        <!-- Liste des projets -->
+        <div class="cp-body" id="cp-body">
+            <div class="cp-section-label">Projets du Journal</div>
+            <?php foreach ($projects as $p): ?>
+            <div class="cp-project-row" onclick="cpToggleProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', this)">
+                <label class="cp-toggle" title="Afficher / masquer <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input
+                        type="checkbox"
+                        class="cp-checkbox"
+                        data-project="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                        checked
+                        onchange="cpToggleProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', this.closest('.cp-project-row'))"
+                    >
+                    <span class="cp-toggle-slider"></span>
+                </label>
+                <span class="cp-project-name" id="cp-label-<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>
+                </span>
+                <span class="cp-size-badge"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Pied de page -->
+        <div class="cp-footer">L'Atelier Num&eacute;rique &mdash; Pilotage d'affichage</div>
+
+    </aside>
+
     <!-- FENÊTRE MODALE (OVERLAY) POUR LES DÉTAILS -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
@@ -1995,6 +2351,165 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             document.getElementById('modulor-overlay').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
+
+        // =========================================================================
+        // CONTROL PANEL — Script de gestion du volet latéral escamotable
+        // =========================================================================
+
+        (function() {
+            'use strict';
+
+            // --- Références DOM ---
+            const cpToggleBtn = document.getElementById('cp-toggle-btn');
+            const cpCloseBtn  = document.getElementById('cp-close-btn');
+            const cpBackdrop  = document.getElementById('cp-backdrop');
+            const cpPanel     = document.getElementById('control-panel');
+            const cpShowAll   = document.getElementById('cp-show-all');
+            const cpHideAll   = document.getElementById('cp-hide-all');
+
+            // --- Ouvrir / Fermer le volet ---
+            function openCp() {
+                cpPanel.classList.add('cp-open');
+                cpBackdrop.classList.add('cp-visible');
+                cpToggleBtn.classList.add('cp-open');
+                cpToggleBtn.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeCp() {
+                cpPanel.classList.remove('cp-open');
+                cpBackdrop.classList.remove('cp-visible');
+                cpToggleBtn.classList.remove('cp-open');
+                cpToggleBtn.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            if (cpToggleBtn) {
+                cpToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    cpPanel.classList.contains('cp-open') ? closeCp() : openCp();
+                });
+            }
+
+            if (cpCloseBtn) cpCloseBtn.addEventListener('click', closeCp);
+            if (cpBackdrop) cpBackdrop.addEventListener('click', closeCp);
+
+            // Fermeture sur Échap
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && cpPanel.classList.contains('cp-open')) {
+                    closeCp();
+                }
+            });
+
+            // Empêcher la propagation des clics dans le volet vers le backdrop
+            if (cpPanel) {
+                cpPanel.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // --- Logique de masquage / affichage des cartes de projets ---
+            // Cible les colonnes dans la section news-row (journal principal)
+            function getProjectCols(projectName) {
+                return document.querySelectorAll(
+                    '.news-row [data-project-name="' + CSS.escape(projectName) + '"]'
+                );
+            }
+
+            // Afficher ou masquer selon l'état de la checkbox
+            window.cpToggleProject = function(projectName, rowEl) {
+                // Si l'événement provient d'un clic sur la ligne (pas sur la checkbox directement),
+                // on bascule programmatiquement la checkbox
+                const checkbox = rowEl.querySelector('.cp-checkbox');
+                if (!checkbox) return;
+
+                // Éviter le double-déclenchement si l'événement vient de la checkbox elle-même
+                if (document.activeElement !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+
+                const isVisible = checkbox.checked;
+                const cols = getProjectCols(projectName);
+                const label = document.getElementById('cp-label-' + projectName);
+
+                cols.forEach(function(col) {
+                    if (isVisible) {
+                        col.classList.remove('news-col-hidden');
+                        col.setAttribute('aria-hidden', 'false');
+                    } else {
+                        col.classList.add('news-col-hidden');
+                        col.setAttribute('aria-hidden', 'true');
+                    }
+                });
+
+                if (label) {
+                    label.classList.toggle('cp-hidden-label', !isVisible);
+                }
+
+                // Recalcul visuel des lignes vides (masquer les news-row sans enfant visible)
+                cpRefreshRows();
+            };
+
+            // Masquer les lignes (news-row) dont tous les projets sont cachés
+            function cpRefreshRows() {
+                var rows = document.querySelectorAll('.news-row');
+                rows.forEach(function(row) {
+                    var cols = row.querySelectorAll('[data-project-name]');
+                    var allHidden = true;
+                    cols.forEach(function(col) {
+                        if (!col.classList.contains('news-col-hidden')) {
+                            allHidden = false;
+                        }
+                    });
+                    // On ne cache que les news-row qui ne contiennent que des projets (exclut la colophon row)
+                    if (cols.length > 0) {
+                        row.style.display = allHidden ? 'none' : '';
+                    }
+                });
+            }
+
+            // --- Actions globales ---
+            if (cpShowAll) {
+                cpShowAll.addEventListener('click', function() {
+                    var checkboxes = document.querySelectorAll('.cp-checkbox');
+                    checkboxes.forEach(function(cb) {
+                        if (!cb.checked) {
+                            cb.checked = true;
+                            var pName = cb.getAttribute('data-project');
+                            var cols = getProjectCols(pName);
+                            cols.forEach(function(col) {
+                                col.classList.remove('news-col-hidden');
+                                col.setAttribute('aria-hidden', 'false');
+                            });
+                            var lbl = document.getElementById('cp-label-' + pName);
+                            if (lbl) lbl.classList.remove('cp-hidden-label');
+                        }
+                    });
+                    cpRefreshRows();
+                });
+            }
+
+            if (cpHideAll) {
+                cpHideAll.addEventListener('click', function() {
+                    var checkboxes = document.querySelectorAll('.cp-checkbox');
+                    checkboxes.forEach(function(cb) {
+                        if (cb.checked) {
+                            cb.checked = false;
+                            var pName = cb.getAttribute('data-project');
+                            var cols = getProjectCols(pName);
+                            cols.forEach(function(col) {
+                                col.classList.add('news-col-hidden');
+                                col.setAttribute('aria-hidden', 'true');
+                            });
+                            var lbl = document.getElementById('cp-label-' + pName);
+                            if (lbl) lbl.classList.add('cp-hidden-label');
+                        }
+                    });
+                    cpRefreshRows();
+                });
+            }
+
+        })();
     </script>
 
 </body>
