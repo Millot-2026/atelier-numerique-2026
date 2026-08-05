@@ -597,6 +597,16 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             display: block;
         }
         
+/* Correction de l'ancrage du menu desktop lorsqu'on scrolle (Sticky active) */
+        body.is-scrolled .news-header-wrapper .journal-mega-menu.active {
+            position: fixed !important;
+            top: 48px !important; /* Ajusté pour supprimer le jour sous la barre */
+            left: 30px !important;
+            right: 30px !important;
+            max-width: none !important;
+            box-sizing: border-box !important;
+        }
+        
         .mega-menu-close-btn {
             display: none;
         }
@@ -767,10 +777,11 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 width: 100%;
             }
 
-            .journal-mega-menu.active {
+.journal-mega-menu.active {
                 display: flex !important;
                 position: fixed !important;
-                inset: 0 !important;
+                top: 0 !important;
+                left: 0 !important;
                 width: 100vw !important;
                 height: 100vh !important;
                 min-height: 100dvh !important;
@@ -1236,7 +1247,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
         /* =========================================================================
             CONTROL PANEL — Volet latéral escamotable
-            ========================================================================= */
+           ========================================================================= */
 
         /* Bouton flottant d'ouverture du Control Panel */
         #cp-toggle-btn {
@@ -1661,7 +1672,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
     <!-- ========================================================================= -->
-    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                             -->
+    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                               -->
     <!-- ========================================================================= -->
     <div class="news-sheet">
         
@@ -2486,8 +2497,10 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 window.addEventListener('scroll', function() {
                     if (window.scrollY > 120) {
                         stickyHeader.classList.add('visible');
+                        document.body.classList.add('is-scrolled');
                     } else {
                         stickyHeader.classList.remove('visible');
+                        document.body.classList.remove('is-scrolled');
                         if (megaMenu) megaMenu.classList.remove('active');
                         const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
                         if (iconSvg) iconSvg.innerHTML = defaultSvg;
