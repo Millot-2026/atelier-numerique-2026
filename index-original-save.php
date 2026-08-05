@@ -1,5 +1,4 @@
 <?php
-// index v2
 $dir = __DIR__;
 $statusesFile = $dir . DIRECTORY_SEPARATOR . 'statuses.json';
 $jsonFile = $dir . DIRECTORY_SEPARATOR . 'dashboard-designer' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'projects.json';
@@ -16,32 +15,6 @@ if (file_exists($jsonFile)) {
             }
         }
     }
-}
-
-// Gestion AJAX de la suppression d'un export
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_export' && isset($_POST['project'])) {
-    $targetProject = basename($_POST['project']);
-    $targetPath = __DIR__ . '/export/' . $targetProject;
-
-    $response = ['success' => false];
-
-    if (is_dir($targetPath)) {
-        $deleteDirectory = function($dir) use (&$deleteDirectory) {
-            $files = array_diff(scandir($dir), ['.', '..']);
-            foreach ($files as $file) {
-                $path = $dir . '/' . $file;
-                is_dir($path) ? $deleteDirectory($path) : unlink($path);
-            }
-            return rmdir($dir);
-        };
-
-        if ($deleteDirectory($targetPath)) {
-            $response['success'] = true;
-        }
-    }
-
-    echo json_encode($response);
-    exit;
 }
 
 // Gestion AJAX du changement de statut
@@ -78,8 +51,8 @@ if (file_exists($statusesFile)) {
     }
 }
 
-// Dossiers système et dossiers internes à exclure du listing (export est bien analysé)
-$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site', 'dashboard-designer', 'images'];
+// Dossiers système et dossiers internes à exclure du listing
+$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site'];
 
 foreach ($files as $file) {
     if ($file === '.' || $file === '..' || !is_dir($dir . '/' . $file)) continue;
@@ -139,7 +112,7 @@ foreach ($files as $file) {
         $badgeClass = 'badge badge-' . $statusKey;
     }
 
-    $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable', 'modulor', 'personator-v1.2']) ? 12 : 6;
+    $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable']) ? 12 : 6;
     $sizeLabel = ($colSpan === 12) ? 'CMS' : 'UX-UI';
 
     $projectsRaw[$lowerFile] = [
@@ -240,6 +213,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 <head>
     <meta charset="UTF-8">
     <title>DEV NOMADE - Dashboard</title>
+    <link rel="stylesheet" href="static/fonts/fontawesome/css/all.min.css">
 
     <style>
         :root {
@@ -260,45 +234,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             color: var(--text-main);
             margin: 0;
             padding: 40px;
-        }
-
-        /* Barre d'en-tête fixe dynamique (apparaît au scroll quand l'original sort de l'écran) */
-        .sticky-header-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #fdfbf7;
-            border-bottom: 2px solid #2b2b2b;
-            padding: 10px 30px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 99999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transform: translateY(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .sticky-header-bar.visible {
-            transform: translateY(0);
-        }
-        .sticky-header-brand {
-            font-family: Georgia, serif;
-            font-size: 1.1rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #2b2b2b;
-            letter-spacing: -0.5px;
-        }
-        .sticky-header-hamburger {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            background: #2b2b2b;
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 6px;
         }
 
         h1 {
@@ -324,45 +259,9 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             flex-direction: column;
             justify-content: space-between;
             border: 1px solid transparent;
-            position: relative;
         }
         .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
-        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; word-break: break-all; padding-right: 20px; }
-
-        .btn-delete-export {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ffffff;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            z-index: 5;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            padding: 0;
-            font-size: 0;
-        }
-        .btn-delete-export::before {
-            content: "×";
-            color: #0f172a;
-            font-size: 26px;
-            font-weight: 900;
-            line-height: 1;
-            display: block;
-        }
-        .btn-delete-export:hover {
-            background: #ef4444;
-            transform: scale(1.1);
-        }
-        .btn-delete-export:hover::before {
-            color: #ffffff;
-        }
+        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; word-break: break-all; }
 
         .badge {
             display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
@@ -458,7 +357,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             top: 100%;
             left: 0;
             right: 0;
-            background: #FDFBF7 !important;
+            background: #fff !important;
             border: 2px solid #2b2b2b;
             border-top: none;
             padding: 25px;
@@ -470,17 +369,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         .journal-mega-menu.active {
             display: block;
         }
-        
-        .mega-menu-close-btn {
-            display: none;
-        }
-
         .mega-menu-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
-        
         .mega-menu-col h4 {
             font-size: 0.85rem;
             text-transform: uppercase;
@@ -502,27 +395,13 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         .mega-menu-col a {
             color: #2b2b2b;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            display: block;
-            padding: 6px 0 6px 12px;
-            transition: color 0.15s ease, background-color 0.15s ease;
+            transition: color 0.2s;
         }
         .mega-menu-col a:hover {
-            color: #ffffff !important;
-            background-color: #555555 !important;
-            text-decoration: none !important;
-            padding-left: 12px !important;
-            padding-right: 8px;
-            border-radius: 4px;
-        }
-        .mega-menu-col a:active, .mega-menu-col a.clicked {
-            color: #ffffff !important;
-            background-color: #000000 !important;
-            text-decoration: none !important;
-            padding-left: 12px !important;
-            padding-right: 8px;
-            border-radius: 4px;
+            color: #c0392b;
+            text-decoration: underline;
         }
 
         .news-bandeau {
@@ -635,155 +514,15 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                 width: 100%;
             }
 
-            .journal-mega-menu.active {
-                display: flex !important;
-                position: fixed !important;
-                inset: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                min-height: 100dvh !important;
-                background: #fdfbf7 !important;
-                z-index: 99999 !important;
-                padding: 20px !important;
-                box-sizing: border-box !important;
-                overflow-y: auto !important;
-                border: none !important;
-                box-shadow: none !important;
-                flex-direction: column !important;
-                justify-content: flex-start !important;
+            /* OPTIMISATION MOBILE POUR LE MÉGA-MENU (Aligné sur les marges du bloc .news-sheet) */
+            .journal-mega-menu {
+                left: 0;
+                right: 0;
+                padding: 20px;
             }
-            .mega-menu-close-btn {
-                display: flex;
-                justify-content: flex-end;
-                margin-bottom: 15px;
-                padding-bottom: 12px;
-                border-bottom: 1px solid #e2ddd5;
-                flex-shrink: 0;
-            }
-            .mega-menu-close-btn button {
-                background: #2b2b2b;
-                color: #fff;
-                border: none;
-                padding: 10px 18px;
-                border-radius: 8px;
-                font-size: 0.95rem;
-                font-weight: bold;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
             .mega-menu-grid {
-                display: flex !important;
-                flex-direction: column !important;
-                flex: 1 !important;
-                gap: 12px !important;
-                transition: all 0.3s ease;
-            }
-            
-            .mega-menu-col {
-                background: #fdfbf7;
-                border: 1px solid #e2ddd5;
-                border-radius: 8px;
-                overflow: hidden;
-                margin-bottom: 0 !important;
-                transition: order 0.3s ease, flex 0.3s ease;
-            }
-
-            .mega-menu-col.is-expanded {
-                order: -1;
-                display: flex !important;
-                flex-direction: column !important;
-                flex: 1 !important;
-            }
-
-            .mega-menu-col h4 {
-                font-size: 1.15rem;
-                font-weight: 800;
-                margin: 0;
-                padding: 15px;
-                background: #fff;
-                border-bottom: 1px solid #e2ddd5;
-                cursor: pointer;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                user-select: none;
-                flex-shrink: 0;
-            }
-            .mega-menu-col h4::after {
-                content: '▼';
-                font-size: 0.75rem;
-                color: #c0392b;
-                transition: transform 0.25s ease;
-            }
-            .mega-menu-col.open h4::after {
-                transform: rotate(180deg);
-            }
-            .mega-menu-col ul {
-                display: none;
-                padding: 0 !important;
-                background: #fdfbf7;
-                margin: 0 !important;
-            }
-            .mega-menu-col.open ul {
-                display: flex !important;
-                flex-direction: column !important;
-                flex: 1 !important;
-                justify-content: space-between !important;
-            }
-            .mega-menu-col.is-expanded.open ul {
-                display: flex !important;
-                flex-direction: column !important;
-                flex: 1 !important;
-                justify-content: space-between !important;
-            }
-            
-            .mega-menu-col li {
-                margin-bottom: 0 !important;
-                border-bottom: 1px dashed rgba(0,0,0,0.08);
-                display: flex !important;
-                align-items: stretch !important;
-                flex: 1 !important;
-                width: 100% !important;
-            }
-            .mega-menu-col li:last-child {
-                border-bottom: none;
-            }
-            
-            .mega-menu-col a {
-                font-size: 1.1rem;
-                font-weight: 700;
-                padding: 0 20px;
-                width: 100% !important;
-                height: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                text-decoration: none !important;
-                color: #2b2b2b;
-                background-color: transparent;
-                box-sizing: border-box;
-                border-radius: 0 !important;
-                transition: background-color 0.15s ease, color 0.15s ease;
-            }
-            
-            .mega-menu-col a:hover {
-                color: #ffffff !important;
-                background-color: #555555 !important;
-                text-decoration: none !important;
-                padding-left: 20px !important;
-                padding-right: 20px !important;
-                border-radius: 0 !important;
-            }
-            
-            .mega-menu-col a:active, .mega-menu-col a.clicked {
-                color: #ffffff !important;
-                background-color: #000000 !important;
-                text-decoration: none !important;
-                padding-left: 20px !important;
-                padding-right: 20px !important;
-                border-radius: 0 !important;
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
         }
 
@@ -801,12 +540,12 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
         .news-article h4 {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: #2b2b2b;
-            margin: 0 0 12px 0;
+            margin: 0 0 10px 0;
             border-bottom: 2px solid #2b2b2b;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
         }
 
         .press-figure {
@@ -878,84 +617,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             }
         }
 
-        .modulor-carousel-container {
-            position: relative;
-            margin: 16px 0;
-            background: #f8fafc;
-            border: none;
-            padding: 0;
-        }
-        .modulor-carousel-track-wrapper {
-            overflow: hidden;
-            width: 100%;
-        }
-        .modulor-carousel-track {
-            display: flex;
-            transition: transform 0.4s ease-in-out;
-            will-change: transform;
-        }
-        .modulor-carousel-slide {
-            min-width: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .modulor-carousel-slide img {
-            width: 100%;
-            height: auto;
-            max-height: 480px;
-            object-fit: contain;
-            background: #f8fafc;
-            display: block;
-            border: none;
-            box-shadow: none;
-        }
-        .modulor-carousel-btn {
-            position: absolute;
-            top: 45%;
-            transform: translateY(-50%);
-            background: rgba(43, 43, 43, 0.85);
-            color: #ffffff !important;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: bold;
-            z-index: 10;
-            transition: background 0.2s;
-            line-height: 1;
-        }
-        .modulor-carousel-btn:hover {
-            background: rgba(43, 43, 43, 1);
-        }
-        .modulor-carousel-prev { left: 8px; }
-        .modulor-carousel-next { right: 8px; }
-        .modulor-carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 10px;
-        }
-        .modulor-carousel-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #cbd5e1;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            transition: background 0.2s;
-        }
-        .modulor-carousel-dot.active {
-            background: #2b2b2b;
-        }
-
         .editor-switch-bar {
             display: flex;
             justify-content: center;
@@ -1024,11 +685,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
         .news-subhead {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             font-weight: 700;
             color: #c0392b;
-            margin: 14px 0 4px 0;
+            margin: 10px 0 3px 0;
             letter-spacing: 0.5px;
         }
         .news-article p {
@@ -1100,327 +761,21 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             }
         }
 
-        /* =========================================================================
-           CONTROL PANEL — Volet latéral escamotable
-           ========================================================================= */
-
-        /* Bouton flottant d'ouverture du Control Panel */
-        #cp-toggle-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 88888;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #2b2b2b;
-            color: #fdfbf7;
-            border: 2px solid #555;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.45);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            font-size: 1.2rem;
-            line-height: 1;
-        }
-        #cp-toggle-btn:hover {
-            background: #c0392b;
-            border-color: #c0392b;
-            transform: scale(1.08);
-            box-shadow: 0 6px 22px rgba(192,57,43,0.45);
-        }
-        #cp-toggle-btn.cp-open {
-            background: #c0392b;
-            border-color: #c0392b;
-        }
-
-        /* Backdrop semi-transparent derrière le volet */
-        #cp-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.35);
-            z-index: 88889;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        #cp-backdrop.cp-visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Volet latéral (drawer) */
-        #control-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 300px;
-            max-width: 92vw;
-            height: 100vh;
-            background: #fdfbf7;
-            border-left: 2px solid #2b2b2b;
-            z-index: 88890;
-            box-shadow: -6px 0 30px rgba(0,0,0,0.3);
-            transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-        #control-panel.cp-open {
-            transform: translateX(0);
-        }
-
-        /* En-tête du volet */
-        .cp-header {
-            background: #2b2b2b;
-            color: #fdfbf7;
-            padding: 16px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-            border-bottom: 2px solid #444;
-        }
-        .cp-header-title {
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #fdfbf7;
-        }
-        .cp-header-subtitle {
-            font-size: 0.65rem;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 3px;
-        }
-        .cp-close-btn {
-            background: none;
-            border: 1px solid #555;
-            color: #fdfbf7;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            line-height: 1;
-            transition: background 0.2s, border-color 0.2s;
-            flex-shrink: 0;
-        }
-        .cp-close-btn:hover {
-            background: #c0392b;
-            border-color: #c0392b;
-        }
-
-        /* Barre d'actions rapides */
-        .cp-actions {
-            padding: 12px 18px;
-            display: flex;
-            gap: 8px;
-            border-bottom: 1px solid #e2ddd5;
-            flex-shrink: 0;
-            background: #f5f0e8;
-        }
-        .cp-action-btn {
-            flex: 1;
-            padding: 7px 6px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 4px;
-            cursor: pointer;
-            border: 1px solid #2b2b2b;
-            background: #fff;
-            color: #2b2b2b;
-            transition: background 0.2s, color 0.2s;
-        }
-        .cp-action-btn:hover {
-            background: #2b2b2b;
-            color: #fff;
-        }
-        .cp-action-btn.cp-btn-danger {
-            border-color: #c0392b;
-            color: #c0392b;
-        }
-        .cp-action-btn.cp-btn-danger:hover {
-            background: #c0392b;
-            color: #fff;
-        }
-
-        /* Corps scrollable du volet */
-        .cp-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 14px 18px;
-        }
-        .cp-body::-webkit-scrollbar {
-            width: 5px;
-        }
-        .cp-body::-webkit-scrollbar-track {
-            background: #f5f0e8;
-        }
-        .cp-body::-webkit-scrollbar-thumb {
-            background: #bbb;
-            border-radius: 3px;
-        }
-
-        /* Label de section dans le volet */
-        .cp-section-label {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #c0392b;
-            border-bottom: 1px solid #e2ddd5;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-            margin-top: 14px;
-        }
-        .cp-section-label:first-of-type {
-            margin-top: 0;
-        }
-
-        /* Ligne de projet dans le volet */
-        .cp-project-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 0;
-            border-bottom: 1px dashed #e2ddd5;
-            cursor: pointer;
-            transition: background 0.15s;
-            border-radius: 3px;
-            user-select: none;
-        }
-        .cp-project-row:last-child {
-            border-bottom: none;
-        }
-        .cp-project-row:hover {
-            background: #f5f0e8;
-            padding-left: 4px;
-            padding-right: 4px;
-        }
-
-        /* Toggle switch style journal */
-        .cp-toggle {
-            position: relative;
-            width: 36px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-        .cp-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-            position: absolute;
-        }
-        .cp-toggle-slider {
-            position: absolute;
-            inset: 0;
-            background: #cbd5e1;
-            border-radius: 20px;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-        .cp-toggle-slider::before {
-            content: '';
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #fff;
-            top: 3px;
-            left: 3px;
-            transition: transform 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-        }
-        .cp-toggle input:checked + .cp-toggle-slider {
-            background: #2b2b2b;
-        }
-        .cp-toggle input:checked + .cp-toggle-slider::before {
-            transform: translateX(16px);
-        }
-
-        /* Nom du projet dans la ligne */
-        .cp-project-name {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #2b2b2b;
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .cp-project-name.cp-hidden-label {
-            color: #aaa;
-            text-decoration: line-through;
-        }
-
-        /* Badge de format dans le volet */
-        .cp-size-badge {
-            font-size: 0.58rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 2px 7px;
-            border-radius: 99px;
-            background: #e2ddd5;
-            color: #555;
-            flex-shrink: 0;
-        }
-
-        /* Pied de page du volet */
-        .cp-footer {
-            padding: 12px 18px;
-            border-top: 1px solid #e2ddd5;
-            font-size: 0.65rem;
-            color: #888;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            flex-shrink: 0;
-            background: #f5f0e8;
-        }
-
-        /* Carte masquée dans la news-row : utilise visibility:hidden + height:0 pour conserver la grille */
-        .news-col-hidden {
-            visibility: hidden;
-            pointer-events: none;
-            /* On conserve le flux pour que CSS Grid garde la disposition correcte */
-        }
     </style>
 </head>
 <body>
 
-    <!-- Barre fixe dynamique (apparaît au scroll quand l'original sort de l'écran) -->
-    <div class="sticky-header-bar" id="sticky-header">
-        <div class="sticky-header-brand">
-            L'Atelier Numérique
-        </div>
-        <div class="sticky-header-hamburger" id="sticky-hamburger-btn" title="Menu">
-            <svg id="sticky-hamburger-icon-svg" width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-            <span style="font-family: -apple-system, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-left: 8px; font-weight: bold;">Menu</span>
-        </div>
-    </div>
-
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
-    <!-- ========================================================================= -->
-    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                               -->
-    <!-- ========================================================================= -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                           -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
     <div class="news-sheet">
         
         <div class="news-bandeau">
@@ -1428,7 +783,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         </div>
 
         <div class="news-header-wrapper">
-            <div class="news-header-grid" id="original-header-grid">
+            <div class="news-header-grid">
                 <div class="news-ear" style="text-align: left;">
                     <strong>SUPPORT :</strong> Clé USB F:\<br>
                     <strong>SERVEUR :</strong> XAMPP Portable
@@ -1442,6 +797,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                         <strong>ARCHITECTURES :</strong> Flat-File<br>
                         <strong>STATUT :</strong> Opérationnel
                     </div>
+                    <!-- Icône hamburger qui se transformera dynamiquement en croix -->
                     <div id="hamburger-menu-btn" style="cursor: pointer; display: flex; align-items: center;" title="Menu">
                         <svg id="hamburger-icon-svg" width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -1454,11 +810,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
             <hr class="news-header-divider">
 
-            <!-- MÉGA-MENU DÉROULANT (NAVIGATION GLOBALE DU JOURNAL) -->
             <div id="journal-mega-menu" class="journal-mega-menu">
-                <div class="mega-menu-close-btn">
-                    <button type="button" id="mega-menu-close"><i class="fas fa-times"></i> Fermer</button>
-                </div>
                 <div class="mega-menu-grid">
                     <div class="mega-menu-col">
                         <h4>Navigation</h4>
@@ -1468,11 +820,10 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                         </ul>
                     </div>
                     <div class="mega-menu-col">
-                        <h4>Applications &amp; Modules</h4>
+                        <h4>Applications</h4>
                         <ul>
-                            <?php foreach ($projects as $p): ?>
-                                <li><a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank"><i class="fas fa-folder-open"></i> <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></a></li>
-                            <?php endforeach; ?>
+                            <li><a href="dashboard-designer/" target="_blank"><i class="fas fa-desktop"></i> Workstation</a></li>
+                            <li><a href="cms-2026-v8-full/" target="_blank"><i class="fas fa-newspaper"></i> CMS 2026</a></li>
                         </ul>
                     </div>
                     <div class="mega-menu-col">
@@ -1497,11 +848,11 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     <?php
                     $linkHref = '/' . rawurlencode($p['name']) . '/';
                     ?>
-                    <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>" data-project-name="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <article class="news-article">
+                    <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <article class="news-article" style="<?php echo ($p['name'] === 'workstation' || $p['name'] === 'cms-2026-v8-full') ? 'background-color: #fdf2f4 !important; border: 2px dashed #f43f5e !important;' : ''; ?>">
                             <div>
                                 <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #111; padding-bottom: 4px; margin-bottom: 8px;">
-                                    <h4 style="margin: 0; border: none; padding: 0; font-size: 1.35rem;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
+                                    <h4 style="margin: 0; border: none; padding: 0;"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
                                     <span style="font-family: -apple-system, sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #777; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
                                 </div>
                                 
@@ -1619,100 +970,23 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                         </figure>
                                     </div>
 
-                                <?php elseif ($p['name'] === 'modulor'): ?>
-                                    
-                                    <p class="news-pitch">Parmi les outils qui composent notre écosystème de développement, certains sont pensés pour produire des livrables finis, tandis que d'autres s'apparentent à de véritables terrains de jeu. <strong>Modulor</strong> appartient incontestablement à cette seconde catégorie.</p>
-                                    
-                                    <p>Conçu à l'origine comme une première incursion dans le développement personnel et comme le prétexte à la création d'un site utilitaire sur-mesure, ce module a évolué pour devenir un espace de travail vivant, un laboratoire d'expérimentation visuelle et fonctionnelle taillé pour le web designer et le développeur nomade.</p>
-
-                                    <div class="news-subhead">Une architecture piquée d'indépendance</div>
-                                    <p>D'un point de vue structurel, Modulor ne cherche pas à imposer les contraintes d'un CMS éditorial lourd. L'application repose sur un équilibre technique élégant :</p>
-                                    <ul>
-                                        <li>Un moteur de rendu en amont sous <strong>PHP</strong>, chargé d'hydrater la structure initiale et de gérer l'exportation des travaux.</li>
-                                        <li>Une couche de persistance hybride articulée autour d'un fichier central (<code>config.json</code>) pour figer la disposition des blocs sur le serveur local, complétée par un système de secours en <code>localStorage</code>.</li>
-                                        <li>Un moteur d'interface en JavaScript pur qui insuffle toute son interactivité à la surface de travail.</li>
-                                    </ul>
-                                    <p>Versionné de manière indépendante avec son propre dépôt <code>.git</code>, Modulor vit sa propre vie au cœur de la clé USB, tel un outil en constante mutation.</p>
-
-                                    <div class="news-subhead">Galerie &amp; Interfaces Principales</div>
-                                    <p class="press-duo-text" style="margin-bottom: 10px;">Découvrez ci-dessous un aperçu des différents écrans et thèmes de l'application via le carrousel interactif.</p>
-
-                                    <div class="modulor-carousel-container" id="modulor-carousel">
-                                        <button type="button" class="modulor-carousel-btn modulor-carousel-prev" onclick="moveModulorCarousel(-1)">&#10094;</button>
-                                        <button type="button" class="modulor-carousel-btn modulor-carousel-next" onclick="moveModulorCarousel(1)">&#10095;</button>
-                                        
-                                        <div class="modulor-carousel-track-wrapper">
-                                            <div class="modulor-carousel-track" id="modulor-track">
-                                                <div class="modulor-carousel-slide">
-                                                    <img src="images/images-modulor/modulor-accueil-01.png" alt="Modulor Accueil 1">
-                                                </div>
-                                                <div class="modulor-carousel-slide">
-                                                    <img src="images/images-modulor/modulor-accueil-02.png" alt="Modulor Accueil 2">
-                                                </div>
-                                                <div class="modulor-carousel-slide">
-                                                    <img src="images/images-modulor/modulor-accueil-03.png" alt="Modulor Accueil 3">
-                                                </div>
-                                                <div class="modulor-carousel-slide">
-                                                    <img src="images/images-modulor/modulor-accueil-04.png" alt="Modulor Accueil 4">
-                                                </div>
-                                                <div class="modulor-carousel-slide">
-                                                    <img src="images/images-modulor/modulor-accueil-05.png" alt="Modulor Accueil 5">
-                                                </div>
-                                                <div class="modulor-carousel-slide">
-                                                    <img src="images/images-modulor/modulor-accueil-06.png" alt="Modulor Accueil 6">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="press-caption" id="modulor-caption" style="margin-top: 8px;">Fig. 1 — Interface Modulor (Vue 1)</div>
-
-                                        <div class="modulor-carousel-dots" id="modulor-dots">
-                                            <button type="button" class="modulor-carousel-dot active" onclick="currentModulorSlide(0)"></button>
-                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(1)"></button>
-                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(2)"></button>
-                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(3)"></button>
-                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(4)"></button>
-                                            <button type="button" class="modulor-carousel-dot" onclick="currentModulorSlide(5)"></button>
-                                        </div>
-                                    </div>
-
-                                    <div class="news-subhead">Un arsenal d'outils taillé pour le prototypage</div>
-                                    <p>Ce qui fait la force de Modulor, c'est la concentration d'utilitaires indispensables réunis sur une seule et même interface modulable :</p>
-                                    <ul>
-                                        <li><strong>Le Skin Engine :</strong> véritable caméléon visuel, ce moteur de thèmes permet de basculer instantanément d'une ambiance graphique à une autre (Cyber, Blueprint, V6, Terminal, Neumorph ou Skeletor).</li>
-                                        <li><strong>Le Design Lab (CodePen intégré) :</strong> intègre un système d'archives avec animation de retournement (flip), journalisation horodatée et prévisualisation en temps réel via un iframe dynamique.</li>
-                                        <li><strong>Les utilitaires d'appoint :</strong> un générateur de faux texte (Lorem Generator) paramétrable à la volée et un explorateur de la base d'icônes FontAwesome chargée localement.</li>
-                                        <li><strong>La gestion dynamique des blocs :</strong> composition libre des lignes de travail et organisation du flux d'idées secondé par un bloc-notes persistant.</li>
-                                    </ul>
-
-                                    <div class="news-subhead">L'esprit de l'atelier</div>
-                                    <p>Modulor incarne parfaitement la philosophie de l'atelier nomade : s'affranchir des architectures complexes pour retrouver le plaisir d'un code maîtrisé, rapide et entièrement sous contrôle local. C'est l'espace où l'on pose les idées, où l'on teste la cohérence d'un composant avant de l'industrialiser.</p>
-
-                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                    
-                                    <p class="news-pitch">Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>
-
-                                    <div class="news-subhead">L'Art de l'Inincarnation — Structurer le Profil</div>
-                                    <p>Conçu pour répondre aux exigences des méthodologies UX/UI modernes, Personator structure la création de personas autour de fiches dynamiques multicouches. Chaque profil est rigoureusement documenté pour ancrer les choix de conception dans la réalité des futurs utilisateurs.</p>
-
-                                    <div class="news-subhead">Motivation et Frustrations au Cœur de l'Interface</div>
-                                    <p>L'interface guide l'utilisateur pas à pas à travers les dimensions clés du persona : données démographiques, motivations profondes, freins et habitudes de navigation. Cette cartographie fine permet d'identifier immédiatement les leviers d'engagement et d'anticiper les frictions potentielles sur les maquettes.</p>
-
-                                    <div class="news-subhead">Restitution et Export des Fiches Clients</div>
-                                    <p>Parce qu'un livrable UX doit être aussi élégant à consulter qu'à partager, Personator intègre un double système de sortie : une vue d'impression optimisée pour les formats papier et un archivage rigoureux en JSON, prêt à être réutilisé ou intégré dans les dossiers de conception client.</p>
-
                                 <?php elseif ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                     <figure class="press-figure">
                                         <img src="images/capture-skeletor.png" alt="Aperçu Skeletor">
                                         <figcaption class="press-caption">Illustration — Skeletor</figcaption>
                                     </figure>
+                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                    <figure class="press-figure">
+                                        <img src="images/capture-personator.png" alt="Aperçu Personator">
+                                        <figcaption class="press-caption">Illustration — Personator</figcaption>
+                                    </figure>
                                 <?php else: ?>
                                     <div style="height: 180px; background: #f1f3f5; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 16px;">
-                                        Illustration
+                                        <i class="fas fa-image" style="margin-right: 6px;">&nbsp;</i> Illustration
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation' || $p['name'] === 'modulor' || $p['name'] === 'personator-v1.2'): ?>
+                                <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation'): ?>
                                     
                                 <?php elseif ($p['name'] === 'dashboard-designer'): ?>
                                     <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, le module permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
@@ -1724,6 +998,10 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <p class="news-pitch">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>
                                 <?php elseif ($p['name'] === 'texturor'): ?>
                                     <p class="news-pitch">Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>
+                                <?php elseif ($p['name'] === 'personator-v1.2'): ?>
+                                    <p class="news-pitch">Atelier d'incarnation et de génération de profils, <strong>personator-v1.2</strong> donne vie à vos applications en peuplant instantanément vos bases ou vos maquettes avec des données utilisateur sur-mesure, réalistes et percutantes.</p>
+                                <?php elseif ($p['name'] === 'modulor'): ?>
+                                    <p class="news-pitch">Laboratoire visuel et interactif de l'atelier, <strong>modulor</strong> propose l'interface idéale pour tester à la volée des mises en page, expérimenter des structures d'UI et sculpter des composants en direct sans contrainte technique lourde.</p>
                                 <?php elseif ($p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                     <p class="news-pitch">Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>
                                 <?php elseif ($p['name'] === 'skeletor-v1.0'): ?>
@@ -1734,7 +1012,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                                     <p class="news-pitch"><?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                                 <?php endif; ?>
 
-                                <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation', 'modulor', 'personator-v1.2']) && $p['details'] && isset($p['details']['niveau2'])): ?>
+                                <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation']) && $p['details'] && isset($p['details']['niveau2'])): ?>
                                     <?php if (!empty($p['details']['niveau2']['contexte'])): ?>
                                         <div class="news-subhead">Contexte</div>
                                         <p><?php echo htmlspecialchars($p['details']['niveau2']['contexte'], ENT_QUOTES, 'UTF-8'); ?></p>
@@ -1797,9 +1075,16 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- SECTION V1 : MES PROJETS NOMADES (V1)                                     -->
-    <!-- ========================================================================= -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- SECTION V1 : MES PROJETS NOMADES (V1)                                 -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- Menu V1 replié par défaut au refresh -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🗂️</span>
@@ -1843,9 +1128,16 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
     <hr class="separator-v2">
 
-    <!-- ========================================================================= -->
-    <!-- SECTION V2 : LANCEUR PROJETS (V2 — CARTES ENRICHIES)                      -->
-    <!-- ========================================================================= -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- SECTION V2 : LANCEUR PROJETS (V2 — CARTES ENRICHIES)                  -->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!--------------------------------------------------------------------------->
+    <!-- Menu V2 replié par défaut au refresh (Cartes Enrichies) -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🚀</span>
@@ -1857,168 +1149,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
         </div>
     </details>
 
-    <hr class="separator-v2">
-
-    <!-- ========================================================================= -->
-    <!-- NOUVELLE SECTION FINALE : PROJETS & PERSONAS GÉNÉRÉS (EXPORTS)            -->
-    <!-- ========================================================================= -->
-    <details class="section-block" open>
-        <summary>
-            <span class="summary-icon">📂</span>
-            <h2>Mes Projets Générés &amp; Exports (Personator, Skeletor, etc.)</h2>
-            <span class="summary-chevron">▼</span>
-        </summary>
-        <div class="section-body">
-            <div class="grid" id="exports-grid">
-                <?php
-                $exportDir = __DIR__ . '/export/';
-                if (!is_dir($exportDir)) {
-                    mkdir($exportDir, 0777, true);
-                }
-
-                $allEntries        = array_diff(scandir($exportDir), ['.', '..']);
-                $generatedProjects = array_filter($allEntries, function($entry) use ($exportDir) {
-                    return is_dir($exportDir . $entry);
-                });
-
-                if (empty($generatedProjects)) {
-                    echo '<p style="color: var(--text-muted); font-size: 0.9em; padding: 10px;" id="no-exports-msg">Aucun projet généré pour le moment.</p>';
-                } else {
-                    foreach ($generatedProjects as $proj) {
-                        $projPath  = $exportDir . $proj;
-                        $indexPath = 'export/' . $proj . '/index.html';
-                        if (!file_exists($projPath . '/index.html') && file_exists($projPath . '/index.php')) {
-                            $indexPath = 'export/' . $proj . '/index.php';
-                        }
-                        $hasIndex = file_exists($projPath . '/index.html') || file_exists($projPath . '/index.php');
-
-                        $badgeType      = 'export-skeletor';
-                        $badgeColor     = 'rgba(155, 89, 182, 0.15)';
-                        $badgeTextColor = '#bb8fce';
-                        $actionLabel    = 'Voir le site';
-                        $detectedSource = 'skeletor';
-
-                        $metaFile = $projPath . '/_meta.json';
-                        if (file_exists($metaFile)) {
-                            $metaRaw = file_get_contents($metaFile);
-                            $meta    = json_decode($metaRaw, true);
-                            if (isset($meta['source'])) {
-                                $detectedSource = mb_strtolower(trim($meta['source']));
-                            }
-                        }
-                        elseif (file_exists($projPath . '/persona.json') || file_exists($projPath . '/persona.html')) {
-                            $detectedSource = 'personator';
-                        } elseif (file_exists($projPath . '/journey.json') || file_exists($projPath . '/journey.html')) {
-                            $detectedSource = 'user-journey';
-                        }
-                        else {
-                            $projLower = mb_strtolower($proj);
-                            if (strpos($projLower, 'persona') !== false || strpos($projLower, 'personnator') !== false) {
-                                $detectedSource = 'personator';
-                            } elseif (strpos($projLower, 'journey') !== false || strpos($projLower, 'user-journey') !== false) {
-                                $detectedSource = 'user-journey';
-                            }
-                        }
-
-                        if ($detectedSource === 'personator') {
-                            $badgeType      = 'export-personnator';
-                            $badgeColor     = 'rgba(245, 158, 11, 0.15)';
-                            $badgeTextColor = 'var(--orange)';
-                            $actionLabel    = 'Voir le persona';
-                        } elseif ($detectedSource === 'user-journey') {
-                            $badgeType      = 'export-user-journey';
-                            $badgeColor     = 'rgba(34, 197, 94, 0.15)';
-                            $badgeTextColor = 'var(--green)';
-                            $actionLabel    = 'Voir la journey';
-                        }
-
-                        $projEsc = htmlspecialchars($proj, ENT_QUOTES, 'UTF-8');
-
-                        echo '<div class="card" id="export-card-' . $projEsc . '">';
-                        echo '<button type="button" class="btn-delete-export" onclick="deleteExport(\'' . $projEsc . '\')" title="Supprimer définitivement ce dossier">×</button>';
-
-                        echo '<div>';
-                        echo '<div style="margin-bottom: 8px;">';
-                        echo '<span style="display:inline-block;font-size:0.65rem;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:99px;text-transform:uppercase;background:' . $badgeColor . ';color:' . $badgeTextColor . ';">' . $badgeType . '</span>';
-                        echo '</div>';
-                        echo '<div class="card-title" style="font-size:1rem;word-break:break-all;">' . $projEsc . '</div>';
-                        echo '</div>';
-
-                        echo '<div class="card-actions" style="margin-top:15px;">';
-                        if ($hasIndex) {
-                            echo '<a class="card-link" href="' . htmlspecialchars($indexPath, ENT_QUOTES, 'UTF-8') . '" target="_blank">' . $actionLabel . '</a>';
-                        } else {
-                            echo '<a class="card-link" href="export/' . $projEsc . '/" target="_blank">' . $actionLabel . '</a>';
-                            echo '<span style="display:block;margin-top:6px;color:var(--text-muted);font-size:0.78em;">⚠️ Pas d\'index détecté</span>';
-                        }
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                }
-                ?>
-            </div>
-        </div>
-    </details>
-
-    <!-- =========================================================================
-         CONTROL PANEL — Volet latéral escamotable
-         ========================================================================= -->
-
-    <!-- Bouton flottant d'ouverture -->
-    <button id="cp-toggle-btn" title="Control Panel — Affichage des projets" aria-label="Ouvrir le Control Panel" aria-expanded="false" aria-controls="control-panel">
-        &#9776;
-    </button>
-
-    <!-- Backdrop (fermeture au clic extérieur) -->
-    <div id="cp-backdrop" aria-hidden="true"></div>
-
-    <!-- Volet latéral -->
-    <aside id="control-panel" role="complementary" aria-label="Control Panel — Visibilité des projets">
-
-        <!-- En-tête -->
-        <div class="cp-header">
-            <div>
-                <div class="cp-header-title">&#9881; Control Panel</div>
-                <div class="cp-header-subtitle">Affichage des projets</div>
-            </div>
-            <button class="cp-close-btn" id="cp-close-btn" title="Fermer le panneau" aria-label="Fermer le Control Panel">&times;</button>
-        </div>
-
-        <!-- Actions rapides -->
-        <div class="cp-actions">
-            <button class="cp-action-btn" id="cp-show-all" type="button">&#10003; Tout afficher</button>
-            <button class="cp-action-btn cp-btn-danger" id="cp-hide-all" type="button">&#10005; Tout masquer</button>
-        </div>
-
-        <!-- Liste des projets -->
-        <div class="cp-body" id="cp-body">
-            <div class="cp-section-label">Projets du Journal</div>
-            <?php foreach ($projects as $p): ?>
-            <div class="cp-project-row" onclick="cpToggleProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', this)">
-                <label class="cp-toggle" title="Afficher / masquer <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input
-                        type="checkbox"
-                        class="cp-checkbox"
-                        data-project="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>"
-                        checked
-                        onchange="cpToggleProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', this.closest('.cp-project-row'))"
-                    >
-                    <span class="cp-toggle-slider"></span>
-                </label>
-                <span class="cp-project-name" id="cp-label-<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>
-                </span>
-                <span class="cp-size-badge"><?php echo htmlspecialchars($p['sizeLabel'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
-            <?php endforeach; ?>
-        </div>
-
-        <!-- Pied de page -->
-        <div class="cp-footer">L'Atelier Num&eacute;rique &mdash; Pilotage d'affichage</div>
-
-    </aside>
-
-    <!-- FENÊTRE MODALE (OVERLAY) POUR LES DÉTAILS -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
@@ -2033,75 +1163,10 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
     </div>
 
     <script>
-        // Fonction de suppression sécurisée avec alerte de confirmation
-        function deleteExport(projectName) {
-            if (confirm("⚠️ Voulez-vous vraiment supprimer définitivement le projet \"" + projectName + "\" ainsi que tout son dossier ?")) {
-                const formData = new FormData();
-                formData.append('action', 'delete_export');
-                formData.append('project', projectName);
-
-                fetch('', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const card = document.getElementById('export-card-' + projectName);
-                        if (card) {
-                            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                            card.style.opacity = '0';
-                            card.style.transform = 'scale(0.9)';
-                            setTimeout(() => {
-                                card.remove();
-                                const grid = document.getElementById('exports-grid');
-                                if (grid && grid.querySelectorAll('.card').length === 0) {
-                                    grid.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9em; padding: 10px;" id="no-exports-msg">Aucun projet généré pour le moment.</p>';
-                                }
-                            }, 300);
-                        }
-                    } else {
-                        alert("Erreur lors de la suppression du dossier sur le serveur.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur réseau :', error);
-                    alert("Une erreur réseau est survenue.");
-                });
-            }
-        }
-
-        // LOGIQUE DU CAROUSEL MODULOR (DÉFILEMENT UNITAIRE PROpre)
-        let modulorSlideIndex = 0;
-        function showModulorSlide(index) {
-            const track = document.getElementById('modulor-track');
-            const dots = document.querySelectorAll('.modulor-carousel-dot');
-            const caption = document.getElementById('modulor-caption');
-            if (!track) return;
-            const slides = track.children;
-            if (index >= slides.length) { modulorSlideIndex = 0; }
-            else if (index < 0) { modulorSlideIndex = slides.length - 1; }
-            else { modulorSlideIndex = index; }
-            
-            track.style.transform = 'translateX(-' + (modulorSlideIndex * 100) + '%)';
-            dots.forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === modulorSlideIndex);
-            });
-            if (caption) {
-                caption.innerText = 'Fig. ' + (modulorSlideIndex + 1) + ' — Interface Modulor (Vue ' + (modulorSlideIndex + 1) + ')';
-            }
-        }
-        function moveModulorCarousel(step) {
-            showModulorSlide(modulorSlideIndex + step);
-        }
-        function currentModulorSlide(index) {
-            showModulorSlide(index);
-        }
-
         const statusCycle = {
             'validated':   { next: 'operational', label: '&#x1F7E0; Op&eacute;rationnel', class: 'badge badge-operational' },
             'operational': { next: 'progress',    label: '&#x1F534; En cours',        class: 'badge badge-progress' },
-            'progress':    { next: 'validated',    label: '&#x1F7E2; Valid&eacute;',    class: 'badge badge-validated' }
+            'progress':    { next: 'validated',   label: '&#x1F7E2; Valid&eacute;',    class: 'badge badge-validated' }
         };
 
         function cycleStatus(badgeEl) {
@@ -2133,104 +1198,35 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
               .catch(error => console.error('Erreur réseau :', error));
         }
 
-        // Script de gestion de l'apparition dynamique de la barre au scroll + méga menu
+        // Script de gestion du méga menu et transformation dynamique de l'icône hamburger en croix
         document.addEventListener("DOMContentLoaded", function() {
             const hamburgerBtn = document.getElementById('hamburger-menu-btn');
-            const stickyBtn = document.getElementById('sticky-hamburger-btn');
             const megaMenu = document.getElementById('journal-mega-menu');
             const iconSvg = document.getElementById('hamburger-icon-svg');
-            const stickyIconSvg = document.getElementById('sticky-hamburger-icon-svg');
-            const closeBtn = document.getElementById('mega-menu-close');
-            const originalHeader = document.getElementById('original-header-grid');
-            const stickyHeader = document.getElementById('sticky-header');
 
-            // Observation du scroll pour afficher/masquer la barre fixe selon la position du header original
-            if (originalHeader && stickyHeader) {
-                const observer = new IntersectionObserver(function(entries) {
-                    entries.forEach(entry => {
-                        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-                            stickyHeader.classList.add('visible');
-                        } else {
-                            stickyHeader.classList.remove('visible');
-                            megaMenu.classList.remove('active');
-                            const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
-                            if (iconSvg) iconSvg.innerHTML = defaultSvg;
-                            if (stickyIconSvg) stickyIconSvg.innerHTML = defaultSvg;
-                        }
-                    });
-                }, { threshold: 0 });
-                observer.observe(originalHeader);
-            }
-
-            function toggleMenu(e) {
-                if (e) e.stopPropagation();
-                const isOpen = megaMenu.classList.toggle('active');
-                
-                const svgContent = isOpen 
-                    ? '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
-                    : '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
-                
-                if (iconSvg) iconSvg.innerHTML = svgContent;
-                if (stickyIconSvg) stickyIconSvg.innerHTML = svgContent;
-
-                if (!isOpen) {
-                    document.querySelectorAll('.mega-menu-col').forEach(c => {
-                        c.classList.remove('open', 'is-expanded');
-                    });
-                }
-            }
-
-            if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMenu);
-            if (stickyBtn) stickyBtn.addEventListener('click', toggleMenu);
-
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function(e) {
+            if (hamburgerBtn && megaMenu && iconSvg) {
+                hamburgerBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
+                    const isOpen = megaMenu.classList.toggle('active');
+                    
+                    if (isOpen) {
+                        // Transformation en croix (X)
+                        iconSvg.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+                    } else {
+                        // Retour à l'icône hamburger d'origine
+                        iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                    }
+                });
+
+                document.addEventListener('click', function() {
                     megaMenu.classList.remove('active');
-                    const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
-                    if (iconSvg) iconSvg.innerHTML = defaultSvg;
-                    if (stickyIconSvg) stickyIconSvg.innerHTML = defaultSvg;
-                    document.querySelectorAll('.mega-menu-col').forEach(c => {
-                        c.classList.remove('open', 'is-expanded');
-                    });
+                    iconSvg.innerHTML = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+                });
+
+                megaMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
                 });
             }
-
-            const menuLinks = megaMenu.querySelectorAll('.mega-menu-col a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    menuLinks.forEach(l => l.classList.remove('clicked'));
-                    this.classList.add('clicked');
-                });
-            });
-
-            const megaMenuCols = document.querySelectorAll('.mega-menu-col');
-            megaMenuCols.forEach(col => {
-                const title = col.querySelector('h4');
-                if (title) {
-                    title.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const isOpen = col.classList.toggle('open');
-                        
-                        if (window.innerWidth <= 768) {
-                            if (isOpen) {
-                                megaMenuCols.forEach(c => {
-                                    if (c !== col) {
-                                        c.classList.remove('open', 'is-expanded');
-                                    }
-                                });
-                                col.classList.add('is-expanded');
-                            } else {
-                                col.classList.remove('is-expanded');
-                            }
-                        }
-                    });
-                }
-            });
-
-            megaMenu.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
         });
 
         // Fonction du switch Desktop/Mobile corrigée
@@ -2308,7 +1304,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
                     html += '<h3 class="level-title">Contexte</h3>';
                     html += `<p>${details.niveau2.contexte}</p>`;
                 }
-                if (details.niveau2.fonctionnalites && details.niveau2.fonctionnalites.length > 1) {
+                if (details.niveau2.fonctionnalites && details.niveau2.fonctionnalites.length > 0) {
                     html += '<h3 class="level-title" style="margin-top: 15px;">Fonctionnalités clés</h3><ul>';
                     details.niveau2.fonctionnalites.forEach(f => {
                         html += `<li>${f}</li>`;
@@ -2320,7 +1316,7 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
 
             if (details && details.niveau3) {
                 html += '<div class="level-block">';
-                html +='<h3 class="level-title">Spécifications & Architecture</h3>';
+                html += '<h3 class="level-title">Spécifications & Architecture</h3>';
                 if (details.niveau3.architecture) html += `<p><strong>Architecture :</strong> ${details.niveau3.architecture}</p>`;
                 if (details.niveau3.environnement) html += `<p><strong>Environnement :</strong> ${details.niveau3.environnement}</p>`;
                 if (details.niveau3.roadmap) html += `<p style="margin-top: 10px;"><strong>Roadmap :</strong> ${details.niveau3.roadmap}</p>`;
@@ -2351,165 +1347,6 @@ $bearColSpan = max(0, 12 - $lastRowSpan);
             document.getElementById('modulor-overlay').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-
-        // =========================================================================
-        // CONTROL PANEL — Script de gestion du volet latéral escamotable
-        // =========================================================================
-
-        (function() {
-            'use strict';
-
-            // --- Références DOM ---
-            const cpToggleBtn = document.getElementById('cp-toggle-btn');
-            const cpCloseBtn  = document.getElementById('cp-close-btn');
-            const cpBackdrop  = document.getElementById('cp-backdrop');
-            const cpPanel     = document.getElementById('control-panel');
-            const cpShowAll   = document.getElementById('cp-show-all');
-            const cpHideAll   = document.getElementById('cp-hide-all');
-
-            // --- Ouvrir / Fermer le volet ---
-            function openCp() {
-                cpPanel.classList.add('cp-open');
-                cpBackdrop.classList.add('cp-visible');
-                cpToggleBtn.classList.add('cp-open');
-                cpToggleBtn.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeCp() {
-                cpPanel.classList.remove('cp-open');
-                cpBackdrop.classList.remove('cp-visible');
-                cpToggleBtn.classList.remove('cp-open');
-                cpToggleBtn.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-
-            if (cpToggleBtn) {
-                cpToggleBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    cpPanel.classList.contains('cp-open') ? closeCp() : openCp();
-                });
-            }
-
-            if (cpCloseBtn) cpCloseBtn.addEventListener('click', closeCp);
-            if (cpBackdrop) cpBackdrop.addEventListener('click', closeCp);
-
-            // Fermeture sur Échap
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && cpPanel.classList.contains('cp-open')) {
-                    closeCp();
-                }
-            });
-
-            // Empêcher la propagation des clics dans le volet vers le backdrop
-            if (cpPanel) {
-                cpPanel.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            }
-
-            // --- Logique de masquage / affichage des cartes de projets ---
-            // Cible les colonnes dans la section news-row (journal principal)
-            function getProjectCols(projectName) {
-                return document.querySelectorAll(
-                    '.news-row [data-project-name="' + CSS.escape(projectName) + '"]'
-                );
-            }
-
-            // Afficher ou masquer selon l'état de la checkbox
-            window.cpToggleProject = function(projectName, rowEl) {
-                // Si l'événement provient d'un clic sur la ligne (pas sur la checkbox directement),
-                // on bascule programmatiquement la checkbox
-                const checkbox = rowEl.querySelector('.cp-checkbox');
-                if (!checkbox) return;
-
-                // Éviter le double-déclenchement si l'événement vient de la checkbox elle-même
-                if (document.activeElement !== checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                }
-
-                const isVisible = checkbox.checked;
-                const cols = getProjectCols(projectName);
-                const label = document.getElementById('cp-label-' + projectName);
-
-                cols.forEach(function(col) {
-                    if (isVisible) {
-                        col.classList.remove('news-col-hidden');
-                        col.setAttribute('aria-hidden', 'false');
-                    } else {
-                        col.classList.add('news-col-hidden');
-                        col.setAttribute('aria-hidden', 'true');
-                    }
-                });
-
-                if (label) {
-                    label.classList.toggle('cp-hidden-label', !isVisible);
-                }
-
-                // Recalcul visuel des lignes vides (masquer les news-row sans enfant visible)
-                cpRefreshRows();
-            };
-
-            // Masquer les lignes (news-row) dont tous les projets sont cachés
-            function cpRefreshRows() {
-                var rows = document.querySelectorAll('.news-row');
-                rows.forEach(function(row) {
-                    var cols = row.querySelectorAll('[data-project-name]');
-                    var allHidden = true;
-                    cols.forEach(function(col) {
-                        if (!col.classList.contains('news-col-hidden')) {
-                            allHidden = false;
-                        }
-                    });
-                    // On ne cache que les news-row qui ne contiennent que des projets (exclut la colophon row)
-                    if (cols.length > 0) {
-                        row.style.display = allHidden ? 'none' : '';
-                    }
-                });
-            }
-
-            // --- Actions globales ---
-            if (cpShowAll) {
-                cpShowAll.addEventListener('click', function() {
-                    var checkboxes = document.querySelectorAll('.cp-checkbox');
-                    checkboxes.forEach(function(cb) {
-                        if (!cb.checked) {
-                            cb.checked = true;
-                            var pName = cb.getAttribute('data-project');
-                            var cols = getProjectCols(pName);
-                            cols.forEach(function(col) {
-                                col.classList.remove('news-col-hidden');
-                                col.setAttribute('aria-hidden', 'false');
-                            });
-                            var lbl = document.getElementById('cp-label-' + pName);
-                            if (lbl) lbl.classList.remove('cp-hidden-label');
-                        }
-                    });
-                    cpRefreshRows();
-                });
-            }
-
-            if (cpHideAll) {
-                cpHideAll.addEventListener('click', function() {
-                    var checkboxes = document.querySelectorAll('.cp-checkbox');
-                    checkboxes.forEach(function(cb) {
-                        if (cb.checked) {
-                            cb.checked = false;
-                            var pName = cb.getAttribute('data-project');
-                            var cols = getProjectCols(pName);
-                            cols.forEach(function(col) {
-                                col.classList.add('news-col-hidden');
-                                col.setAttribute('aria-hidden', 'true');
-                            });
-                            var lbl = document.getElementById('cp-label-' + pName);
-                            if (lbl) lbl.classList.add('cp-hidden-label');
-                        }
-                    });
-                    cpRefreshRows();
-                });
-            }
-
-        })();
     </script>
 
 </body>
