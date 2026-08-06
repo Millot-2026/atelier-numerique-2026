@@ -212,96 +212,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$files = scandir($dir);
+$files = @scandir($dir);
 $projectsRaw = [];
+$projects = [];
 
-$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site', 'dashboard-designer', 'images', 'export'];
+if (is_array($files)) {
+    $exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site', 'dashboard-designer', 'images', 'export'];
 
-foreach ($files as $file) {
-    if ($file === '.' || $file === '..' || !is_dir($dir . '/' . $file)) continue;
-    if (in_array($file, $exclude)) continue;
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..' || !is_dir($dir . '/' . $file)) continue;
+        if (in_array($file, $exclude)) continue;
 
-    $hasIndex = file_exists($dir . '/' . $file . '/index.php') || file_exists($dir . '/' . $file . '/index.html');
-    $isWP    = file_exists($dir . '/' . $file . '/wp-config.php');
+        $hasIndex = file_exists($dir . '/' . $file . '/index.php') || file_exists($dir . '/' . $file . '/index.html');
+        $isWP    = file_exists($dir . '/' . $file . '/wp-config.php');
 
-    $title   = $file;
-    $lowerFile = mb_strtolower($file);
-    
-    $customDetails = isset($projectsDetailsMap[$lowerFile]) ? $projectsDetailsMap[$lowerFile] : null;
+        $title   = $file;
+        $lowerFile = mb_strtolower($file);
+        
+        $customDetails = isset($projectsDetailsMap[$lowerFile]) ? $projectsDetailsMap[$lowerFile] : null;
 
-    if (!$customDetails && in_array($lowerFile, ['user_journey-v1.0', 'user_journey'])) {
-        $customDetails = [
-            'name' => $file,
-            'details' => [
-                'niveau1' => [
-                    'pitch' => "Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure.",
-                    'technos' => ['UI Design', 'UX Research', 'Prototypage'],
-                    'image' => 'photo-640x480.png'
+        if (!$customDetails && in_array($lowerFile, ['user_journey-v1.0', 'user_journey'])) {
+            $customDetails = [
+                'name' => $file,
+                'details' => [
+                    'niveau1' => [
+                        'pitch' => "Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure.",
+                        'technos' => ['UI Design', 'UX Research', 'Prototypage'],
+                        'image' => 'photo-640x480.png'
+                    ]
                 ]
-            ]
+            ];
+        }
+
+        $description = "Description détaillée et présentation complète du projet web : " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ".";
+        
+        $imgName = 'photo-640x480.png';
+        if ($customDetails && isset($customDetails['details']['niveau1']['image']) && !empty($customDetails['details']['niveau1']['image'])) {
+            $imgName = basename($customDetails['details']['niveau1']['image']);
+        }
+        
+        if ($lowerFile === 'cms-2026-v8-full') {
+            $screenshot = 'images/images-cms/' . $imgName;
+        } else {
+            $screenshot = 'dashboard-designer/assets/img/' . $imgName;
+        }
+        
+        $savedStatuses = isset($savedConfig['statuses']) ? $savedConfig['statuses'] : [];
+        if (isset($savedStatuses[$file])) {
+            $statusKey = $savedStatuses[$file];
+        } else {
+            $statusKey = ($isWP || $hasIndex) ? 'operational' : 'progress';
+        }
+
+        if ($isWP) {
+            $badgeLabel = '&#x2699;&#xFE0F; WordPress';
+            $badgeClass = 'badge badge-wp';
+        } else {
+            if ($statusKey === 'validated') {
+                $badgeLabel = '&#x1F7E2; Valid&eacute;';
+            } elseif ($statusKey === 'operational') {
+                $badgeLabel = '&#x1F7E0; Op&eacute;rationnel';
+            } else {
+                $badgeLabel = '&#x1F534; En cours';
+            }
+            $badgeClass = 'badge badge-' . $statusKey;
+        }
+
+        $savedSpans = isset($savedConfig['spans']) ? $savedConfig['spans'] : [];
+        if (isset($savedSpans[$file])) {
+            $colSpan = (int)$savedSpans[$file];
+        } else {
+            $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable', 'modulor', 'personator-v1.2']) ? 12 : 6;
+        }
+
+        $sizeLabel = ($colSpan === 12) ? 'CMS' : 'UX-UI';
+
+        $projectsRaw[$lowerFile] = [
+            'name'        => $file,
+            'title'       => $title,
+            'hasIndex'    => true,
+            'isWP'        => $isWP,
+            'description' => $description,
+            'screenshot'  => $screenshot,
+            'statusKey'   => $statusKey,
+            'badgeLabel'  => $badgeLabel,
+            'badgeClass'  => $badgeClass,
+            'cardClass'   => 'card',
+            'details'     => $customDetails ? $customDetails['details'] : null,
+            'colSpan'     => (int)$colSpan,
+            'colClass'    => 'news-col-' . (int)$colSpan,
+            'sizeLabel'   => $sizeLabel,
+            'linkHref'    => '/' . rawurlencode($file) . '/'
         ];
     }
-
-    $description = "Description détaillée et présentation complète du projet web : " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ".";
-    
-    $imgName = 'photo-640x480.png';
-    if ($customDetails && isset($customDetails['details']['niveau1']['image']) && !empty($customDetails['details']['niveau1']['image'])) {
-        $imgName = basename($customDetails['details']['niveau1']['image']);
-    }
-    
-    if ($lowerFile === 'cms-2026-v8-full') {
-        $screenshot = 'images/images-cms/' . $imgName;
-    } else {
-        $screenshot = 'dashboard-designer/assets/img/' . $imgName;
-    }
-    
-    $savedStatuses = isset($savedConfig['statuses']) ? $savedConfig['statuses'] : [];
-    if (isset($savedStatuses[$file])) {
-        $statusKey = $savedStatuses[$file];
-    } else {
-        $statusKey = ($isWP || $hasIndex) ? 'operational' : 'progress';
-    }
-
-    if ($isWP) {
-        $badgeLabel = '&#x2699;&#xFE0F; WordPress';
-        $badgeClass = 'badge badge-wp';
-    } else {
-        if ($statusKey === 'validated') {
-            $badgeLabel = '&#x1F7E2; Valid&eacute;';
-        } elseif ($statusKey === 'operational') {
-            $badgeLabel = '&#x1F7E0; Op&eacute;rationnel';
-        } else {
-            $badgeLabel = '&#x1F534; En cours';
-        }
-        $badgeClass = 'badge badge-' . $statusKey;
-    }
-
-    $savedSpans = isset($savedConfig['spans']) ? $savedConfig['spans'] : [];
-    if (isset($savedSpans[$file])) {
-        $colSpan = (int)$savedSpans[$file];
-    } else {
-        $colSpan = in_array($lowerFile, ['cms-2026-v8-full', 'dashboard-designer', 'wordpress-portable', 'modulor', 'personator-v1.2']) ? 12 : 6;
-    }
-
-    $sizeLabel = ($colSpan === 12) ? 'CMS' : 'UX-UI';
-
-    $projectsRaw[$lowerFile] = [
-        'name'        => $file,
-        'title'       => $title,
-        'hasIndex'    => true,
-        'isWP'        => $isWP,
-        'description' => $description,
-        'screenshot'  => $screenshot,
-        'statusKey'   => $statusKey,
-        'badgeLabel'  => $badgeLabel,
-        'badgeClass'  => $badgeClass,
-        'cardClass'   => 'card',
-        'details'     => $customDetails ? $customDetails['details'] : null,
-        'colSpan'     => (int)$colSpan,
-        'colClass'    => 'news-col-' . (int)$colSpan,
-        'sizeLabel'   => $sizeLabel,
-        'linkHref'    => '/' . rawurlencode($file) . '/'
-    ];
 }
 
 $wsSpan = (isset($savedConfig['spans']['workstation'])) ? (int)$savedConfig['spans']['workstation'] : 12;
@@ -335,7 +338,6 @@ $orderedKeys = isset($savedConfig['order']) && is_array($savedConfig['order']) ?
     'user_journey-v1.0', 'wordpress-portable', 'mon-site'
 ];
 
-$projects = [];
 foreach ($orderedKeys as $key) {
     $lowerKey = mb_strtolower($key);
     foreach ($projectsRaw as $pKey => $pVal) {
@@ -979,12 +981,19 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
             border: 1px solid #dcd7ce;
         }
         
-        .press-figure-scrollable img {
+        .press-figure-scrollable {
             height: 400px !important;
             max-height: 400px !important;
-            object-fit: cover !important;
-            object-position: top !important;
-            overflow-y: auto;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            position: relative;
+        }
+
+        .press-figure-scrollable img {
+            height: auto !important;
+            max-height: none !important;
+            object-fit: initial !important;
+            max-width: 100% !important;
         }
 
         .press-caption {
@@ -1860,7 +1869,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                                         <figcaption class="press-caption">Fig. 7 — Bloc notes rapides</figcaption>
                                     </figure>
                                     <figure class="press-figure">
-                                        <img src="images/images-workstation/08-journal-de developpement-de-ce-projet.png" alt="Journal de bord">
+                                        <img src="images/images-workstation/08-journal-de-developpement.png" alt="Journal de bord">
                                         <figcaption class="press-caption">Fig. 8 — Journal de développement et roadmap</figcaption>
                                     </figure>
                                 </div>
@@ -1947,6 +1956,13 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                                 <div class="news-subhead">Restitution et Export des Fiches Clients</div>
                                 <p>Parce qu'un livrable UX doit être aussi élégant à consulter qu'à partager, Personator intègre un double système de sortie : une vue d'impression optimisée pour les formats papier et un archivage rigoureux en JSON, prêt à être réutilisé ou intégré dans les dossiers de conception client.</p>
 
+                            <?php elseif ($p['name'] === 'texturor'): ?>
+                                <figure class="press-figure">
+                                    <img src="images/images-texturor/img-texturor.png" alt="Aperçu Texturor">
+                                    <figcaption class="press-caption">Illustration — Texturor</figcaption>
+                                </figure>
+                                <p class="news-pitch">Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>
+
                             <?php elseif ($p['name'] === 'skeletor-v1.0' || $p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                 <figure class="press-figure">
                                     <img src="images/capture-skeletor.png" alt="Aperçu Skeletor">
@@ -1959,7 +1975,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                                 </figure>
                             <?php endif; ?>
 
-                            <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation' || $p['name'] === 'modulor' || $p['name'] === 'personator-v1.2'): ?>
+                            <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation' || $p['name'] === 'modulor' || $p['name'] === 'personator-v1.2' || $p['name'] === 'texturor'): ?>
                                 
                             <?php elseif ($p['name'] === 'dashboard-designer'): ?>
                                 <p class="news-pitch desk-col-2">Le module <strong>dashboard-designer</strong> redéfinit l'ergonomie de pilotage de l'atelier nomade. En fusionnant l'esthétique rédactionnelle de la grande presse et la rigueur d'un tableau de bord technique, le module permet d'orchestrer, de structurer et de visualiser l'ensemble des projets stockés sur la clé USB avec une élégance et une fluidité absolues.</p>
@@ -1969,8 +1985,6 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                                 <p class="news-pitch">Résultat direct de l'architecture créée avec <strong>Skeletor</strong>, <strong>mon-site</strong> concrétise l'exportation du squelette pour l'afficher et le vérifier directement dans le navigateur en conditions réelles.</p>
                             <?php elseif ($p['name'] === 'user_journey-v1.0'): ?>
                                 <p class="news-pitch">Pensé pour façonner et orchestrer les parcours utilisateurs, <strong>user_journey-v1.0</strong> est le seul outil de cette clé entièrement conçu pour l'UX-UI pure. Destiné en priorité absolue aux web designers et aux spécialistes de l'expérience utilisateur, il fournit l'écosystème visuel et fonctionnel idéal pour concevoir, prototyper et évaluer les interfaces avec une finesse absolue.</p>
-                            <?php elseif ($p['name'] === 'texturor'): ?>
-                                <p class="news-pitch">Conçu comme un CodePen <em>home made</em> au cœur de l'atelier, <strong>texturor</strong> est taillé pour prototyper et tester du code en un clin d'œil. Doté d'une capacité redoutable pour enregistrer et organiser tes snippets favoris, il se révèle également parfaitement responsive pour effectuer des tests et des ajustements en ligne directement depuis ton mobile.</p>
                             <?php elseif ($p['name'] === 'skeletor-v1.0-o2switch'): ?>
                                 <p class="news-pitch">Version dopée à la production de l'atelier, <strong>skeletor-v1.0-o2switch</strong> reprend la logique ludique et l'enregistrement de trames de son aîné pour l'ériger en rampe de lancement vers le serveur distant. Il évite les manipulations fastidieuses et sécurise d'un bloc le passage de la clé USB nomade à l'hébergeur o2switch, sans friction ni perte de temps.</p>
                             <?php elseif ($p['name'] === 'skeletor-v1.0'): ?>
@@ -1981,7 +1995,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                                 <p class="news-pitch"><?php echo htmlspecialchars($p['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                             <?php endif; ?>
 
-                            <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation', 'modulor', 'personator-v1.2']) && $p['details'] && isset($p['details']['niveau2'])): ?>
+                            <?php if (!in_array($p['name'], ['cms-2026-v8-full', 'workstation', 'modulor', 'personator-v1.2', 'texturor']) && $p['details'] && isset($p['details']['niveau2'])): ?>
                                 <?php if (!empty($p['details']['niveau2']['contexte'])): ?>
                                     <div class="news-subhead">Contexte</div>
                                     <p><?php echo htmlspecialchars($p['details']['niveau2']['contexte'], ENT_QUOTES, 'UTF-8'); ?></p>
@@ -2280,6 +2294,25 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
     </div>
 
     <script>
+        function switchEditorView(view, btn) {
+            const img = document.getElementById('editor-demo-img');
+            const caption = document.getElementById('editor-demo-caption');
+            const buttons = btn.parentElement.querySelectorAll('.editor-switch-btn');
+
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (view === 'desktop') {
+                img.src = 'images/images-cms/03-capture-cms-editeur-frame-desktop.png';
+                img.alt = 'Éditeur Desktop';
+                caption.innerText = "Fig. 3 — L'éditeur en mode Bureau (hauteur fixe de 400px avec défilement interne)";
+            } else {
+                img.src = 'images/images-cms/04-capture-cms-editeur-frame-mobile.png';
+                img.alt = 'Éditeur Mobile';
+                caption.innerText = "Fig. 4 — L'éditeur en mode Mobile";
+            }
+        }
+
         function confirmExportJournal() {
             if (confirm("Vous êtes sur le point d'exporter le journal vers le dossier Nuxit ? Confirmez-vous ?")) {
                 fetch('export/export-vers-o2switch/export-journal.php')
@@ -2688,8 +2721,8 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 };
             });
 
-            if (saveBtn) {
-                saveBtn.onclick = function(e) {
+            if (cpSaveBtn) {
+                cpSaveBtn.onclick = function(e) {
                     e.stopPropagation();
                     const formData = new FormData();
                     formData.append('action', 'save_config');
@@ -2709,8 +2742,8 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
-                            saveBtn.innerHTML = '✓ Enregistré !';
-                            setTimeout(() => { saveBtn.innerHTML = '✓ Save'; }, 1500);
+                            cpSaveBtn.innerHTML = '✓ Enregistré !';
+                            setTimeout(() => { cpSaveBtn.innerHTML = '✓ Save'; }, 1500);
                         } else {
                             alert('Erreur lors de la sauvegarde.');
                         }
@@ -2719,8 +2752,8 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 };
             }
 
-            if (resetBtn) {
-                resetBtn.onclick = function(e) {
+            if (cpResetBtn) {
+                cpResetBtn.onclick = function(e) {
                     e.stopPropagation();
                     if (confirm("⚠️ Voulez-vous réinitialiser la mise en page par défaut ?")) {
                         const formData = new FormData();
@@ -2734,8 +2767,8 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 };
             }
 
-            if (applyBtn) {
-                applyBtn.onclick = function(e) {
+            if (cpApplyBtn) {
+                cpApplyBtn.onclick = function(e) {
                     e.stopPropagation();
                     document.querySelectorAll('.news-grid-container [data-project-name]').forEach(col => {
                         col.className = col.className.replace(/news-col-\d+/, '').trim();
