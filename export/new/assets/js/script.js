@@ -1,1 +1,0 @@
-// Script JS initialisé pour new

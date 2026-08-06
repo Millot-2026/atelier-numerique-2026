@@ -11,8 +11,8 @@
     "presets": {
         "preset_1": {
             "spans": {
-                "modulor": "12",
                 "workstation": "12",
+                "modulor": "12",
                 "skeletor-v1.0": "6",
                 "skeletor-v1.0-o2switch": "6",
                 "personator-v1.2": "12",
@@ -21,12 +21,11 @@
                 "user_journey-v1.0": "6",
                 "wordpress-portable": "6",
                 "mon-site": "6",
-                "Projet-demo-pour-site-en-ligne": "6",
-                "export": "6"
+                "Projet-demo-pour-site-en-ligne": "6"
             },
             "order": [
-                "modulor",
                 "workstation",
+                "modulor",
                 "skeletor-v1.0",
                 "skeletor-v1.0-o2switch",
                 "personator-v1.2",
@@ -35,8 +34,7 @@
                 "user_journey-v1.0",
                 "wordpress-portable",
                 "mon-site",
-                "Projet-demo-pour-site-en-ligne",
-                "export"
+                "Projet-demo-pour-site-en-ligne"
             ],
             "name": "Preset 1"
         },
@@ -166,8 +164,8 @@
         }
     },
     "spans": {
-        "modulor": "12",
         "workstation": "12",
+        "modulor": "12",
         "skeletor-v1.0": "6",
         "skeletor-v1.0-o2switch": "6",
         "personator-v1.2": "12",
@@ -176,12 +174,11 @@
         "user_journey-v1.0": "6",
         "wordpress-portable": "6",
         "mon-site": "6",
-        "Projet-demo-pour-site-en-ligne": "6",
-        "export": "6"
+        "Projet-demo-pour-site-en-ligne": "6"
     },
     "order": [
-        "modulor",
         "workstation",
+        "modulor",
         "skeletor-v1.0",
         "skeletor-v1.0-o2switch",
         "personator-v1.2",
@@ -190,8 +187,7 @@
         "user_journey-v1.0",
         "wordpress-portable",
         "mon-site",
-        "Projet-demo-pour-site-en-ligne",
-        "export"
+        "Projet-demo-pour-site-en-ligne"
     ],
     "active_preset": 1
 }

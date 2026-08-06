@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $files = scandir($dir);
 $projectsRaw = [];
 
-$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site', 'dashboard-designer', 'images'];
+$exclude = ['.git', 'core', 'server', 'Data', 'sql', 'mac-server-runtime', 'mac-tools', 'static', 'projet-client', 'partials', 'mon-premier-site', 'dashboard-designer', 'images', 'export'];
 
 foreach ($files as $file) {
     if ($file === '.' || $file === '..' || !is_dir($dir . '/' . $file)) continue;
@@ -597,7 +597,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             display: block;
         }
         
-        /* Correction de l'ancrage du menu desktop lorsqu'on scrolle (Sticky active) */
         body.is-scrolled .news-header-wrapper .journal-mega-menu.active {
             position: fixed !important;
             top: 48px !important;
@@ -725,7 +724,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             color: #333333;
         }
 
-        /* GRILLE GLOBALE FLUIDE UNIQUE CONTINUE */
         .news-grid-container {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
@@ -1257,7 +1255,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             CONTROL PANEL — Volet latéral escamotable
            ========================================================================= */
 
-        /* Bouton flottant d'ouverture du Control Panel */
         #cp-toggle-btn {
             position: fixed;
             bottom: 30px;
@@ -1289,7 +1286,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             border-color: #c0392b;
         }
 
-        /* Backdrop semi-transparent derrière le volet */
         #cp-backdrop {
             position: fixed;
             inset: 0;
@@ -1304,7 +1300,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             pointer-events: auto;
         }
 
-        /* Volet latéral (drawer) */
         #control-panel {
             position: fixed;
             top: 0;
@@ -1328,7 +1323,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             box-shadow: -6px 0 30px rgba(0,0,0,0.3);
         }
 
-        /* En-tête du volet */
         .cp-header {
             background: #2b2b2b;
             color: #fdfbf7;
@@ -1374,7 +1368,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             border-color: #c0392b;
         }
 
-        /* Barre d'actions explicites (Save & Reset) */
         .cp-actions {
             padding: 12px 18px;
             display: flex;
@@ -1418,7 +1411,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             color: #fff;
         }
 
-        /* Section des Presets (5 boutons numérotés 1 à 5 avec réindexation sans trous et indice Ctrl + Click) */
         .cp-presets-section {
             padding: 12px 18px;
             background: #efe9df;
@@ -1477,7 +1469,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             text-align: center;
         }
 
-        /* Corps scrollable du volet */
         .cp-body {
             flex: 1;
             overflow-y: auto;
@@ -1494,7 +1485,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             border-radius: 3px;
         }
 
-        /* Label de section dans le volet */
         .cp-section-label {
             font-size: 0.65rem;
             font-weight: 800;
@@ -1510,7 +1500,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             margin-top: 0;
         }
 
-        /* Ligne de projet dans le volet */
         .cp-project-row {
             display: flex;
             align-items: center;
@@ -1530,7 +1519,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             padding-right: 4px;
         }
 
-        /* Toggle switch style journal */
         .cp-toggle {
             position: relative;
             width: 34px;
@@ -1570,7 +1558,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             transform: translateX(16px);
         }
 
-        /* Nom du projet dans la ligne */
         .cp-project-name {
             font-size: 0.78rem;
             font-weight: 600;
@@ -1585,7 +1572,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             text-decoration: line-through;
         }
 
-        /* Sélecteur de taille */
         .cp-size-select {
             font-size: 0.7rem;
             font-weight: 700;
@@ -1598,7 +1584,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             flex-shrink: 0;
         }
 
-        /* Boutons de réordonnancement (Monter / Descendre) */
         .cp-move-group {
             display: flex;
             flex-direction: column;
@@ -1627,7 +1612,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             border-color: #2b2b2b;
         }
 
-        /* Pied de page avec bouton Apply opérationnel */
         .cp-footer {
             padding: 12px 18px;
             border-top: 1px solid #e2ddd5;
@@ -1649,13 +1633,16 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             transition: background 0.2s, border-color 0.2s;
             display: block;
             text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
         }
         .cp-apply-btn:hover {
             background: #c0392b;
             border-color: #c0392b;
+            color: #fdfbf7;
+            text-decoration: none;
         }
 
-        /* Carte masquée */
         .news-col-hidden {
             display: none !important;
         }
@@ -1663,7 +1650,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 </head>
 <body>
 
-    <!-- Barre fixe dynamique (apparaît au scroll quand l'original sort de l'écran) -->
     <div class="sticky-header-bar" id="sticky-header">
         <div class="sticky-header-brand">
             L'Atelier Numérique
@@ -1680,9 +1666,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
     <h1 style="display: none;">🚀 Mes Projets Nomades</h1>
 
-    <!-- ========================================================================= -->
-    <!-- JOURNAL (ACCUEIL PRINCIPAL)                                               -->
-    <!-- ========================================================================= -->
     <div class="news-sheet">
         
         <div class="news-bandeau">
@@ -1716,7 +1699,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
             <hr class="news-header-divider">
 
-            <!-- MÉGA-MENU DÉROULANT (NAVIGATION GLOBALE DU JOURNAL) -->
             <div id="journal-mega-menu" class="journal-mega-menu">
                 <div class="mega-menu-close-btn">
                     <button type="button" id="mega-menu-close"><i class="fas fa-times"></i> Fermer</button>
@@ -1753,7 +1735,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             <p>« S'affranchir des infrastructures distantes pour recentrer le développement web sur l'essentiel : la maîtrise absolue du code, de l'octet initial jusqu'au déploiement final, au creux d'un support de poche inaltérable. »</p>
         </div>
 
-        <!-- GRILLE GLOBALE FLUIDE UNIQUE CONTINUE POUR TOUS LES PROJETS ET LE BLOC FINAL -->
         <div class="news-grid-container" id="news-grid-container">
             <?php foreach ($projects as $p): ?>
                 <?php
@@ -1969,9 +1950,10 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                                     <figcaption class="press-caption">Illustration — Skeletor</figcaption>
                                 </figure>
                             <?php else: ?>
-                                <div style="height: 180px; background: #f1f3f5; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 16px;">
-                                    Illustration
-                                </div>
+                                <figure class="press-figure">
+                                    <img src="<?php echo htmlspecialchars($p['screenshot'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <figcaption class="press-caption">Illustration — <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></figcaption>
+                                </figure>
                             <?php endif; ?>
 
                             <?php if ($p['name'] === 'cms-2026-v8-full' || $p['name'] === 'workstation' || $p['name'] === 'modulor' || $p['name'] === 'personator-v1.2'): ?>
@@ -2040,9 +2022,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- SECTION V1 : MES PROJETS NOMADES (V1)                                     -->
-    <!-- ========================================================================= -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🗂️</span>
@@ -2086,9 +2065,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
     <hr class="separator-v2">
 
-    <!-- ========================================================================= -->
-    <!-- SECTION V2 : LANCEUR PROJETS (V2 — CARTES ENRICHIES)                      -->
-    <!-- ========================================================================= -->
     <details class="section-block">
         <summary>
             <span class="summary-icon">🚀</span>
@@ -2102,9 +2078,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
     <hr class="separator-v2">
 
-    <!-- ========================================================================= -->
-    <!-- NOUVELLE SECTION FINALE : PROJETS & PERSONAS GÉNÉRÉS (EXPORTS)          -->
-    <!-- ========================================================================= -->
     <details class="section-block" open>
         <summary>
             <span class="summary-icon">📂</span>
@@ -2119,7 +2092,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                     mkdir($exportDir, 0777, true);
                 }
 
-                $allEntries        = array_diff(scandir($exportDir), ['.', '..']);
+                $allEntries         = array_diff(scandir($exportDir), ['.', '..']);
                 $generatedProjects = array_filter($allEntries, function($entry) use ($exportDir) {
                     return is_dir($exportDir . $entry);
                 });
@@ -2203,22 +2176,14 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
         </div>
     </details>
 
-    <!-- =========================================================================
-         CONTROL PANEL — Volet latéral escamotable
-         ========================================================================= -->
-
-    <!-- Bouton flottant d'ouverture -->
     <button id="cp-toggle-btn" title="Control Panel — Affichage des projets" aria-label="Ouvrir le Control Panel" aria-expanded="false" aria-controls="control-panel">
         &#9776;
     </button>
 
-    <!-- Backdrop (fermeture au clic extérieur) -->
     <div id="cp-backdrop" aria-hidden="true"></div>
 
-    <!-- Volet latéral -->
     <aside id="control-panel" role="complementary" aria-label="Control Panel — Visibilité des projets">
 
-        <!-- En-tête -->
         <div class="cp-header">
             <div>
                 <div class="cp-header-title">&#9881; Control Panel</div>
@@ -2227,13 +2192,11 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             <button class="cp-close-btn" id="cp-close-btn" title="Fermer le panneau" aria-label="Fermer le Control Panel">&times;</button>
         </div>
 
-        <!-- Barre d'actions explicites (Save & Reset) -->
         <div class="cp-actions">
             <button class="cp-action-btn cp-btn-primary" id="cp-save-btn" type="button">&#10003; Save</button>
             <button class="cp-action-btn cp-btn-danger" id="cp-reset-btn" type="button">&#8635; Reset</button>
         </div>
 
-        <!-- Section des Presets (5 boutons numérotés 1 à 5 avec réindexation sans trous et indice Ctrl + Click) -->
         <div class="cp-presets-section">
             <div class="cp-presets-title">Presets</div>
             <div class="cp-presets-grid" id="cp-presets-grid">
@@ -2258,7 +2221,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             <div class="cp-presets-hint">clic pour enregistrer si vide, ctrl+clic pour supprimer.</div>
         </div>
 
-        <!-- Liste des projets -->
         <div class="cp-body" id="cp-body">
             <div class="cp-section-label">Projets du Journal</div>
             <?php foreach ($projects as $p): ?>
@@ -2276,13 +2238,11 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 <span class="cp-project-name" id="cp-label-<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>" onclick="cpToggleProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', this.closest('.cp-project-row'))">
                     <?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?>
                 </span>
-                <!-- Sélecteur de taille -->
                 <select class="cp-size-select" data-project-size="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>" title="Choisir le nombre de colonnes">
                     <?php for ($i = 4; $i <= 12; $i++): ?>
                         <option value="<?php echo $i; ?>" <?php echo ($p['colSpan'] === $i) ? 'selected' : ''; ?>><?php echo $i; ?> col</option>
                     <?php endfor; ?>
                 </select>
-                <!-- Boutons de réordonnancement (Monter / Descendre) -->
                 <div class="cp-move-group">
                     <button type="button" class="cp-move-btn" onclick="cpMoveProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', -1)" title="Monter l'article">▲</button>
                     <button type="button" class="cp-move-btn" onclick="cpMoveProject('<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>', 1)" title="Descendre l'article">▼</button>
@@ -2291,14 +2251,16 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             <?php endforeach; ?>
         </div>
 
-        <!-- Pied de page avec bouton Apply opérationnel -->
         <div class="cp-footer">
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <a href="export/export-vers-o2switch/dossier-final-export-o2switch/" target="_blank" class="cp-apply-btn" style="background: #38bdf8; color: #0f172a; border-color: #38bdf8; text-align: center; text-decoration: none; line-height: normal; display: flex; align-items: center; justify-content: center;">Voir le site</a>
+                <button class="cp-apply-btn" id="cp-export-journal-btn" type="button" style="background: #38bdf8; color: #0f172a; border-color: #38bdf8;" onclick="confirmExportJournal()">Exporter le Journal</button>
+            </div>
             <button class="cp-apply-btn" id="cp-apply-btn" type="button">Apply</button>
         </div>
 
     </aside>
 
-    <!-- FENÊTRE MODALE (OVERLAY) POUR LES DÉTAILS -->
     <div id="modulor-overlay">
         <button class="overlay-close" onclick="closeOverlay()"><i class="fas fa-times"></i> Fermer</button>
         <div class="overlay-container">
@@ -2313,6 +2275,25 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
     </div>
 
     <script>
+        function confirmExportJournal() {
+            if (confirm("Vous êtes sur le point d'exporter le journal vers le dossier Nuxit ? Confirmez-vous ?")) {
+                fetch('export/export-vers-o2switch/export-journal.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Exportation réussie ! Le dossier a été généré.");
+                            location.reload();
+                        } else {
+                            alert("Erreur lors de l'exportation.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Erreur réseau.");
+                    });
+            }
+        }
+
         const clientPresets = <?php echo json_encode($presets); ?>;
 
         function applyPresetToDOM(presetKey) {
@@ -2371,7 +2352,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             return true;
         }
 
-        // Application immédiate et synchrone de l'état actif initial au chargement
         (function() {
             const activeMenuHref = localStorage.getItem('activeMenuLink');
             if (activeMenuHref) {
@@ -2512,7 +2492,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 if (e) e.stopPropagation();
                 const isOpen = megaMenu.classList.toggle('active');
                 
-                // Sortir le menu du wrapper parent en mobile pour qu'il occupe tout l'écran sans décalage
                 if (isOpen && window.innerWidth <= 768) {
                     document.body.appendChild(megaMenu);
                 } else if (!isOpen && window.innerWidth <= 768 && headerWrapper) {
@@ -2631,7 +2610,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 }
             });
 
-            // --- GESTION DES PRÉSETS : CLIC SIMPLE POUR CHARGER OU ENREGISTRER SI VIDE ---
             document.querySelectorAll('.cp-preset-box').forEach(presetBtn => {
                 presetBtn.onclick = function(e) {
                     e.stopPropagation();
@@ -2641,7 +2619,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                     const isCtrl = (e.ctrlKey || e.metaKey);
                     const isShift = e.shiftKey;
 
-                    // 1. CTRL + CLIC : Supprimer / Purger le preset
                     if (isCtrl) {
                         if (clientPresets[presetKey]) {
                             if (confirm("⚠️ Voulez-vous supprimer le Preset " + presetNum + " ?")) {
@@ -2660,7 +2637,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                         return;
                     }
 
-                    // 2. SI LE PRESET EST VIDE OU SI SHIFT EST MAINTENU : Enregistrer la disposition actuelle
                     if (!clientPresets[presetKey] || isShift) {
                         const actionMsg = !clientPresets[presetKey] 
                             ? "Le Preset " + presetNum + " est vide. Voulez-vous y enregistrer la disposition actuelle ?"
@@ -2691,7 +2667,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                         return;
                     }
 
-                    // 3. CLIC SIMPLE SUR UN PRESET EXISTANT : Charger et appliquer
                     const formData = new FormData();
                     formData.append('action', 'set_active_preset');
                     formData.append('preset_key', presetNum);
@@ -2706,7 +2681,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
             });
 
-            // Écouteur direct pour Save (Enregistre l'état global et met à jour le preset actif s'il y en a un)
             const saveBtn = document.getElementById('cp-save-btn');
             if (saveBtn) {
                 saveBtn.onclick = function(e) {
@@ -2739,7 +2713,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
             }
 
-            // Écouteur direct pour Reset
             const resetBtn = document.getElementById('cp-reset-btn');
             if (resetBtn) {
                 resetBtn.onclick = function(e) {
@@ -2756,7 +2729,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
             }
 
-            // Écouteur direct pour Apply
             const applyBtn = document.getElementById('cp-apply-btn');
             if (applyBtn) {
                 applyBtn.onclick = function(e) {
