@@ -1,5 +1,5 @@
 <?php
-// Script d'exportation par Aspiration (SSG) — Correction des chemins d'images et autonomie totale
+// Script d'exportation par Aspiration (SSG) — Nettoyage complet des outils et sections de travail
 $baseDir = __DIR__; 
 $targetDir = $baseDir . '/dossier-final-export-o2switch';
 $imagesTargetDir = $targetDir . '/images';
@@ -45,11 +45,11 @@ if (is_dir($sourceDashboardImgDir)) {
     recursiveCopy($sourceDashboardImgDir, $targetDashboardImgDir);
 }
 
-// Aspiration du HTML rendu par le moteur local avec le mode export
+// Aspiration du HTML rendu par le moteur local
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
 $scriptPath = dirname(dirname($_SERVER['SCRIPT_NAME']));
-$localUrl = "{$protocol}://{$host}{$scriptPath}/../index.php?mode=export";
+$localUrl = "{$protocol}://{$host}{$scriptPath}/../index.php";
 
 $context = stream_context_create([
     "http" => [
@@ -65,11 +65,21 @@ if ($perfectHtml === false) {
     exit;
 }
 
-// Correction automatique des chemins d'images pour l'archive autonome
+// 1. Correction automatique des chemins d'images pour l'archive autonome
 $perfectHtml = str_replace('dashboard-designer/assets/img/', 'images/dashboard/', $perfectHtml);
 $perfectHtml = str_replace('/dashboard-designer/assets/img/', 'images/dashboard/', $perfectHtml);
 
-// Sauvegarde du fichier HTML final dans l'archive
+// 2. Suppression chirurgicale du Control Panel dans l'export final
+$perfectHtml = preg_replace('/<button id="cp-toggle-btn".*?<\/button>/s', '', $perfectHtml);
+$perfectHtml = preg_replace('/<div id="cp-backdrop".*?<\/div>/s', '', $perfectHtml);
+$perfectHtml = preg_replace('/<aside id="control-panel".*?<\/aside>/s', '', $perfectHtml);
+
+// 3. Suppression des sections de travail (V1, V2, Exports) et de leurs séparateurs
+$perfectHtml = preg_replace('/<details class="section-block">.*?<\/details>/s', '', $perfectHtml);
+$perfectHtml = preg_replace('/<details class="section-block" open>.*?<\/details>/s', '', $perfectHtml);
+$perfectHtml = preg_replace('/<hr class="separator-v2">/s', '', $perfectHtml);
+
+// Sauvegarde du fichier HTML épuré dans l'archive finale
 file_put_contents($targetDir . '/index.php', $perfectHtml);
 
 header('Content-Type: application/json');

@@ -361,6 +361,7 @@ if ($colophonSpan === 0) {
 
 $presets = isset($savedConfig['presets']) && is_array($savedConfig['presets']) ? $savedConfig['presets'] : [];
 $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active_preset'] : 0;
+$isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -1251,8 +1252,9 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             }
         }
 
+        <?php if (!$isExportMode): ?>
         /* =========================================================================
-            CONTROL PANEL — Volet latéral escamotable
+            CONTROL PANEL — Volet latéral escamotable (Masqué en mode export)
            ========================================================================= */
 
         #cp-toggle-btn {
@@ -1642,6 +1644,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             color: #fdfbf7;
             text-decoration: none;
         }
+        <?php endif; ?>
 
         .news-col-hidden {
             display: none !important;
@@ -2022,6 +2025,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
 
     </div>
 
+    <?php if (!$isExportMode): ?>
     <details class="section-block">
         <summary>
             <span class="summary-icon">🗂️</span>
@@ -2175,6 +2179,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             </div>
         </div>
     </details>
+    <?php endif; ?>
 
     <button id="cp-toggle-btn" title="Control Panel — Affichage des projets" aria-label="Ouvrir le Control Panel" aria-expanded="false" aria-controls="control-panel">
         &#9776;
@@ -2307,7 +2312,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             if (preset.order) {
                 const orderArr = Array.isArray(preset.order) ? preset.order : Object.values(preset.order);
                 const gridItems = Array.from(container.querySelectorAll('[data-project-name]'));
-                const cpRows = Array.from(cpBody.querySelectorAll('.cp-project-row'));
+                const cpRows = cpBody ? Array.from(cpBody.querySelectorAll('.cp-project-row')) : [];
                 
                 const sortFn = (a, b) => {
                     const nameA = a.getAttribute('data-project-name') || a.getAttribute('data-cp-row');
@@ -2322,7 +2327,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
 
                 gridItems.sort(sortFn);
-                cpRows.sort(sortFn);
+                if (cpRows.length > 0) cpRows.sort(sortFn);
 
                 gridItems.forEach(item => {
                     if (bearBlock) {
@@ -2332,19 +2337,21 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                     }
                 });
 
-                cpRows.forEach(row => cpBody.appendChild(row));
+                if (cpBody && cpRows.length > 0) {
+                    cpRows.forEach(row => cpBody.appendChild(row));
+                }
             }
 
             if (preset.spans) {
                 for (const [pName, spanVal] of Object.entries(preset.spans)) {
-                    const sel = cpBody.querySelector('[data-project-size="' + CSS.escape(pName) + '"]');
+                    const sel = cpBody ? cpBody.querySelector('[data-project-size="' + CSS.escape(pName) + '"]') : null;
                     if (sel) {
                         sel.value = spanVal;
-                        document.querySelectorAll('.news-grid-container [data-project-name="' + CSS.escape(pName) + '"]').forEach(col => {
-                            col.className = col.className.replace(/news-col-\d+/, '').trim();
-                            col.classList.add('news-col-' + spanVal);
-                        });
                     }
+                    document.querySelectorAll('.news-grid-container [data-project-name="' + CSS.escape(pName) + '"]').forEach(col => {
+                        col.className = col.className.replace(/news-col-\d+/, '').trim();
+                        col.classList.add('news-col-' + spanVal);
+                    });
                 }
             }
 
@@ -2605,7 +2612,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             if (cpBackdrop) cpBackdrop.addEventListener('click', closeCp);
 
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && cpPanel.classList.contains('cp-open')) {
+                if (e.key === 'Escape' && cpPanel && cpPanel.classList.contains('cp-open')) {
                     closeCp();
                 }
             });
@@ -2681,7 +2688,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
             });
 
-            const saveBtn = document.getElementById('cp-save-btn');
             if (saveBtn) {
                 saveBtn.onclick = function(e) {
                     e.stopPropagation();
@@ -2713,7 +2719,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
             }
 
-            const resetBtn = document.getElementById('cp-reset-btn');
             if (resetBtn) {
                 resetBtn.onclick = function(e) {
                     e.stopPropagation();
@@ -2729,7 +2734,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 };
             }
 
-            const applyBtn = document.getElementById('cp-apply-btn');
             if (applyBtn) {
                 applyBtn.onclick = function(e) {
                     e.stopPropagation();
@@ -2790,7 +2794,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 }
             });
 
-            const cpRow = cpBody.querySelector('[data-cp-row="' + CSS.escape(projectName) + '"]');
+            const cpRow = cpBody ? cpBody.querySelector('[data-cp-row="' + CSS.escape(projectName) + '"]') : null;
             if (cpRow) {
                 if (direction === -1 && cpRow.previousElementSibling && cpRow.previousElementSibling.classList.contains('cp-project-row')) {
                     cpBody.insertBefore(cpRow, cpRow.previousElementSibling);
