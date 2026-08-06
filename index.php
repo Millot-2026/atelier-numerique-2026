@@ -2096,7 +2096,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                     mkdir($exportDir, 0777, true);
                 }
 
-                $allEntries         = array_diff(scandir($exportDir), ['.', '..']);
+                $allEntries       = array_diff(scandir($exportDir), ['.', '..']);
                 $generatedProjects = array_filter($allEntries, function($entry) use ($exportDir) {
                     return is_dir($exportDir . $entry);
                 });

@@ -1793,7 +1793,7 @@
         <div class="news-footer">
             <span>&copy; 2026 Christophe Millot • Tous droits réservés</span>
             <span>•</span>
-            <span>Mise à jour : 06/08/2026 à 13:22</span>
+            <span>Mise à jour : 06/08/2026 à 14:05</span>
         </div>
 
     </div>
