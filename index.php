@@ -597,10 +597,10 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             display: block;
         }
         
-/* Correction de l'ancrage du menu desktop lorsqu'on scrolle (Sticky active) */
+        /* Correction de l'ancrage du menu desktop lorsqu'on scrolle (Sticky active) */
         body.is-scrolled .news-header-wrapper .journal-mega-menu.active {
             position: fixed !important;
-            top: 48px !important; /* Ajusté pour supprimer le jour sous la barre */
+            top: 48px !important;
             left: 30px !important;
             right: 30px !important;
             max-width: none !important;
@@ -743,6 +743,13 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
         .news-col-5  { grid-column: span 5; }
         .news-col-4  { grid-column: span 4; }
 
+        @media (max-width: 1400px) {
+            .press-duo-layout {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+        }
+
         @media (max-width: 1024px) {
             .news-col-12, .news-col-11, .news-col-10, .news-col-9, .news-col-8, .news-col-7, .news-col-6, .news-col-5, .news-col-4 { grid-column: span 12; }
         }
@@ -777,11 +784,13 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 width: 100%;
             }
 
-.journal-mega-menu.active {
+            .journal-mega-menu.active {
                 display: flex !important;
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
                 width: 100vw !important;
                 height: 100vh !important;
                 min-height: 100dvh !important;
@@ -794,7 +803,9 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 box-shadow: none !important;
                 flex-direction: column !important;
                 justify-content: flex-start !important;
+                margin: 0 !important;
             }
+            
             .mega-menu-close-btn {
                 display: flex;
                 justify-content: flex-end;
@@ -989,10 +1000,9 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
         }
 
         .press-duo-layout {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 16px;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin-bottom: 16px;
             background: #fdfbf7;
             border: 1px solid #e2ddd5;
@@ -1013,12 +1023,6 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             color: #333;
             text-align: justify;
             margin: 0;
-        }
-
-        @media (max-width: 768px) {
-            .press-duo-layout {
-                grid-template-columns: 1fr;
-            }
         }
 
         .modulor-carousel-container {
@@ -1237,7 +1241,11 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             font-weight: bold;
         }
 
-        @media (min-width: 1025px) {
+        @media (min-width: 1401px) {
+            .press-duo-layout {
+                display: grid;
+                grid-template-columns: 320px 1fr;
+            }
             .desk-col-2 {
                 column-count: 2;
                 column-gap: 24px;
@@ -1307,9 +1315,9 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             background: #fdfbf7;
             border-left: 2px solid #2b2b2b;
             z-index: 88890;
-            box-shadow: -6px 0 30px rgba(0,0,0,0.3);
+            box-shadow: none;
             transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -1317,6 +1325,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
         }
         #control-panel.cp-open {
             transform: translateX(0);
+            box-shadow: -6px 0 30px rgba(0,0,0,0.3);
         }
 
         /* En-tête du volet */
@@ -1409,7 +1418,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             color: #fff;
         }
 
-        /* Section des Presets (5 boutons numérotés 1 à 5 avec affichage dynamique de + si vide et cadre noir fin pour l'actif) */
+        /* Section des Presets (5 boutons numérotés 1 à 5 avec réindexation sans trous et indice Ctrl + Click) */
         .cp-presets-section {
             padding: 12px 18px;
             background: #efe9df;
@@ -2004,23 +2013,12 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                             <?php endif; ?>
                         </div>
                         <div class="news-article-link-container">
-                            <?php if ($p['name'] === 'modulor'): ?>
-                                <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Modulons ensemble !...</a>
-                            <?php elseif ($p['name'] === 'personator-v1.2'): ?>
-                                <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">En quête de personnalité ?...</a>
-                            <?php elseif ($p['name'] === 'texturor'): ?>
-                                <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">On refait la déco ?...</a>
-                            <?php elseif (in_array($p['name'], ['cms-2026-v8-full', 'workstation'])): ?>
-                                <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Lire l'article...</a>
-                            <?php else: ?>
-                                <a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" class="news-article-link">Voir le projet...</a>
-                            <?php endif; ?>
+                            <?php echo '<a href="' . $linkHref . '" class="news-article-link">Voir le projet</a>'; ?>
                         </div>
                     </article>
                 </div>
             <?php endforeach; ?>
 
-            <!-- BLOC FINAL INTÉGRÉ DANS LA GRILLE GLOBALE FLUIDE -->
             <div class="news-col-<?php echo $colophonSpan; ?>" id="bear-col-block" data-bear-span="<?php echo $colophonSpan; ?>">
                 <article class="news-article" style="background: #f8fafc; border: 1px dashed #cbd5e1; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
                     <div>
@@ -2492,6 +2490,7 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             const stickyIconSvg = document.getElementById('sticky-hamburger-icon-svg');
             const closeBtn = document.getElementById('mega-menu-close');
             const stickyHeader = document.getElementById('sticky-header');
+            const headerWrapper = document.querySelector('.news-header-wrapper');
 
             if (stickyHeader) {
                 window.addEventListener('scroll', function() {
@@ -2512,6 +2511,13 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
             function toggleMenu(e) {
                 if (e) e.stopPropagation();
                 const isOpen = megaMenu.classList.toggle('active');
+                
+                // Sortir le menu du wrapper parent en mobile pour qu'il occupe tout l'écran sans décalage
+                if (isOpen && window.innerWidth <= 768) {
+                    document.body.appendChild(megaMenu);
+                } else if (!isOpen && window.innerWidth <= 768 && headerWrapper) {
+                    headerWrapper.appendChild(megaMenu);
+                }
                 
                 const svgContent = isOpen 
                     ? '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
@@ -2534,6 +2540,9 @@ $activePreset = isset($savedConfig['active_preset']) ? (int)$savedConfig['active
                 closeBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     megaMenu.classList.remove('active');
+                    if (window.innerWidth <= 768 && headerWrapper) {
+                        headerWrapper.appendChild(megaMenu);
+                    }
                     const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
                     if (iconSvg) iconSvg.innerHTML = defaultSvg;
                     if (stickyIconSvg) stickyIconSvg.innerHTML = defaultSvg;

@@ -11,26 +11,26 @@
     "presets": {
         "preset_1": {
             "spans": {
-                "cms-2026-v8-full": "12",
+                "modulor": "12",
                 "workstation": "12",
                 "skeletor-v1.0": "6",
                 "skeletor-v1.0-o2switch": "6",
-                "modulor": "12",
                 "personator-v1.2": "12",
+                "cms-2026-v8-full": "6",
                 "texturor": "6",
                 "user_journey-v1.0": "6",
-                "wordpress-portable": "12",
+                "wordpress-portable": "6",
                 "mon-site": "6",
                 "Projet-demo-pour-site-en-ligne": "6",
                 "export": "6"
             },
             "order": [
-                "cms-2026-v8-full",
+                "modulor",
                 "workstation",
                 "skeletor-v1.0",
                 "skeletor-v1.0-o2switch",
-                "modulor",
                 "personator-v1.2",
+                "cms-2026-v8-full",
                 "texturor",
                 "user_journey-v1.0",
                 "wordpress-portable",
@@ -42,26 +42,26 @@
         },
         "preset_2": {
             "spans": {
-                "workstation": "12",
-                "cms-2026-v8-full": "12",
+                "workstation": "6",
+                "modulor": "6",
                 "skeletor-v1.0": "6",
                 "skeletor-v1.0-o2switch": "6",
-                "modulor": "12",
                 "personator-v1.2": "12",
+                "cms-2026-v8-full": "6",
                 "texturor": "6",
                 "user_journey-v1.0": "6",
-                "wordpress-portable": "12",
+                "wordpress-portable": "6",
                 "mon-site": "6",
                 "Projet-demo-pour-site-en-ligne": "6",
                 "export": "6"
             },
             "order": [
-                "workstation",
-                "cms-2026-v8-full",
                 "skeletor-v1.0",
                 "skeletor-v1.0-o2switch",
+                "workstation",
                 "modulor",
                 "personator-v1.2",
+                "cms-2026-v8-full",
                 "texturor",
                 "user_journey-v1.0",
                 "wordpress-portable",
@@ -73,8 +73,8 @@
         },
         "preset_3": {
             "spans": {
-                "modulor": "12",
                 "skeletor-v1.0": "6",
+                "modulor": "12",
                 "workstation": "12",
                 "cms-2026-v8-full": "12",
                 "skeletor-v1.0-o2switch": "6",
@@ -87,8 +87,8 @@
                 "export": "6"
             },
             "order": [
-                "modulor",
                 "skeletor-v1.0",
+                "modulor",
                 "workstation",
                 "cms-2026-v8-full",
                 "skeletor-v1.0-o2switch",
@@ -104,6 +104,7 @@
         },
         "preset_4": {
             "spans": {
+                "user_journey-v1.0": "6",
                 "personator-v1.2": "12",
                 "cms-2026-v8-full": "12",
                 "workstation": "12",
@@ -111,13 +112,13 @@
                 "skeletor-v1.0-o2switch": "6",
                 "modulor": "12",
                 "texturor": "6",
-                "user_journey-v1.0": "6",
                 "wordpress-portable": "12",
                 "mon-site": "6",
                 "Projet-demo-pour-site-en-ligne": "6",
                 "export": "6"
             },
             "order": [
+                "user_journey-v1.0",
                 "personator-v1.2",
                 "cms-2026-v8-full",
                 "workstation",
@@ -125,36 +126,66 @@
                 "skeletor-v1.0-o2switch",
                 "modulor",
                 "texturor",
-                "user_journey-v1.0",
                 "wordpress-portable",
                 "mon-site",
                 "Projet-demo-pour-site-en-ligne",
                 "export"
             ],
             "name": "Preset 4"
+        },
+        "preset_5": {
+            "spans": {
+                "texturor": "6",
+                "skeletor-v1.0": "6",
+                "modulor": "12",
+                "workstation": "12",
+                "cms-2026-v8-full": "12",
+                "skeletor-v1.0-o2switch": "6",
+                "personator-v1.2": "12",
+                "user_journey-v1.0": "6",
+                "wordpress-portable": "12",
+                "mon-site": "6",
+                "Projet-demo-pour-site-en-ligne": "6",
+                "export": "6"
+            },
+            "order": [
+                "texturor",
+                "skeletor-v1.0",
+                "modulor",
+                "workstation",
+                "cms-2026-v8-full",
+                "skeletor-v1.0-o2switch",
+                "personator-v1.2",
+                "user_journey-v1.0",
+                "wordpress-portable",
+                "mon-site",
+                "Projet-demo-pour-site-en-ligne",
+                "export"
+            ],
+            "name": "Preset 5"
         }
     },
     "spans": {
         "modulor": "12",
-        "skeletor-v1.0": "6",
         "workstation": "12",
-        "cms-2026-v8-full": "12",
+        "skeletor-v1.0": "6",
         "skeletor-v1.0-o2switch": "6",
         "personator-v1.2": "12",
+        "cms-2026-v8-full": "6",
         "texturor": "6",
         "user_journey-v1.0": "6",
-        "wordpress-portable": "12",
+        "wordpress-portable": "6",
         "mon-site": "6",
         "Projet-demo-pour-site-en-ligne": "6",
         "export": "6"
     },
     "order": [
         "modulor",
-        "skeletor-v1.0",
         "workstation",
-        "cms-2026-v8-full",
+        "skeletor-v1.0",
         "skeletor-v1.0-o2switch",
         "personator-v1.2",
+        "cms-2026-v8-full",
         "texturor",
         "user_journey-v1.0",
         "wordpress-portable",
@@ -162,5 +193,5 @@
         "Projet-demo-pour-site-en-ligne",
         "export"
     ],
-    "active_preset": 3
+    "active_preset": 1
 }
