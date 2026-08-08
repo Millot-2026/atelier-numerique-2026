@@ -28,6 +28,7 @@ html {
     overflow-y: auto;
 }
 
+
 body {
     font-family: var(--font-family);
     background-color: var(--bg-color);
@@ -42,6 +43,29 @@ body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
+
+/*
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    background-image: url('https://picsum.photos/1920/1080');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-blend-mode: overlay;
+    background-color: rgba(26, 26, 26, 0.85);
+    color: var(--text-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}*/
 
 .centrale-container {
     width: 100%;

@@ -44,32 +44,44 @@ document.addEventListener('DOMContentLoaded', function () {
         const moduleId = item ? item.getAttribute('data-id') : details.id;
 
         if (moduleId) {
-            // 1. Restaurer l'état mémorisé au chargement
             const savedState = localStorage.getItem('centrale_module_open_' + moduleId);
             if (savedState !== null) {
                 details.open = (savedState === 'true');
             }
 
-            // 2. Sauvegarder l'état lors du toggle (ouverture/fermeture)
             details.addEventListener('toggle', () => {
                 localStorage.setItem('centrale_module_open_' + moduleId, details.open);
             });
         }
     });
 
+    // Élément style dynamique pour le fond de La Centrale
+    let centralDynamicStyle = document.getElementById('central-dynamic-texture-style');
+    if (!centralDynamicStyle) {
+        centralDynamicStyle = document.createElement('style');
+        centralDynamicStyle.id = 'central-dynamic-texture-style';
+        document.head.appendChild(centralDynamicStyle);
+    }
+
+    // 1. Restauration de la texture de fond active sur La Centrale au chargement
+    const savedTextureClass = localStorage.getItem('centrale_active_texture_class');
+    const savedTextureScss = localStorage.getItem('centrale_active_texture_scss');
+    if (savedTextureClass && savedTextureScss) {
+        document.body.classList.add('textured-bg', savedTextureClass);
+        centralDynamicStyle.textContent = savedTextureScss;
+    }
+
     // Gestion universelle des hauteurs pour toutes les iframes
     document.querySelectorAll('.module-iframe').forEach(iframe => {
         const item = iframe.closest('.module-item');
         const moduleId = item ? item.getAttribute('data-id') : '';
 
-        // Texturor : Règle absolue (ne pas toucher)
         if (moduleId === 'texturor') {
             iframe.style.height = '750px';
             return;
         }
 
         const updateHeight = () => {
-            // Pixel Art gère sa propre hauteur via postMessage, on ignore son calcul ici
             if (moduleId === 'pixelart') return;
 
             try {
@@ -95,12 +107,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     iframe.style.height = (height > 0 ? height + 15 : 150) + 'px';
                 }
-            } catch (e) {
-                // Erreur cross-origin ou chargement en cours
-            }
+            } catch (e) { }
         };
 
-        // Événement de chargement initial
         iframe.addEventListener('load', () => {
             updateHeight();
             try {
@@ -116,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (e) { }
         });
 
-        // Événement sur l'accordéon parent de La Centrale
         const details = iframe.closest('details');
         if (details) {
             details.addEventListener('toggle', () => {
@@ -128,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Écouteur pour les messages dynamiques (utilisé par Pixel Art)
+    // 2. Écouteur des messages reçus depuis l'iframe Texturor pour appliquer le fond en direct
     window.addEventListener('message', function (event) {
         if (event.data && event.data.type === 'resizeIframe') {
             document.querySelectorAll('.module-iframe').forEach(iframe => {
@@ -144,42 +152,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
+
+        if (event.data && event.data.type === 'updateCentralBackground') {
+            const { className, scss, selected } = event.data;
+
+            const allSavedClass = localStorage.getItem('centrale_active_texture_class');
+            if (allSavedClass) {
+                document.body.classList.remove(allSavedClass);
+            }
+
+            if (selected) {
+                document.body.classList.add('textured-bg', className);
+                centralDynamicStyle.textContent = scss;
+                localStorage.setItem('centrale_active_texture_class', className);
+                localStorage.setItem('centrale_active_texture_scss', scss);
+            } else {
+                document.body.classList.remove('textured-bg');
+                centralDynamicStyle.textContent = '';
+                localStorage.removeItem('centrale_active_texture_class');
+                localStorage.removeItem('centrale_active_texture_scss');
+            }
+        }
     });
-});
-
-// Redimensionnement global de la fenêtre
-let globalResizeTimer = null;
-window.addEventListener('resize', () => {
-    clearTimeout(globalResizeTimer);
-    globalResizeTimer = setTimeout(() => {
-        document.querySelectorAll('.module-iframe').forEach(iframe => {
-            const item = iframe.closest('.module-item');
-            const moduleId = item ? item.getAttribute('data-id') : '';
-            if (moduleId === 'texturor' || moduleId === 'pixelart') return;
-
-            try {
-                iframe.style.height = '0px';
-                const doc = iframe.contentDocument || iframe.contentWindow.document;
-                if (doc && doc.body) {
-                    let maxBottom = 0;
-                    doc.body.querySelectorAll('*').forEach(el => {
-                        const style = el.ownerDocument.defaultView.getComputedStyle(el);
-                        if (style.position !== 'absolute' && style.position !== 'fixed' && style.display !== 'none' && el.offsetHeight > 0) {
-                            if (!el.closest('details:not([open])')) {
-                                const bottom = el.offsetTop + el.offsetHeight;
-                                if (bottom > maxBottom) maxBottom = bottom;
-                            }
-                        }
-                    });
-
-                    const height = Math.max(
-                        maxBottom,
-                        doc.body.scrollHeight,
-                        doc.documentElement ? doc.documentElement.scrollHeight : 0
-                    );
-                    iframe.style.height = (height > 0 ? height + 15 : 150) + 'px';
-                }
-            } catch (e) { }
-        });
-    }, 100);
 });
