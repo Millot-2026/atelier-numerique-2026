@@ -38,64 +38,96 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Gestion des iframes avec règles spécifiques par module
+    // Gestion des iframes sans ResizeObserver (anti-boucle infinie)
     document.querySelectorAll('.module-iframe').forEach(iframe => {
         const item = iframe.closest('.module-item');
         const moduleId = item ? item.getAttribute('data-id') : '';
 
-        // Modules complexes avec hauteur fixe de confort (évite la boucle infinie)
-        if (moduleId === 'pixelart' || moduleId === 'texturor') {
+        // Texturor : Règle absolue (ne pas toucher)
+        if (moduleId === 'texturor') {
             iframe.style.height = '750px';
-            return; // On sort pour ne pas appliquer le ResizeObserver en boucle
+            return;
         }
 
-        // Calcul dynamique pour les autres (Personnator, Skeletor, User Journey) sans marge superflue
         const updateHeight = () => {
             try {
                 const doc = iframe.contentDocument || iframe.contentWindow.document;
                 if (doc && doc.body) {
-                    const height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
-                    iframe.style.height = height + 'px';
+                    const heights = [
+                        doc.body.scrollHeight,
+                        doc.body.offsetHeight,
+                        doc.documentElement ? doc.documentElement.scrollHeight : 0,
+                        doc.documentElement ? doc.documentElement.offsetHeight : 0
+                    ];
+
+                    let height = Math.max(...heights);
+                    if (!Number.isFinite(height) || height < 150) height = 150;
+
+                    const newHeight = Math.ceil(height) + 15;
+
+                    // On applique uniquement si l'écart est significatif pour stabiliser le rendu
+                    if (Math.abs(iframe.offsetHeight - newHeight) > 2) {
+                        iframe.style.height = newHeight + 'px';
+                    }
                 }
             } catch (e) {
-                console.log("Erreur de redimensionnement iframe", e);
+                // Erreur cross-origin ou chargement en cours
             }
         };
 
+        // Événement de chargement initial
         iframe.addEventListener('load', () => {
             updateHeight();
             try {
                 const doc = iframe.contentDocument || iframe.contentWindow.document;
-                if (doc && doc.defaultView) {
-                    const observer = new ResizeObserver(updateHeight);
-                    observer.observe(doc.body);
+                if (doc) {
+                    doc.querySelectorAll('details').forEach(det => {
+                        det.addEventListener('toggle', () => {
+                            setTimeout(updateHeight, 50);
+                            setTimeout(updateHeight, 200);
+                        });
+                    });
                 }
             } catch (e) { }
         });
 
+        // Événement sur l'accordéon parent de La Centrale
         const details = iframe.closest('details');
         if (details) {
             details.addEventListener('toggle', () => {
                 if (details.open) {
                     setTimeout(updateHeight, 50);
+                    setTimeout(updateHeight, 200);
                 }
             });
         }
     });
 });
 
+// Redimensionnement global de la fenêtre
+let globalResizeTimer = null;
 window.addEventListener('resize', () => {
-    document.querySelectorAll('.module-iframe').forEach(iframe => {
-        const item = iframe.closest('.module-item');
-        const moduleId = item ? item.getAttribute('data-id') : '';
-        if (moduleId === 'pixelart' || moduleId === 'texturor') return;
+    clearTimeout(globalResizeTimer);
+    globalResizeTimer = setTimeout(() => {
+        document.querySelectorAll('.module-iframe').forEach(iframe => {
+            const item = iframe.closest('.module-item');
+            const moduleId = item ? item.getAttribute('data-id') : '';
+            if (moduleId === 'texturor') return;
 
-        try {
-            const doc = iframe.contentDocument || iframe.contentWindow.document;
-            if (doc && doc.body) {
-                const height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
-                iframe.style.height = height + 'px';
-            }
-        } catch (e) { }
-    });
+            try {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                if (doc && doc.body) {
+                    const heights = [
+                        doc.body.scrollHeight,
+                        doc.body.offsetHeight,
+                        doc.documentElement ? doc.documentElement.scrollHeight : 0,
+                        doc.documentElement ? doc.documentElement.offsetHeight : 0
+                    ];
+                    let height = Math.max(...heights);
+                    if (!Number.isFinite(height) || height < 150) height = 150;
+                    iframe.style.height = (Math.ceil(height) + 15) + 'px';
+                }
+            } catch (e) { }
+        });
+    }, 100);
 });

@@ -61,8 +61,9 @@ $modulesInfo = [
         <?php foreach ($order as $moduleKey): ?>
             <?php if (isset($modulesInfo[$moduleKey])): ?>
                 <?php $mod = $modulesInfo[$moduleKey]; ?>
+                <?php $isOpen = ($moduleKey === 'pixelart') ? 'open' : ''; ?>
                 <div class="module-item" data-id="<?php echo htmlspecialchars($moduleKey); ?>">
-                    <details class="module-details">
+                    <details class="module-details" <?php echo $isOpen; ?>>
                         <summary class="module-summary">
                             <span class="drag-handle" title="Déplacer">⠿</span>
                             <span class="module-icon"><?php echo $mod['icon']; ?></span>
