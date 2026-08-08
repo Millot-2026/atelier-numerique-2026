@@ -126,12 +126,13 @@ details[open]>summary.module-summary {
 
 .module-iframe {
     width: 100%;
-    height: 100vh;
-    /* <-- C'est ça qui force la hauteur fixe */
+    height: 150px;
+    /* Hauteur initiale minimale avant le calcul */
     border: none;
     display: block;
-    overflow-y: auto;
     background: #1a1a1a;
+    overflow: hidden;
+    /* Empêche la double barre de défilement moche */
 }
 
 
