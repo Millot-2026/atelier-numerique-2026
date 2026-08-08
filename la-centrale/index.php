@@ -61,16 +61,14 @@ $modulesInfo = [
         <?php foreach ($order as $moduleKey): ?>
             <?php if (isset($modulesInfo[$moduleKey])): ?>
                 <?php $mod = $modulesInfo[$moduleKey]; ?>
-                <?php $isOpen = ($moduleKey === 'pixelart') ? 'open' : ''; ?>
                 <div class="module-item" data-id="<?php echo htmlspecialchars($moduleKey); ?>">
-                    <details class="module-details" <?php echo $isOpen; ?>>
+                    <details class="module-details" id="details-<?php echo htmlspecialchars($moduleKey); ?>">
                         <summary class="module-summary">
                             <span class="drag-handle" title="Déplacer">⠿</span>
                             <span class="module-icon"><?php echo $mod['icon']; ?></span>
                             <span class="module-title"><?php echo htmlspecialchars($mod['title']); ?></span>
                         </summary>
                         <div class="module-content">
-                            <!-- We load the iframe only when opened or we can load it initially. Let's load initially for saving state -->
                             <iframe src="<?php echo htmlspecialchars($mod['path']); ?>" class="module-iframe" title="<?php echo htmlspecialchars($mod['title']); ?>" loading="lazy"></iframe>
                         </div>
                     </details>
@@ -81,5 +79,25 @@ $modulesInfo = [
 </div>
 
 <script src="script.js"></script>
+<script>
+    // Restauration et sauvegarde instantanée de l'état des accordéons de La Centrale
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('#modules-container details').forEach(details => {
+            const id = details.id;
+            if (id) {
+                const saved = localStorage.getItem('centrale_state_' + id);
+                if (saved !== null) {
+                    details.open = (saved === 'true');
+                } else if (id === 'details-pixelart') {
+                    details.open = true; // État par défaut initial pour pixelart si jamais rien en storage
+                }
+
+                details.addEventListener('toggle', () => {
+                    localStorage.setItem('centrale_state_' + id, details.open);
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
