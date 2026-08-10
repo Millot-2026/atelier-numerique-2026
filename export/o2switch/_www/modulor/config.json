@@ -1,0 +1,38 @@
+{
+    "theme": "cyber",
+    "blocks": [
+        {
+            "id": "6a78b306a51a7",
+            "cols": 1,
+            "modules": []
+        },
+        {
+            "id": "6a78b306a577d",
+            "cols": 1,
+            "modules": []
+        },
+        {
+            "id": "6a78b306a5784",
+            "cols": 1,
+            "modules": []
+        },
+        {
+            "id": "",
+            "cols": 1,
+            "modules": [
+                {
+                    "type": "empty"
+                }
+            ]
+        },
+        {
+            "id": "1786295092432",
+            "cols": 1,
+            "modules": [
+                {
+                    "type": "empty"
+                }
+            ]
+        }
+    ]
+}
