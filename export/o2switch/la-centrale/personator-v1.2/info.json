@@ -1,0 +1,5 @@
+{
+  "title": "Personator v1.2 — Générateur de Personas UX",
+  "description": "Outil de création et d'export de fiches personas pour les projets de design UX/UI. L'interface propose un formulaire structuré par niveaux de contenu, permettant de définir le profil, les motivations, les frustrations et les habitudes d'un utilisateur type. Une photo de persona peut être importée directement depuis l'interface. Les configurations sont sauvegardables en JSON pour être rechargées ultérieurement. La génération produit un dossier d'export complet contenant la fiche persona mise en forme, prête à intégrer dans une présentation ou un livrable client.",
+  "screenshot": "./assets/img/screenshot.png"
+}

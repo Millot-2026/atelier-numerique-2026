@@ -1,0 +1,15 @@
+body {
+  background-color: #121214;
+  color: #e1e1e6;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.texture-limonade {
+  background-color: #1a1a1e;
+  background-image: radial-gradient(#ff6b6b 20%, transparent 21%);
+  background-size: 20px 20px;
+}
+
+.texture-pierre {
+  background: repeating-linear-gradient(45deg, #333, #333 10px, #222 10px, #222 20px);
+}/*# sourceMappingURL=main.css.map */

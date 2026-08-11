@@ -1,0 +1,124 @@
+{
+  "textures": [
+    {
+      "id": "limonade",
+      "title": "Limonade Rose",
+      "tags": ["fruité", "acidulé", "point", "rose"],
+      "scss": ".texture-limonade {\n  background-color: #1a1a1e;\n  background-image: radial-gradient(#ff6b6b 20%, transparent 21%);\n  background-size: 20px 20px;\n}"
+    },
+    {
+      "id": "pierre",
+      "title": "Dalle Brute",
+      "tags": ["pierre", "géométrique", "gris", "rayures"],
+      "scss": ".texture-pierre {\n  background: repeating-linear-gradient(45deg, #333, #333 10px, #222 10px, #222 20px);\n}"
+    },
+    {
+      "id": "damier",
+      "title": "Damier Sombre",
+      "tags": ["damier", "géométrique", "sombre", "carreaux"],
+      "scss": ".texture-damier {\n  background-color: #1e1e24;\n  background-image: linear-gradient(45deg, #2a2a35 25%, transparent 25%), linear-gradient(-45deg, #2a2a35 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #2a2a35 75%), linear-gradient(-45deg, transparent 75%, #2a2a35 75%);\n  background-size: 30px 30px;\n  background-position: 0 0, 0 15px, 15px -15px, -15px 0px;\n}"
+    },
+    {
+      "id": "pois",
+      "title": "Pois Verts",
+      "tags": ["pois", "vert", "minimaliste", "points"],
+      "scss": ".texture-pois {\n  background-color: #121214;\n  background-image: radial-gradient(#00b37e 15%, transparent 16%);\n  background-size: 24px 24px;\n}"
+    },
+    {
+      "id": "lignes",
+      "title": "Lignes Horizontales",
+      "tags": ["lignes", "horizontal", "discret", "epuré"],
+      "scss": ".texture-lignes {\n  background-color: #1a1a2e;\n  background-image: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(255, 255, 255, 0.03) 10px, rgba(255, 255, 255, 0.03) 20px);\n}"
+    },
+    {
+      "id": "chevron",
+      "title": "Chevron Zigzag",
+      "tags": ["chevron", "zigzag", "moderne", "motif"],
+      "scss": ".texture-chevron {\n  background: linear-gradient(135deg, #18181b 25%, transparent 25%) -15px 0/ 30px 30px, linear-gradient(225deg, #18181b 25%, transparent 25%) -15px 0/ 30px 30px, linear-gradient(315deg, #18181b 25%, transparent 25%) 0 0/ 30px 30px, linear-gradient(45deg, #18181b 25%, transparent 25%) 0 0/ 30px 30px;\n  background-color: #27272a;\n}"
+    },
+    {
+      "id": "labyrinthe",
+      "title": "Labyrinthe 3D",
+      "tags": ["labyrinthe", "abstrait", "géométrique", "3d"],
+      "scss": ".texture-labyrinthe {\n  background-color: #111827;\n  background-image: linear-gradient(30deg, #1f2937 12%, transparent 12.5%, transparent 87%, #1f2937 87.5%, #1f2937), linear-gradient(150deg, #1f2937 12%, transparent 12.5%, transparent 87%, #1f2937 87.5%, #1f2937), linear-gradient(30deg, #1f2937 12%, transparent 12.5%, transparent 87%, #1f2937 87.5%, #1f2937), linear-gradient(150deg, #1f2937 12%, transparent 12.5%, transparent 87%, #1f2937 87.5%, #1f2937);\n  background-size: 40px 70px;\n  background-position: 0 0, 0 0, 20px 35px, 20px 35px;\n}"
+    },
+    {
+      "id": "grille",
+      "title": "Grille Technique",
+      "tags": ["grille", "wireframe", "technique", "carreaux"],
+      "scss": ".texture-grille {\n  background-color: #18181b;\n  background-image: linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px);\n  background-size: 20px 20px;\n}"
+    },
+    {
+      "id": "cuir",
+      "title": "Grain de Cuir",
+      "tags": ["cuir", "grain", "organique", "sombre"],
+      "scss": ".texture-cuir {\n  background-color: #1c1917;\n  background-image: radial-gradient(#292524 15%, transparent 16%), radial-gradient(#292524 15%, transparent 16%);\n  background-size: 16px 16px;\n  background-position: 0 0, 8px 8px;\n}"
+    },
+    {
+      "id": "obliques",
+      "title": "Lignes Obliques",
+      "tags": ["lignes", "obliques", "rayures", "diagonale"],
+      "scss": ".texture-obliques {\n  background-color: #09090b;\n  background-image: repeating-linear-gradient(45deg, #18181b, #18181b 10px, transparent 10px, transparent 20px);\n}"
+    },
+    {
+      "id": "confettis",
+      "title": "Confettis Colorés",
+      "tags": ["confettis", "coloré", "moderne", "festif"],
+      "scss": ".texture-confettis {\n  background-color: #121214;\n  background-image: radial-gradient(#6366f1 15%, transparent 16%), radial-gradient(#ec4899 15%, transparent 16%);\n  background-size: 30px 30px;\n  background-position: 0 0, 15px 15px;\n}"
+    },
+    {
+      "id": "alveoles",
+      "title": "Alvéoles Nid d'Abeille",
+      "tags": ["alvéoles", "nid d'abeille", "géométrique", "bleu"],
+      "scss": ".texture-alveoles {\n  background-color: #0f172a;\n  background-image: radial-gradient(circle, #334155 20%, transparent 20%), radial-gradient(circle, #334155 20%, transparent 20%);\n  background-size: 30px 30px;\n  background-position: 0 0, 15px 15px;\n}"
+    },
+    {
+      "id": "losanges",
+      "title": "Losanges Rétro",
+      "tags": ["losanges", "rétro", "géométrique", "vintage"],
+      "scss": ".texture-losanges {\n  background-color: #18181b;\n  background-image: linear-gradient(135deg, #27272a 25%, transparent 25%), linear-gradient(225deg, #27272a 25%, transparent 25%), linear-gradient(315deg, #27272a 25%, transparent 25%), linear-gradient(45deg, #27272a 25%, transparent 25%);\n  background-position: -15px 0, -15px 0, 0 0, 0 0;\n  background-size: 30px 30px;\n}"
+    },
+    {
+      "id": "carbone",
+      "title": "Fibre de Carbone",
+      "tags": ["carbone", "techno", "sombre", "sport"],
+      "scss": ".texture-carbone {\n  background: linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px, linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0, linear-gradient(27deg, #222 5px, transparent 5px) 0 10px, linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px, linear-gradient(90deg, #1b1b1b 10px, transparent 10px), linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);\n  background-color: #131313;\n  background-size: 20px 20px;\n}"
+    },
+    {
+      "id": "vagues-cyan",
+      "title": "Ondes Cyan",
+      "tags": ["vagues", "ondes", "cyan", "fluide"],
+      "scss": ".texture-vagues-cyan {\n  background-color: #05050a;\n  background-image: radial-gradient(circle at 100% 150%, #06b6d4 0, transparent 25%), radial-gradient(circle at 0% -50%, #06b6d4 0, transparent 25%);\n  background-size: 40px 40px;\n}"
+    },
+    {
+      "id": "zigzag-dore",
+      "title": "Zigzag Doré",
+      "tags": ["zigzag", "or", "luxe", "motif"],
+      "scss": ".texture-zigzag-dore {\n  background-color: #111111;\n  background-image: linear-gradient(135deg, #d97706 25%, transparent 25%), linear-gradient(225deg, #d97706 25%, transparent 25%);\n  background-size: 20px 20px;\n}"
+    },
+    {
+      "id": "pixels",
+      "title": "Matrice Pixel",
+      "tags": ["pixels", "retro", "arcade", "violet"],
+      "scss": ".texture-pixels {\n  background-color: #0f0e17;\n  background-image: linear-gradient(#a78bfa 2px, transparent 2px), linear-gradient(90deg, #a78bfa 2px, transparent 2px);\n  background-size: 32px 32px;\n  background-position: -2px -2px;\n}"
+    },
+    {
+      "id": "metal-perfore",
+      "title": "Mégalith Métal",
+      "tags": ["métal", "perforé", "industriel", "gris"],
+      "scss": ".texture-metal-perfore {\n  background-color: #262626;\n  background-image: radial-gradient(#171717 30%, transparent 31%), radial-gradient(#171717 30%, transparent 31%);\n  background-size: 12px 12px;\n  background-position: 0 0, 6px 6px;\n}"
+    },
+    {
+      "id": "cross-lines",
+      "title": "Croisillons",
+      "tags": ["croix", "filet", "minimaliste", "geometrique"],
+      "scss": ".texture-cross-lines {\n  background-color: #18181b;\n  background-image: radial-gradient(#3f3f46 1px, transparent 0), radial-gradient(#3f3f46 1px, #18181b 0);\n  background-size: 20px 20px;\n  background-position: 0 0, 10px 10px;\n}"
+    },
+    {
+      "id": "neon-grid",
+      "title": "Grille Synthwave",
+      "tags": ["neon", "synthwave", "rose", "futuriste"],
+      "scss": ".texture-neon-grid {\n  background-color: #0d0914;\n  background-image: linear-gradient(to right, rgba(236, 72, 153, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(236, 72, 153, 0.15) 1px, transparent 1px);\n  background-size: 40px 40px;\n}"
+    }
+  ]
+}

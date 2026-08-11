@@ -1,0 +1,5 @@
+{
+  "title": "Skeletor v1.0 — Générateur d'Architecture de Dossiers",
+  "description": "Outil de scaffolding pour la création d'arborescences de fichiers et de dossiers de projet. L'interface permet de définir une structure hiérarchique à plusieurs niveaux (dossiers parents, sous-dossiers, fichiers) via un formulaire dynamique. Les configurations peuvent être nommées et sauvegardées en JSON pour être rechargées ou partagées. La génération exporte l'arborescence complète dans un répertoire dédié. Idéal pour initialiser rapidement des projets web ou des livrables clients avec une structure cohérente et reproductible.",
+  "screenshot": "./assets/img/screenshot.png"
+}

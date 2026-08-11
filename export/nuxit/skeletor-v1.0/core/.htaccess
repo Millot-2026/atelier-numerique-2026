@@ -1,0 +1,17 @@
+# ============================================================
+#  SÉCURITÉ — Dossier core/ de Skeletor v1.0
+#  Bloque tout accès HTTP direct aux fichiers PHP et JSON.
+#  Ces fichiers sont des bibliothèques internes uniquement
+#  appelables par PHP server-side, jamais depuis un navigateur.
+# ============================================================
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+
+# Apache 2.2 (compatibilité hébergements mutualisés)
+<IfModule !mod_authz_core.c>
+    Order Deny,Allow
+    Deny from all
+</IfModule>

@@ -1,0 +1,234 @@
+:root {
+    --primary-color: #f39c12;
+    --secondary-color: #e67e22;
+    --accent-color: #f39c12;
+    --bg-color: #1a1a1a;
+    --surface-color: #222222;
+    --text-main: #f0f0f0;
+    --text-muted: #888888;
+    --border-color: #333333;
+    --border-radius: 0;
+    --box-shadow: none;
+    --transition: none;
+    --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    border-radius: 0 !important;
+}
+
+html {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/*
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    background-image: url('https://picsum.photos/1920/1080');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-blend-mode: overlay;
+    background-color: rgba(26, 26, 26, 0.85);
+    color: var(--text-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}*/
+
+.centrale-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0.75rem;
+    /* Légèrement ajusté pour éviter les micro-débordements sur écran très étroit */
+    overflow-x: hidden;
+}
+
+.centrale-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.centrale-header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.module-item {
+    width: 100%;
+    max-width: 100%;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    margin-bottom: 1.5rem;
+    box-shadow: none;
+    transition: none;
+    overflow: hidden;
+    /* Empêche tout contenu interne de faire déborder le bloc */
+}
+
+.module-item.sortable-ghost {
+    opacity: 0.4;
+    background: #333333;
+}
+
+details.module-details {
+    width: 100%;
+    max-width: 100%;
+}
+
+summary.module-summary {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    border-bottom: 1px solid transparent;
+}
+
+summary.module-summary::-webkit-details-marker {
+    display: none;
+}
+
+summary.module-summary::after {
+    content: '▼';
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+}
+
+details[open]>summary.module-summary {
+    border-bottom-color: var(--border-color);
+    background-color: #2a2a2a;
+    border-radius: 0;
+}
+
+details[open]>summary.module-summary::after {
+    transform: rotate(180deg);
+}
+
+.drag-handle {
+    cursor: grab;
+    color: var(--text-muted);
+    margin-right: 1.5rem;
+    font-size: 1.5rem;
+    user-select: none;
+    padding: 0 0.5rem;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.module-title {
+    flex-grow: 1;
+    color: var(--primary-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.module-icon {
+    margin-right: 0.5rem;
+}
+
+.module-content {
+    width: 100%;
+    max-width: 100%;
+    background: var(--surface-color);
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.module-iframe {
+    width: 100%;
+    max-width: 100%;
+    height: 150px;
+    border: none;
+    display: block;
+    background: #1a1a1a;
+    overflow: hidden !important;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    transition: none;
+    background-color: #333333;
+    color: var(--text-main);
+}
+
+select option {
+    background-color: #1a1a1a;
+    color: var(--text-main);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: none;
+}
+
+button,
+.btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 0;
+    cursor: pointer;
+    transition: none;
+    text-align: center;
+    text-decoration: none;
+}

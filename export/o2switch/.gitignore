@@ -1,0 +1,15 @@
+# --- Dossiers des applications (gérées dans leurs propres dépôts) ---
+/dashboard-designer/
+/texturor/
+/personator-v1.2/
+/skeletor-v1.0/
+/modulor/
+/cms-2026-v8-full/
+/mon-premier-site/
+/projet-client/
+/user_journey-v1.0/
+/wordpress-portable/
+
+# --- Fichiers système ou temporaires ---
+.DS_Store
+Thumbs.db

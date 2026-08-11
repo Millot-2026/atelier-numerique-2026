@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>Lancement DEV NOMADE</title>
+    <hta:application
+        applicationName="DEV NOMADE Launcher"
+        border="none"
+        borderStyle="normal"
+        caption="no"
+        showInTaskbar="no"
+        singleInstance="yes"
+        windowState="minimize"
+    />
+</head>
+<body>
+<script type="text/vbscript">
+    Dim fso, drv, batPath, shell
+
+    Set fso   = CreateObject("Scripting.FileSystemObject")
+    Set shell = CreateObject("WScript.Shell")
+    batPath   = ""
+
+    ' Parcourir tous les lecteurs pour trouver celui qui contient
+    ' à la fois LANCER.bat ET le dossier _www à sa racine.
+    For Each drv In fso.Drives
+        On Error Resume Next
+        Dim candidate : candidate = drv.DriveLetter & ":\LANCER.bat"
+        Dim wwwCheck  : wwwCheck  = drv.DriveLetter & ":\_www"
+        If fso.FileExists(candidate) And fso.FolderExists(wwwCheck) Then
+            batPath = candidate
+            Exit For
+        End If
+        On Error GoTo 0
+    Next
+
+    If batPath = "" Then
+        MsgBox "Erreur : LANCER.bat introuvable." & Chr(13) & _
+               "Vérifiez que la clé USB est bien branchée.", 16, "DEV NOMADE"
+    Else
+        ' Utiliser "cmd /c" explicitement pour contourner les associations
+        ' de fichiers (.bat associé à VS Code ou Notepad sur certains postes).
+        shell.Run "cmd /c """ & batPath & """", 0, False
+        window.close
+    End If
+</script>
+</body>
+</html>
