@@ -819,8 +819,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 width: 100%;
             }
 
-            .journal-mega-menu.active {
-                display: flex !important;
+            .journal-mega-menu {
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
@@ -839,6 +838,9 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 flex-direction: column !important;
                 justify-content: flex-start !important;
                 margin: 0 !important;
+            }
+            .journal-mega-menu.active {
+                display: flex !important;
             }
             
             .mega-menu-close-btn {
@@ -1260,7 +1262,13 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                     } else {
                         stickyHeader.classList.remove('visible');
                         document.body.classList.remove('is-scrolled');
-                        if (megaMenu) megaMenu.classList.remove('active');
+                        if (megaMenu) {
+                            megaMenu.classList.remove('active');
+                            megaMenu.style.position = '';
+                            megaMenu.style.top = '';
+                            megaMenu.style.left = '';
+                            megaMenu.style.right = '';
+                        }
                         const defaultSvg = '<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
                         if (iconSvg) iconSvg.innerHTML = defaultSvg;
                         if (stickyIconSvg) stickyIconSvg.innerHTML = defaultSvg;
@@ -1272,6 +1280,18 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 if (e) e.stopPropagation();
                 const isOpen = megaMenu.classList.toggle('active');
                 
+                if (isOpen && window.innerWidth > 768 && window.scrollY > 120) {
+                    megaMenu.style.position = 'fixed';
+                    megaMenu.style.top = '48px';
+                    megaMenu.style.left = '30px';
+                    megaMenu.style.right = '30px';
+                } else if (isOpen && window.innerWidth > 768) {
+                    megaMenu.style.position = 'absolute';
+                    megaMenu.style.top = '100%';
+                    megaMenu.style.left = '0';
+                    megaMenu.style.right = '0';
+                }
+
                 if (isOpen && window.innerWidth <= 768) {
                     document.body.appendChild(megaMenu);
                 } else if (!isOpen && window.innerWidth <= 768 && headerWrapper) {
@@ -1299,6 +1319,10 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 closeBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     megaMenu.classList.remove('active');
+                    megaMenu.style.position = '';
+                    megaMenu.style.top = '';
+                    megaMenu.style.left = '';
+                    megaMenu.style.right = '';
                     if (window.innerWidth <= 768 && headerWrapper) {
                         headerWrapper.appendChild(megaMenu);
                     }
