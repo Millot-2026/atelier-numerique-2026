@@ -162,32 +162,5 @@
             ],
             "name": "Preset 5"
         }
-    },
-    "spans": {
-        "workstation": "12",
-        "modulor": "12",
-        "skeletor-v1.0": "6",
-        "skeletor-v1.0-o2switch": "6",
-        "personator-v1.2": "12",
-        "cms-2026-v8-full": "6",
-        "texturor": "6",
-        "user_journey-v1.0": "6",
-        "wordpress-portable": "6",
-        "mon-site": "6",
-        "Projet-demo-pour-site-en-ligne": "6"
-    },
-    "order": [
-        "workstation",
-        "modulor",
-        "skeletor-v1.0",
-        "skeletor-v1.0-o2switch",
-        "personator-v1.2",
-        "cms-2026-v8-full",
-        "texturor",
-        "user_journey-v1.0",
-        "wordpress-portable",
-        "mon-site",
-        "Projet-demo-pour-site-en-ligne"
-    ],
-    "active_preset": 1
+    }
 }
