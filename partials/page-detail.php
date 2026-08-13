@@ -94,6 +94,17 @@ if (!function_exists('detailLink')) {
             --green: #22c55e;
         }
 
+
+
+/* Rend le lien Modulor vert dans le menu */
+a[href*="modulor"] {
+    color: #10b981 !important;
+}
+
+
+
+
+
         body {
             font-family: system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
