@@ -32,6 +32,14 @@
                         <input type="text" id="secondaryOklch" value="oklch(0.9 0.1 30)">
                     </div>
                 </div>
+
+                <!-- SECTION DÉDIÉE À L'ANALYSE DU LOGO -->
+                <div class="logo-analysis-block" style="margin-top: 20px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                    <h4 style="font-size: 0.85rem; margin-bottom: 8px; color: var(--text-muted, #aaa);">Couleurs détectées dans le logo :</h4>
+                    <div id="logoAnalysisContainer" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <span style="font-size: 0.8rem; color: #777;">Importe un logo pour lancer l'analyse...</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Zone de preview -->
@@ -43,7 +51,6 @@
         </div>
 
         <!-- Section dédiée aux Ambiances, Recommandations & Mots-clés -->
-<!-- Section dédiée aux Ambiances, Recommandations & Mots-clés -->
         <div class="ambiance-section">
             <h3>Ambiance & Recommandations</h3>
             <p class="ambiance-subtitle">Suggestions d'univers graphiques et déclinaisons sémantiques</p>
@@ -53,18 +60,6 @@
 
             <!-- Champ de saisie classique des tags -->
             <div class="input-group" style="margin-top: 15px;">
-                <input type="text" id="tagInput" placeholder="Ajouter un tag (ex: luxe, tech...) et Entrée">
-                <div id="activeTagsContainer" class="tags-container"></div>
-            </div>
-        </div>
-
-            <!-- Champ de saisie rapide (masqué par défaut) -->
-            <div id="moodInputContainer" class="mood-input-container" style="display:none;">
-                <input type="text" id="bulkKeywordsInput" placeholder="Colle ta liste de mots-clés ici (ex: vert, nature, bois...) et Entrée">
-            </div>
-
-            <!-- Champ de saisie classique et conteneur des tags -->
-            <div class="input-group" style="margin-top: 10px;">
                 <input type="text" id="tagInput" placeholder="Ajouter un tag (ex: luxe, tech...) et Entrée">
                 <div id="activeTagsContainer" class="tags-container"></div>
             </div>

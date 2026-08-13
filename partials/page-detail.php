@@ -100,8 +100,12 @@ if (!function_exists('detailLink')) {
 a[href*="modulor"] {
     color: #10b981 !important;
 }
-
-
+a[href*="texturor"] {
+    color: #10b981 !important;
+}
+a[href*="palettor"] {
+    color: #10b981 !important;
+}
 
 
 
