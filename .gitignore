@@ -10,6 +10,10 @@
 /user_journey-v1.0/
 /wordpress-portable/
 
+# --- Dossiers d'export et builds ---
+/export/
+.firebase/
+
 # --- Fichiers système ou temporaires ---
 .DS_Store
 Thumbs.db

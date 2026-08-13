@@ -69,10 +69,62 @@ if (is_dir($sourceDir . '/skeletor-v1.0')) {
 $redirectHtml = '<meta http-equiv="refresh" content="0;url=generator.php">';
 file_put_contents($skeletorDest . "/index.html", $redirectHtml);
 
-$journalUrl = "http://localhost/_www/export/nuxit/index.html";
+// 5. Génération des pages de détail statiques pour chaque projet
+// Chaque {slug}/detail.php est capturé via ob_start() et écrit en {slug}/detail.html dans le dossier Nuxit
+$detailProjects = [
+    'workstation',
+    'la-centrale',
+    'cms-2026-v8-full',
+    'palettor',
+    'modulor',
+    'skeletor-v1.0',
+    'personator-v1.2',
+    'texturor',
+    'user_journey-v1.0',
+    'wordpress-portable',
+    'pixelart',
+];
+
+$detailsGenerated = [];
+$detailsFailed    = [];
+
+foreach ($detailProjects as $dSlug) {
+    $detailSrc = $sourceDir . '/' . $dSlug . '/detail.php';
+    if (!file_exists($detailSrc)) {
+        $detailsFailed[] = $dSlug;
+        continue;
+    }
+
+    // Crée le dossier de destination si nécessaire
+    $detailDestDir = $destDir . '/' . $dSlug;
+    if (!file_exists($detailDestDir)) {
+        @mkdir($detailDestDir, 0777, true);
+    }
+
+    // Capture de la sortie PHP en mode statique
+    ob_start();
+    // La constante FIREBASE_STATIC est déjà définie (étape 3)
+    include $detailSrc;
+    $detailHtml = ob_get_clean();
+
+    // Adaptation des chemins d'images (dashboard-designer → images/ de l'export)
+    $detailHtml = str_replace('dashboard-designer/assets/img/', '../images/', $detailHtml);
+    $detailHtml = str_replace('src="images/', 'src="../images/', $detailHtml);
+
+    file_put_contents($detailDestDir . '/detail.html', $detailHtml);
+    $detailsGenerated[] = $dSlug;
+}
+
+$journalUrl  = "http://localhost/_www/export/nuxit/index.html";
 $skeletorUrl = "http://localhost/_www/export/nuxit/skeletor-v1.0/generator.php";
 
 echo "<h3>Export Nuxit mis à jour avec succès !</h3>";
 echo "<p><a href=\"" . $journalUrl . "\" target=\"_blank\" style=\"font-size: 1.1rem;\">👉 Ouvrir le Journal Nuxit (Accueil)</a></p>";
 echo "<p><a href=\"" . $skeletorUrl . "\" target=\"_blank\" style=\"font-size: 1.1rem;\">👉 Ouvrir Skeletor Nuxit</a></p>";
-?>
+if (!empty($detailsGenerated)) {
+    echo "<p>✅ Pages de détail générées (" . count($detailsGenerated) . ") : <code>" . implode('</code>, <code>', $detailsGenerated) . "</code></p>";
+}
+if (!empty($detailsFailed)) {
+    echo "<p>⚠️ Pages de détail manquantes : <code>" . implode('</code>, <code>', $detailsFailed) . "</code></p>";
+}
+?>

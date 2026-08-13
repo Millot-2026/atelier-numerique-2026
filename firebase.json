@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "la-centrale-36780",
+    "public": "export/firebase",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

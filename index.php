@@ -207,6 +207,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Textes éditoriaux de rédaction pour les projets du journal
+$editorialDescriptions = [
+    'la-centrale' => "Module de conception et de gestion centralisée des palettes de couleurs. Conçu pour unifier l'identité visuelle de l'atelier, il permet de calibrer, tester et exporter des harmonies chromatiques sur-mesure directement depuis l'environnement nomade.",
+    'cms-2026-v8-full' => "Architecture CMS modulaire de nouvelle génération. Pensée pour offrir une performance maximale sans dépendance au cloud distant, elle garantit une autonomie éditoriale totale au cœur d'une structure flat-file ultra-sécurisée.",
+    'palettor' => "Laboratoire d'extraction et d'analyse chromatique. Cet utilitaire de design dissèque les nuances pour générer instantanément des chartes graphiques cohérentes prêtes à l'intégration.",
+    'modulor' => "Système de grille et de mise en page proportionnelle. Inspiré des canons architecturaux classiques, modulor structure l'espace visuel avec une rigueur mathématique irréprochable.",
+    'skeletor-v1.0' => "Squelette de démarrage rapide et minimaliste pour applications web agiles. Fournit une base saine, propre et épurée pour prototyper sans contrainte superflue.",
+    'personator-v1.2' => "Générateur de profils, de données factices et de personas pour les phases de test d'ergonomie et de parcours utilisateurs en conditions réelles.",
+    'texturor' => "Boîte à outils dédiée au traitement typographique, à la gestion des interlignages et à l'optimisation de la lisibilité textuelle sur tous les supports d'affichage.",
+    'user_journey-v1.0' => "Cartographie interactive des parcours clients et des flux de navigation. Un outil de pilotage stratégique pour anticiper chaque étape de l'expérience utilisateur.",
+    'wordpress-portable' => "Environnement WordPress complètement virtualisé et autonome embarqué sur support amovible, garantissant un fonctionnement hors-ligne instantané.",
+    'pixelart' => "Studio créatif rétro-numérique pour la conception de graphismes pixelisés et d'éléments d'interface vintage au charme intemporel."
+];
+
 $files = @scandir($dir);
 $projectsRaw = [];
 $projects = [];
@@ -226,7 +240,11 @@ if (is_array($files)) {
         
         $customDetails = isset($projectsDetailsMap[$lowerFile]) ? $projectsDetailsMap[$lowerFile] : null;
 
-        $description = "Description détaillée et présentation complète du projet web : " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ".";
+        if (isset($editorialDescriptions[$lowerFile])) {
+            $description = $editorialDescriptions[$lowerFile];
+        } else {
+            $description = "Chronique et analyse technique approfondie du module " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . ", développé dans le cadre de l'atelier de nomadisme numérique.";
+        }
         
         $imgName = 'photo-640x480.png';
         if ($customDetails && isset($customDetails['details']['niveau1']['image']) && !empty($customDetails['details']['niveau1']['image'])) {
@@ -283,7 +301,7 @@ if (is_array($files)) {
             'colSpan' => (int)$colSpan,
             'colClass' => 'news-col-' . (int)$colSpan,
             'sizeLabel' => $sizeLabel,
-            'linkHref' => '/' . rawurlencode($file) . '/'
+            'linkHref' => rawurlencode($file) . '/'
         ];
     }
 }
@@ -294,7 +312,7 @@ $projectsRaw['workstation'] = [
     'title' => 'Workstation',
     'hasIndex' => true,
     'isWP' => false,
-    'description' => "Cockpit central et tableau de bord de l'atelier nomade. Unifie le pilotage du temps, la météo en direct et les outils de prototypage.",
+    'description' => "Véritable cockpit central et tableau de bord ultime, Workstation unifie le pilotage du temps, la météo en direct et les outils de prototypage de l'atelier nomade. Conçu pour une maîtrise totale du flux de travail.",
     'screenshot' => 'images/images-workstation/01-header.png',
     'statusKey' => 'operational',
     'badgeLabel' => '&#x1F7E0; Op&eacute;rationnel',
@@ -350,6 +368,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEV NOMADE - Dashboard</title>
 
     <style>
@@ -777,9 +796,25 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
 
         .news-col-hidden { display: none !important; }
 
-        @media (max-width: 768px) {
+        /* Marges totalement à 0 pour coller le haut de la page sur mobile portrait et paysage */
+        @media (max-width: 1024px) and (orientation: portrait) {
             body {
-                padding: 0 !important;
+                margin-top: 0px !important;
+                padding-top: 0px !important;
+            }
+        }
+        @media (max-width: 1024px) and (orientation: landscape) {
+            body {
+                margin-top: 0px !important;
+                padding-top: 0px !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                padding-bottom: 0 !important;
             }
             .news-sheet {
                 padding: 15px !important;
@@ -790,33 +825,99 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 border-right: none !important;
                 box-sizing: border-box !important;
             }
+            .news-bandeau {
+                font-size: 0.9rem !important;
+                letter-spacing: 2px !important;
+            }
             .news-header-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                padding-bottom: 15px;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px !important;
+                padding-bottom: 15px !important;
+                text-align: center !important;
             }
             .news-header-grid > div:nth-child(1) {
-                grid-column: 1 / 2;
-                text-align: left !important;
+                text-align: center !important;
+                font-size: 0.9rem !important;
             }
             .news-header-grid > div:nth-child(2) {
-                grid-column: 1 / -1;
-                grid-row: 1;
                 text-align: center !important;
-                margin-bottom: 10px;
+            }
+            .news-manchette {
+                font-size: 2.4rem !important;
             }
             .news-header-grid > div:nth-child(3) {
-                grid-column: 2 / 3;
-                text-align: right !important;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end !important;
+                align-items: center !important;
+                text-align: center !important;
+                font-size: 0.9rem !important;
             }
             .news-header-grid > div:nth-child(3) > div:last-child {
-                display: flex;
-                justify-content: flex-end !important;
-                width: 100%;
+                display: flex !important;
+                justify-content: center !important;
+                width: 100% !important;
+                margin-top: 8px !important;
+            }
+
+            /* Paragraphes alignés et justifiés à gauche dans les deux modes mobiles */
+            .news-tribune p,
+            .news-article p.news-pitch {
+                text-align: left !important;
+            }
+
+            .news-tribune p {
+                font-size: 1.25rem !important;
+                line-height: 1.6 !important;
+            }
+
+            .news-article h4 {
+                font-size: 1.5rem !important;
+            }
+
+            .news-article p.news-pitch {
+                font-size: 1.2rem !important;
+                line-height: 1.6 !important;
+            }
+            .news-article p.news-pitch::first-letter {
+                font-size: 3.4rem !important;
+            }
+
+            /* Étirement complet des images sur toute la largeur de l'écran en mobile */
+            .press-figure {
+                margin-left: -15px !important;
+                margin-right: -15px !important;
+                border-left: none !important;
+                border-right: none !important;
+                padding: 4px 0 !important;
+            }
+            .press-figure img {
+                max-height: none !important;
+                width: 100% !important;
+                height: auto !important;
+                object-fit: cover !important;
+                border-left: none !important;
+                border-right: none !important;
+            }
+
+            .press-caption {
+                font-size: 0.9rem !important;
+                padding: 0 15px;
+            }
+
+            .news-article-link {
+                font-size: 1rem !important;
+                font-weight: bold;
+            }
+
+            /* Refonte du footer en mode mobile */
+            .news-footer {
+                flex-direction: column !important;
+                gap: 8px !important;
+                align-items: center !important;
+                text-align: center !important;
+                font-size: 0.85rem !important;
+            }
+            .news-footer span:nth-child(2) {
+                display: none !important;
             }
 
             .journal-mega-menu {
@@ -1003,34 +1104,39 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
                 <div class="mega-menu-close-btn">
                     <button type="button" id="mega-menu-close">Fermer</button>
                 </div>
+                <?php
+                // Détermine l'extension des pages de détail selon le contexte (local vs export statique)
+                $detailPageExt = (defined('FIREBASE_STATIC') && FIREBASE_STATIC) ? 'detail.html' : 'detail.php';
+                // Liste des projets dans chaque colonne du menu (slug => label)
+                $menuCol1 = ['workstation' => 'Workstation', 'la-centrale' => 'la-centrale', 'cms-2026-v8-full' => 'cms-2026-v8-full'];
+                $menuCol2 = ['palettor' => 'palettor', 'modulor' => 'modulor', 'texturor' => 'texturor', 'personator-v1.2' => 'personator-v1.2', 'pixelart' => 'pixelart', 'user_journey-v1.0' => 'user_journey-v1.0'];
+                $menuCol3 = ['skeletor-v1.0' => 'skeletor-v1.0', 'wordpress-portable' => 'wordpress-portable'];
+                ?>
                 <div class="mega-menu-grid">
+                    <!-- Colonne 1 : Pilotage & Structure -->
                     <div class="mega-menu-col">
                         <h4>Pilotage &amp; Structure</h4>
                         <ul>
-                            <?php foreach ($projects as $p): ?>
-                                <?php if (in_array(mb_strtolower($p['name']), ['workstation', 'cms-2026-v8-full', 'dashboard-designer'])): ?>
-                                    <li><a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></a></li>
-                                <?php endif; ?>
+                            <?php foreach ($menuCol1 as $mSlug => $mLabel): ?>
+                                <li><a href="<?php echo rawurlencode($mSlug) . '/' . $detailPageExt; ?>"><?php echo htmlspecialchars($mLabel, ENT_QUOTES, 'UTF-8'); ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
+                    <!-- Colonne 2 : Outils Créatifs & Design -->
                     <div class="mega-menu-col">
                         <h4>Outils Créatifs &amp; Design</h4>
                         <ul>
-                            <?php foreach ($projects as $p): ?>
-                                <?php if (in_array(mb_strtolower($p['name']), ['palettor', 'modulor', 'pixelart', 'texturor', 'personator-v1.2', 'user_journey-v1.0'])): ?>
-                                    <li><a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></a></li>
-                                <?php endif; ?>
+                            <?php foreach ($menuCol2 as $mSlug => $mLabel): ?>
+                                <li><a href="<?php echo rawurlencode($mSlug) . '/' . $detailPageExt; ?>"><?php echo htmlspecialchars($mLabel, ENT_QUOTES, 'UTF-8'); ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
+                    <!-- Colonne 3 : Templates & Environnements -->
                     <div class="mega-menu-col">
                         <h4>Templates &amp; Environnements</h4>
                         <ul>
-                            <?php foreach ($projects as $p): ?>
-                                <?php if (in_array(mb_strtolower($p['name']), ['skeletor-v1.0', 'wordpress-portable'])): ?>
-                                    <li><a href="<?php echo htmlspecialchars($p['linkHref'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank"><?php echo htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8'); ?></a></li>
-                                <?php endif; ?>
+                            <?php foreach ($menuCol3 as $mSlug => $mLabel): ?>
+                                <li><a href="<?php echo rawurlencode($mSlug) . '/' . $detailPageExt; ?>"><?php echo htmlspecialchars($mLabel, ENT_QUOTES, 'UTF-8'); ?></a></li>
                             <?php endforeach; ?>
                             <li><a href="#">À propos</a></li>
                         </ul>
@@ -1047,7 +1153,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
         <!-- GRILLE DES ARTICLES LÉGERS (GÉRÉE PAR LE CONTROL PANEL) -->
         <div class="news-grid-container" id="news-grid-container">
             <?php foreach ($projects as $p): ?>
-                <?php $linkHref = '/' . rawurlencode($p['name']) . '/'; ?>
+                <?php $linkHref = rawurlencode($p['name']) . '/'; ?>
                 <div class="<?php echo htmlspecialchars($p['colClass'], ENT_QUOTES, 'UTF-8'); ?>" data-project-name="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'); ?>">
                     <article class="news-article">
                         <div>
@@ -1177,6 +1283,17 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
 
     <!-- JAVASCRIPT DE GESTION DU MENU ET DU CONTROL PANEL -->
     <script>
+        window.addEventListener('orientationchange', function() {
+            const resetScroll = () => {
+                window.scrollTo(0, 0);
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            };
+            setTimeout(resetScroll, 50);
+            setTimeout(resetScroll, 150);
+            setTimeout(resetScroll, 350);
+        });
+
         const clientPresets = <?php echo json_encode($presets); ?>;
 
         function applyPresetToDOM(presetKey) {

@@ -1,5 +1,0 @@
-{
-  "title": "User Journey v1.0 — Cartographie des Parcours Utilisateur",
-  "description": "Application de modélisation de parcours utilisateurs (User Journey Map) à destination des équipes UX et produit. L'interface principale propose un formulaire dynamique dans lequel chaque étape du parcours est ajoutée ligne par ligne. Un aperçu en temps réel visualise la séquence des étapes au fur et à mesure de leur saisie. Les parcours peuvent être nommés, sauvegardés en JSON et rechargés via un sélecteur de projet. Une vue de présentation dédiée (presentation.php) permet d'afficher le parcours finalisé dans un format propre, exportable pour un livrable client ou une session de travail en équipe.",
-  "screenshot": "./assets/img/screenshot.png"
-}
