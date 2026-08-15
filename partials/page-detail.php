@@ -16,21 +16,21 @@
    ============================================================ */
 
 // ---- Sécurité : variables avec valeurs par défaut ----
-if (!isset($slug))       $slug       = '';
-if (!isset($title))      $title      = 'Projet';
-if (!isset($subtitle))   $subtitle   = '';
-if (!isset($pitch))      $pitch      = '';
-if (!isset($technos))    $technos    = [];
-if (!isset($statusKey))  $statusKey  = 'operational';
+if (!isset($slug))      $slug       = '';
+if (!isset($title))     $title      = 'Projet';
+if (!isset($subtitle))  $subtitle   = '';
+if (!isset($pitch))     $pitch      = '';
+if (!isset($technos))   $technos    = [];
+if (!isset($statusKey)) $statusKey  = 'operational';
 if (!isset($screenshot)) $screenshot = '';
-if (!isset($sections))   $sections   = [];
-if (!isset($isStatic))   $isStatic   = false;
-if (!isset($basePath))   $basePath   = '../';
-if (!isset($appHref))    $appHref    = '';
+if (!isset($sections))  $sections   = [];
+if (!isset($isStatic))  $isStatic   = false;
+if (!isset($basePath))  $basePath   = '../';
+if (!isset($appHref))   $appHref    = '';
 
 // ---- Badge de statut ----
 $badgeMap = [
-    'validated'   => ['label' => '&#x1F7E2; Validé',       'class' => 'badge badge-validated'],
+    'validated'   => ['label' => '&#x1F7E2; Validé',      'class' => 'badge badge-validated'],
     'operational' => ['label' => '&#x1F7E0; Opérationnel', 'class' => 'badge badge-operational'],
     'progress'    => ['label' => '&#x1F534; En cours',      'class' => 'badge badge-progress'],
 ];
@@ -47,15 +47,15 @@ $menuProjects = [
         ['cms-2026-v8-full', 'cms-2026-v8-full'],
     ],
     'col2' => [
-        ['palettor',          'palettor'],
-        ['modulor',           'modulor'],
-        ['texturor',          'texturor'],
+        ['palettor',         'palettor'],
+        ['modulor',          'modulor'],
+        ['texturor',         'texturor'],
         ['personator-v1.2',   'personator-v1.2'],
-        ['pixelart',          'pixelart'],
+        ['pixelart',         'pixelart'],
         ['user_journey-v1.0', 'user_journey-v1.0'],
     ],
     'col3' => [
-        ['skeletor-v1.0',      'skeletor-v1.0'],
+        ['skeletor-v1.0',    'skeletor-v1.0'],
         ['wordpress-portable', 'wordpress-portable'],
     ],
 ];
@@ -80,8 +80,8 @@ if (!function_exists('detailLink')) {
 
     <style>
         /* =========================================================================
-           CHARTE GRAPHIQUE — JOURNAL (identique à index.php)
-           ========================================================================= */
+            CHARTE GRAPHIQUE — JOURNAL (identique à index.php)
+            ========================================================================= */
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -232,8 +232,8 @@ a[href*="palettor"] {
         .news-footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #333333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 0.75rem; color: #555555; display: flex; justify-content: space-between; text-transform: uppercase; letter-spacing: 1px; }
 
         /* =========================================================================
-           CONTROL PANEL — Volet latéral escamotable (identique à index.php)
-           ========================================================================= */
+            CONTROL PANEL — Volet latéral escamotable (identique à index.php)
+            ========================================================================= */
         #cp-toggle-btn { position: fixed; bottom: 30px; right: 30px; z-index: 88888; width: 52px; height: 52px; border-radius: 50%; background: #2b2b2b; color: #fdfbf7; border: 2px solid #555; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,0.45); font-size: 1.2rem; transition: background 0.2s, transform 0.2s; }
         #cp-toggle-btn:hover { background: #c0392b; border-color: #c0392b; transform: scale(1.08); }
         #cp-toggle-btn.cp-open { background: #c0392b; border-color: #c0392b; }

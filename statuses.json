@@ -7,6 +7,7 @@
     "dashboard-designer": "validated",
     "mon-premier-site": "operational",
     "modulor": "validated",
+    "palettor": "operational",
     "presets": {
         "preset_1": {
             "spans": {

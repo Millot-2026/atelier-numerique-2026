@@ -369,7 +369,31 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEV NOMADE - Dashboard</title>
+
+
+
+
+   <title>
+    <?php 
+    // Détection de l'environnement
+    if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        $env = "LOCAL";
+    } elseif (strpos($_SERVER['REQUEST_URI'], '/export/firebase/') !== false) {
+        $env = "FIREBASE";
+    } elseif (strpos($_SERVER['REQUEST_URI'], '/export/nuxit/') !== false) {
+        $env = "NUXIT";
+    } elseif (strpos($_SERVER['REQUEST_URI'], '/export/o2switch/') !== false) {
+        $env = "O2SWITCH";
+    } else {
+        $env = "DEV";
+    }
+    echo "[$env] DEV NOMADE - Dashboard";
+    ?>
+</title>
+
+
+
+
 
     <style>
         :root {
@@ -1053,6 +1077,7 @@ $isExportMode = (isset($_GET['mode']) && $_GET['mode'] === 'export');
             }
         }
     </style>
+
 </head>
 <body>
 

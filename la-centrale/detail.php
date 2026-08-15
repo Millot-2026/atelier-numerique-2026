@@ -42,4 +42,4 @@ $sections = [
     ],
 ];
 
-require_once __DIR__ . '/../partials/page-detail.php';
+require __DIR__ . '/../partials/page-detail.php';
